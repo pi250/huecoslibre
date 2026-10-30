@@ -2,127 +2,79 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#F2F2F2">
-<title>Huecos · Última hora</title>
-<!-- Mezcla de tipografía utilitaria (Space Grotesk) y editorial clásica (Fraunces) -->
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+<title>Huecos · Únete</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --ink: #0A0A0A;
-  --paper: #F4F4F4; /* No es blanco puro, evita la fatiga visual */
-  --mute: #666666;
-  --line: #0A0A0A;
+  --ink: #0A0A0A; --paper: #F4F4F4; --mute: #777777; --line: rgba(10,10,10,0.15);
 }
-
 * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html { overscroll-behavior: none; }
-
-/* Textura de ruido fotográfico para dar tacto humano y romper lo "digital" */
 body {
   background-color: var(--paper);
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
   color: var(--ink);
   font-family: 'Space Grotesk', system-ui, sans-serif;
-  font-size: 15px;
-  line-height: 1.4;
+  font-size: 15px; line-height: 1.4;
   -webkit-font-smoothing: antialiased;
-  min-height: 100dvh;
 }
-
-button, input { font: inherit; color: inherit; border: none; background: none; }
-button { cursor: pointer; transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
+button, input, select { font: inherit; color: inherit; border: none; background: none; }
+button { cursor: pointer; transition: transform 0.15s ease; }
 button:active { transform: scale(0.96); }
+input, select { width: 100%; border-bottom: 1.5px solid var(--ink); padding: 12px 0; font-size: 16px; margin-bottom: 24px; border-radius: 0; outline: none; background: transparent;}
+input:focus { border-bottom-width: 3px; }
 
-/* Tipografía de contraste */
 .serif { font-family: 'Fraunces', serif; letter-spacing: -0.03em; }
 .italic { font-style: italic; }
 
-header {
-  padding: calc(24px + env(safe-area-inset-top)) 24px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1.5px solid var(--line);
-}
-.logo { font-size: 24px; font-weight: 600; text-transform: uppercase; letter-spacing: -0.04em; }
+header { padding: calc(16px + env(safe-area-inset-top)) 24px 16px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); position: sticky; top:0; background: rgba(244,244,244,0.9); backdrop-filter: blur(8px); z-index: 10; }
+.logo { font-size: 22px; font-weight: 600; text-transform: uppercase; letter-spacing: -0.04em; }
 
-main { max-width: 560px; margin: 0 auto; padding: 40px 24px 120px; }
+main { max-width: 560px; margin: 0 auto; padding: 32px 24px 120px; }
+h1 { font-size: clamp(28px, 8vw, 40px); font-weight: 300; line-height: 1.1; margin-bottom: 12px; }
+.lead { color: var(--mute); font-size: 16px; margin-bottom: 40px; }
 
-h1 { font-size: clamp(32px, 8vw, 48px); font-weight: 300; line-height: 1.05; margin-bottom: 16px; }
-.lead { color: var(--mute); font-size: 16px; margin-bottom: 48px; max-width: 90%; }
+/* Botones */
+.btn { background: var(--ink); color: var(--paper); padding: 16px 24px; font-weight: 500; font-size: 14px; text-transform: uppercase; letter-spacing: 0.05em; width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;}
+.btn.o { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+.btn.apple { background: #000; color: #fff; border-radius: 4px; text-transform: none; font-size: 16px; }
 
-/* Segmented Control Asimétrico */
-.tabs { display: flex; gap: 12px; margin-bottom: 32px; border-bottom: 1px solid rgba(10,10,10,0.1); padding-bottom: 16px;}
-.tabs button { font-weight: 500; color: var(--mute); text-transform: uppercase; font-size: 13px; letter-spacing: 0.05em; }
-.tabs button[aria-pressed=true] { color: var(--ink); position: relative; }
-.tabs button[aria-pressed=true]::after { content: ''; position: absolute; bottom: -17px; left: 0; width: 100%; height: 1.5px; background: var(--ink); }
+/* Navegación Inferior (Editorial) */
+nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--paper); border-top: 1px solid var(--line); display: flex; justify-content: space-around; padding-bottom: env(safe-area-inset-bottom); z-index: 10; }
+nav button { flex: 1; padding: 20px 0; font-weight: 600; text-transform: uppercase; font-size: 12px; letter-spacing: 0.05em; color: var(--mute); border-right: 1px solid var(--line); }
+nav button:last-child { border-right: none; }
+nav button.active { color: var(--ink); background: rgba(0,0,0,0.03); }
 
-/* Listado de Ofertas (Estilo Revista) */
-.tk {
-  position: relative;
-  padding: 24px 0;
-  border-bottom: 1.5px solid var(--line);
-  display: grid;
-  grid-template-columns: 80px 1fr;
-  gap: 16px;
-  align-items: start;
-}
-.tk-time { font-size: 32px; line-height: 1; }
-.tk-time small { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--mute); margin-top: 8px; }
-
+/* Tarjetas y Listas */
+.tk { position: relative; padding: 24px 0; border-bottom: 1px solid var(--line); display: grid; grid-template-columns: 70px 1fr; gap: 16px; align-items: start; }
+.tk-time { font-size: 28px; line-height: 1; }
+.tk-time small { display: block; font-size: 11px; font-weight: 600; text-transform: uppercase; color: var(--mute); margin-top: 6px; }
 .tk-info h3 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
 .tk-info p { color: var(--mute); font-size: 14px; margin-bottom: 16px; }
-
-.tk-price { display: flex; gap: 12px; align-items: baseline; margin-bottom: 20px;}
-.now { font-size: 24px; font-weight: 600; }
+.tk-price { display: flex; gap: 12px; align-items: baseline; margin-bottom: 16px;}
+.now { font-size: 20px; font-weight: 600; }
 .old { text-decoration: line-through; color: var(--mute); }
 
-/* Etiqueta rota artesanal (El Detalle Humano) */
-.tag {
-  position: absolute;
-  top: 16px;
-  right: 0;
-  background: var(--ink);
-  color: var(--paper);
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  transform: rotate(3deg);
-  box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
-}
-.tag.gift { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); transform: rotate(-2deg); }
+.tag { position: absolute; top: 16px; right: 0; background: var(--ink); color: var(--paper); padding: 4px 10px; font-size: 11px; font-weight: 600; text-transform: uppercase; transform: rotate(3deg); box-shadow: 2px 2px 0 rgba(0,0,0,0.2); }
+.tag.ok { background: transparent; color: var(--ink); border: 1px solid var(--ink); transform: rotate(-2deg); }
 
-/* Botones Brutalistas */
-.btn {
-  background: var(--ink);
-  color: var(--paper);
-  padding: 16px 24px;
-  font-weight: 500;
-  font-size: 14px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  width: 100%;
-  display: block;
-  text-align: center;
-}
-.btn.o { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
+/* Toggle */
+.seg { display: flex; border: 1.5px solid var(--ink); margin-bottom: 32px; }
+.seg button { flex: 1; padding: 12px; font-size: 13px; font-weight: 600; text-transform: uppercase; }
+.seg button.active { background: var(--ink); color: var(--paper); }
 
-/* Modal simplificado */
-.veil { position: fixed; inset: 0; background: rgba(244,244,244,0.9); z-index: 50; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-.veil.on { opacity: 1; pointer-events: auto; }
-.sheet { background: var(--paper); width: 100%; max-width: 440px; padding: 40px 24px; border: 1.5px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); transform: translateY(20px); transition: transform 0.3s; }
-.veil.on .sheet { transform: translateY(0); }
+/* Animaciones */
+.fade-in { animation: fadeIn 0.3s ease; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
 /* Toast */
-.toast { position: fixed; bottom: 40px; left: 50%; transform: translate(-50%, 20px); background: var(--ink); color: var(--paper); padding: 12px 24px; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0; transition: 0.3s; pointer-events: none; z-index: 100; }
+.toast { position: fixed; top: 20px; left: 50%; transform: translate(-50%, -20px); background: var(--ink); color: var(--paper); padding: 12px 24px; font-size: 12px; font-weight: 600; text-transform: uppercase; opacity: 0; transition: 0.3s; pointer-events: none; z-index: 100; white-space: nowrap; box-shadow: 4px 4px 0 rgba(0,0,0,0.2); }
 .toast.on { opacity: 1; transform: translate(-50%, 0); }
 </style>
 </head>
 <body>
 <div id="app"></div>
-<div class="veil" id="veil"><div class="sheet" id="sheet"></div></div>
 <div class="toast" id="toast"></div>
 
 <script>
@@ -130,93 +82,274 @@ const $ = id => document.getElementById(id);
 const eur = n => n + '€';
 const hh = d => d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 
-// Mock data realista
-const SV = [
-  { id: 1, n: 'Corte de autor y secado', p: 38, d: 60 },
-  { id: 2, n: 'Color completo y mechas', p: 85, d: 120 }
-];
-const SL = [
-  { id: 101, s: 1, t: new Date(Date.now() + 45*60000), disc: 20, st: 'live', sty: 'Marta' },
-  { id: 102, s: 2, t: new Date(Date.now() + 120*60000), disc: 30, st: 'live', sty: 'Elena' },
-  { id: 103, s: 1, t: new Date(Date.now() + 200*60000), disc: 0, gift: 'Tratamiento Olaplex', st: 'live', sty: 'Dani' }
+// Estado de la aplicación
+const STATE = {
+  view: 'feed', // feed, login, cli_dash, biz_dash, checkout, card_form
+  user: null, 
+  role: null, // 'cli' o 'biz'
+  selectedSlot: null
+};
+
+// Bases de datos simuladas
+const USERS = {
+  'iker': { pw: '123', role: 'cli', name: 'Iker E.', cards: ['•••• 4242'] },
+  'marea': { pw: '123', role: 'biz', name: 'Salón Marea' }
+};
+
+let SLOTS = [
+  { id: 1, s: 'Corte y secado', p: 38, d: 60, t: new Date(Date.now() + 45*6e4), disc: 20, st: 'live', biz: 'Salón Marea', cli: null },
+  { id: 2, s: 'Color completo', p: 85, d: 120, t: new Date(Date.now() + 120*6e4), disc: 30, st: 'live', biz: 'Salón Marea', cli: null },
+  { id: 3, s: 'Tratamiento', p: 45, d: 45, t: new Date(Date.now() - 30*6e4), disc: 0, st: 'booked', biz: 'Salón Marea', cli: 'Ana Gómez' }
 ];
 
-const sv = s => SV.find(x => x.id === s.s);
-const cp = s => Math.round(sv(s).p * (1 - s.disc / 100));
+const cp = s => Math.round(s.p * (1 - s.disc / 100));
 
-function viewBook() {
-  const L = SL.filter(s => s.st === 'live');
+// --- VISTAS ---
+
+function renderHeader() {
+  const btn = STATE.user 
+    ? `<button onclick="logout()" style="text-decoration:underline; font-size:13px">Salir</button>` 
+    : `<button onclick="navTo('login')" style="text-decoration:underline; font-size:13px; font-weight:600">Entrar</button>`;
+  return `<header><div class="logo">Huecos</div>${btn}</header>`;
+}
+
+function renderNav() {
+  if (!STATE.user) return '';
+  if (STATE.role === 'cli') {
+    return `<nav>
+      <button class="${STATE.view==='feed'?'active':''}" onclick="navTo('feed')">Explorar</button>
+      <button class="${STATE.view==='cli_dash'?'active':''}" onclick="navTo('cli_dash')">Mis Citas</button>
+    </nav>`;
+  } else {
+    return `<nav>
+      <button class="${STATE.view==='biz_dash'?'active':''}" onclick="navTo('biz_dash')">Mi Agenda</button>
+      <button class="active" onclick="alert('En desarrollo')">Ajustes</button>
+    </nav>`;
+  }
+}
+
+function viewFeed() {
+  const L = SLOTS.filter(s => s.st === 'live');
   return `
-    <header>
-      <div class="logo">Huecos</div>
-      <button style="text-decoration:underline; font-weight:500; font-size:14px">Entrar</button>
-    </header>
-    <main>
+    <main class="fade-in">
       <h1 class="serif">Alguien acaba de <i class="italic">cancelar</i>.</h1>
-      <p class="lead">Su pérdida es tu descuento. Huecos de última hora en salones premium de tu ciudad.</p>
-      
-      <div class="tabs">
-        <button aria-pressed="true">Para hoy</button>
-        <button aria-pressed="false">Mañana</button>
-      </div>
-
-      <div class="list">
-        ${L.map(s => {
-          const x = sv(s);
-          const min = Math.round((s.t - Date.now()) / 60000);
-          const tag = s.disc 
-            ? `<div class="tag">−${s.disc}% OFF</div>` 
-            : `<div class="tag gift">REGALO INCLUIDO</div>`;
-            
-          return `
-            <div class="tk">
-              ${tag}
-              <div class="tk-time serif">${hh(s.t)}<small>En ${min} min</small></div>
-              <div class="tk-info">
-                <h3>${x.n}</h3>
-                <p>${s.sty} se ha quedado libre. Duración: ${x.d} min.</p>
-                <div class="tk-price">
-                  <span class="now">${eur(cp(s))}</span>
-                  ${s.disc ? `<span class="old">${eur(x.p)}</span>` : ''}
-                </div>
-                <button class="btn o" onclick="checkout(${s.id})">Bloquear hueco</button>
-              </div>
-            </div>`;
-        }).join('')}
+      <p class="lead">Su pérdida es tu descuento. Huecos de última hora en tu ciudad.</p>
+      <div style="border-top: 1px solid var(--line);">
+        ${L.map(s => `
+          <div class="tk">
+            ${s.disc ? `<div class="tag">−${s.disc}% OFF</div>` : `<div class="tag ok">Regalo</div>`}
+            <div class="tk-time serif">${hh(s.t)}<small>En ${Math.round((s.t - Date.now())/6e4)}m</small></div>
+            <div class="tk-info">
+              <h3>${s.s}</h3>
+              <p>${s.biz} · ${s.d} min</p>
+              <div class="tk-price"><span class="now">${eur(cp(s))}</span><span class="old">${eur(s.p)}</span></div>
+              <button class="btn o" onclick="startCheckout(${s.id})">Bloquear hueco</button>
+            </div>
+          </div>
+        `).join('')}
+        ${!L.length ? `<p style="padding:40px 0; text-align:center; color:var(--mute)">Todos los salones están llenos ahora mismo. Vuelve más tarde.</p>` : ''}
       </div>
     </main>
   `;
 }
 
-function checkout(id) {
-  const s = SL.find(x => x.id === id);
-  const x = sv(s);
-  $('sheet').innerHTML = `
-    <h2 class="serif" style="font-size:28px; font-weight:300; margin-bottom:8px">Confirma tu cita</h2>
-    <p style="color:var(--mute); margin-bottom:24px; font-size:14px">${x.n} a las ${hh(s.t)}</p>
-    <div style="border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:16px 0; margin-bottom:32px; display:flex; justify-content:space-between; font-size:18px; font-weight:600">
-      <span>Total en el salón</span><span>${eur(cp(s))}</span>
-    </div>
-    <button class="btn" onclick="confirm(${id})">Confirmar asistencia</button>
-    <button class="btn o" style="border:none; margin-top:8px" onclick="closeModal()">Cancelar</button>
+function viewLogin(type = 'cli') {
+  const isCli = type === 'cli';
+  return `
+    <main class="fade-in">
+      <h1 class="serif">${isCli ? 'Ponte a punto.' : 'Llena tu agenda.'}</h1>
+      <div class="seg">
+        <button class="${isCli?'active':''}" onclick="$('app').innerHTML=renderApp(viewLogin('cli'))">Soy Cliente</button>
+        <button class="${!isCli?'active':''}" onclick="$('app').innerHTML=renderApp(viewLogin('biz'))">Soy Salón</button>
+      </div>
+      <div>
+        <input type="text" id="u" placeholder="Usuario (ej. ${isCli?'iker':'marea'})">
+        <input type="password" id="p" placeholder="Contraseña (123)">
+        <button class="btn" onclick="login('${type}')">Entrar</button>
+      </div>
+    </main>
   `;
-  $('veil').classList.add('on');
 }
 
-function confirm(id) {
-  SL.find(x => x.id === id).st = 'booked';
-  closeModal();
-  $('app').innerHTML = viewBook();
+// ----------------------------------------------------
+// EL DETALLE HUMANO: PANEL DE EMPRESARIO (AGENDA ESTILO EDITORIAL)
+// ----------------------------------------------------
+function viewBizDash() {
+  const mySlots = SLOTS.filter(s => s.biz === USERS[STATE.user].name).sort((a,b)=>a.t-b.t);
+  return `
+    <main class="fade-in">
+      <h1 class="serif">Agenda.</h1>
+      <p class="lead">Tus huecos publicados de hoy.</p>
+      <button class="btn" style="margin-bottom:32px" onclick="toast('Lanzando creador de huecos...')">+ Publicar nuevo hueco</button>
+      
+      <div style="border-top: 1.5px solid var(--ink);">
+        ${mySlots.map(s => {
+          const isBooked = s.st === 'booked';
+          return `
+          <div class="tk" style="${isBooked ? 'opacity:0.9' : ''}">
+            ${isBooked ? `<div class="tag ok" style="background:var(--ink); color:var(--paper)">Salvado 🌟</div>` : ''}
+            <div class="tk-time serif">${hh(s.t)}</div>
+            <div class="tk-info">
+              <h3>${s.s}</h3>
+              <p>${isBooked ? `<b>¡Reservado por ${s.cli}!</b>` : 'Esperando cliente...'}</p>
+              ${isBooked ? '' : `<button class="btn o" style="padding:8px; font-size:11px" onclick="removeSlot(${s.id})">Retirar</button>`}
+            </div>
+          </div>
+        `}).join('')}
+      </div>
+    </main>
+  `;
+}
+
+// ----------------------------------------------------
+// PANEL DE CLIENTE
+// ----------------------------------------------------
+function viewCliDash() {
+  const myBookings = SLOTS.filter(s => s.cli === USERS[STATE.user].name);
+  const u = USERS[STATE.user];
+  return `
+    <main class="fade-in">
+      <h1 class="serif">Hola, ${u.name.split(' ')[0]}.</h1>
+      
+      <h3 style="margin: 32px 0 16px; border-bottom:1px solid var(--line); padding-bottom:8px">Tus Próximas Citas</h3>
+      ${myBookings.length ? myBookings.map(s => `
+        <div style="padding:16px 0; display:flex; justify-content:space-between; border-bottom:1px dashed var(--line)">
+          <div><b>${s.s}</b><br><small style="color:var(--mute)">${s.biz} · ${hh(s.t)}</small></div>
+          <div style="text-align:right"><b>${eur(cp(s))}</b></div>
+        </div>
+      `).join('') : '<p class="lead">No tienes citas a la vista.</p>'}
+
+      <h3 style="margin: 40px 0 16px; border-bottom:1px solid var(--line); padding-bottom:8px">Métodos de Pago</h3>
+      ${u.cards.map(c => `<div style="padding:12px 0; font-family:monospace; font-size:16px">${c}</div>`).join('')}
+      <button class="btn o" style="margin-top:16px" onclick="alert('Redirigiendo a Stripe...')">+ Añadir Tarjeta</button>
+
+      <!-- IDEA ATREVIDA: EL RADAR -->
+      <div style="margin-top:60px; padding:24px; border:1.5px solid var(--ink); text-align:center">
+        <h3 class="serif" style="font-size:24px; margin-bottom:8px">¿No encuentras hueco?</h3>
+        <p style="font-size:13px; color:var(--mute); margin-bottom:16px">Activa el Radar y te avisaremos por WhatsApp si un salón premium cancela hoy.</p>
+        <button class="btn" onclick="toast('Radar Activado 📡')">Activar Radar</button>
+      </div>
+    </main>
+  `;
+}
+
+// ----------------------------------------------------
+// FLUJO DE PAGO INTEGRADO (SPA)
+// ----------------------------------------------------
+function viewCheckout() {
+  const s = SLOTS.find(x => x.id === STATE.selectedSlot);
+  return `
+    <main class="fade-in">
+      <button onclick="navTo('feed')" style="margin-bottom:24px; text-decoration:underline; font-size:14px">← Atrás</button>
+      <h1 class="serif" style="font-size:32px">Pagar reserva</h1>
+      <div style="padding: 24px 0; border-top:1px solid var(--line); border-bottom:1px solid var(--line); margin-bottom:32px">
+        <h3 style="font-size:18px">${s.s}</h3>
+        <p style="color:var(--mute)">${s.biz} · Hoy a las ${hh(s.t)}</p>
+        <div style="display:flex; justify-content:space-between; margin-top:16px; font-size:24px; font-weight:600">
+          <span>Total</span><span>${eur(cp(s))}</span>
+        </div>
+      </div>
+
+      <p style="font-size:13px; font-weight:600; margin-bottom:16px; text-transform:uppercase">Elige cómo pagar</p>
+      
+      <button class="btn apple" style="margin-bottom:12px" onclick="processPayment('apple')"> Pay</button>
+      <button class="btn o" style="margin-bottom:12px; background:white" onclick="navTo('card_form')">Tarjeta de crédito / débito</button>
+      
+      <div style="margin-top:32px; padding:16px; background:rgba(0,0,0,0.03); border-left:3px solid var(--ink)">
+        <button onclick="processPayment('cash')" style="width:100%; text-align:left; font-weight:600; font-size:16px">Pagar en efectivo en el salón →</button>
+        <p style="font-size:12px; color:var(--mute); margin-top:8px">Confiamos en ti. Al ser una oferta de última hora, si no apareces se bloqueará tu cuenta de Huecos para siempre.</p>
+      </div>
+    </main>
+  `;
+}
+
+function viewCardForm() {
+  return `
+    <main class="fade-in" style="background: white; min-height: 100dvh; margin: -32px -24px 0; padding: 40px 24px; max-width:none">
+      <button onclick="navTo('checkout')" style="margin-bottom:32px; text-decoration:underline">← Cancelar pago</button>
+      <h1 class="serif" style="font-size:28px">Datos de tarjeta</h1>
+      <div style="margin-top:32px">
+        <input type="text" placeholder="Número de tarjeta (ej. 4242...)">
+        <div style="display:flex; gap:16px">
+          <input type="text" placeholder="MM/AA">
+          <input type="text" placeholder="CVC">
+        </div>
+        <input type="text" placeholder="Nombre en la tarjeta">
+        <button class="btn" style="margin-top:24px" onclick="processPayment('card')">Pagar y Confirmar</button>
+      </div>
+      <p style="text-align:center; margin-top:24px; font-size:12px; color:var(--mute)">Pagos seguros procesados por Stripe</p>
+    </main>
+  `;
+}
+
+// --- CONTROLADOR ---
+
+function renderApp(contentView) {
+  return `${renderHeader()}${contentView}${renderNav()}`;
+}
+
+function navTo(view) {
+  STATE.view = view;
+  const views = {
+    'feed': viewFeed, 'login': () => viewLogin('cli'),
+    'biz_dash': viewBizDash, 'cli_dash': viewCliDash,
+    'checkout': viewCheckout, 'card_form': viewCardForm
+  };
+  $('app').innerHTML = renderApp(views[view]());
+  window.scrollTo(0,0);
+}
+
+function login(type) {
+  const u = $('u').value.toLowerCase(), p = $('p').value;
+  if(USERS[u] && USERS[u].pw === p && USERS[u].role === type) {
+    STATE.user = u; STATE.role = type;
+    toast(`Bienvenido/a`);
+    if(STATE.selectedSlot && type === 'cli') navTo('checkout');
+    else navTo(type === 'cli' ? 'feed' : 'biz_dash');
+  } else {
+    toast('Datos incorrectos');
+  }
+}
+
+function logout() { STATE.user = null; STATE.role = null; STATE.selectedSlot = null; navTo('feed'); }
+
+function startCheckout(id) {
+  STATE.selectedSlot = id;
+  if (!STATE.user || STATE.role !== 'cli') {
+    toast('Inicia sesión para reservar');
+    navTo('login');
+  } else {
+    navTo('checkout');
+  }
+}
+
+function processPayment(method) {
+  // Simula procesamiento
+  const s = SLOTS.find(x => x.id === STATE.selectedSlot);
+  s.st = 'booked';
+  s.cli = USERS[STATE.user].name;
+  STATE.selectedSlot = null;
   
-  const t = $('toast');
-  t.textContent = 'HUECO CONFIRMADO';
-  t.classList.add('on');
+  $('app').innerHTML = `<main class="fade-in" style="text-align:center; padding-top:80px">
+    <h1 class="serif" style="font-size:48px">¡Listo!</h1>
+    <p class="lead">Hueco bloqueado. Te esperan en el salón.</p>
+    <button class="btn" onclick="navTo('cli_dash')">Ver mis citas</button>
+  </main>`;
+}
+
+function removeSlot(id) {
+  SLOTS = SLOTS.filter(s => s.id !== id);
+  navTo('biz_dash');
+  toast('Hueco retirado');
+}
+
+function toast(msg) {
+  const t = $('toast'); t.textContent = msg; t.classList.add('on');
   setTimeout(() => t.classList.remove('on'), 3000);
 }
 
-function closeModal() { $('veil').classList.remove('on'); }
-
-$('app').innerHTML = viewBook();
+// Iniciar app
+navTo('feed');
 </script>
 </body>
 </html>
