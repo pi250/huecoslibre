@@ -3,366 +3,220 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#EAE6DF">
-<title>Huecos · Citas de última hora</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#F2F2F2">
+<title>Huecos · Última hora</title>
+<!-- Mezcla de tipografía utilitaria (Space Grotesk) y editorial clásica (Fraunces) -->
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #EAE6DF;
-  --card: #F6F4F0;
-  --ink: #181818;
-  --mute: #6C6861;
-  --line: #181818;
-  --accent: #DCD6CD;
-  --rust: #A33A24;
-  --ok: #27633D;
-  --sh: 4px 4px 0px rgba(24, 24, 24, 1);
-  --sh-hover: 1px 1px 0px rgba(24, 24, 24, 1);
+  --ink: #0A0A0A;
+  --paper: #F4F4F4; /* No es blanco puro, evita la fatiga visual */
+  --mute: #666666;
+  --line: #0A0A0A;
 }
-* { box-sizing: border-box; margin: 0; -webkit-tap-highlight-color: transparent; }
-[hidden] { display: none !important; }
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 html { overscroll-behavior: none; }
+
+/* Textura de ruido fotográfico para dar tacto humano y romper lo "digital" */
 body {
-  background: var(--bg);
+  background-color: var(--paper);
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
   color: var(--ink);
-  font: 400 16px/1.5 'Hanken Grotesk', system-ui, sans-serif;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
   -webkit-font-smoothing: antialiased;
   min-height: 100dvh;
 }
-button, input, select { font: inherit; color: inherit; }
-button {
-  cursor: pointer;
-  border: 0;
-  background: none;
-  transition: transform 0.3s cubic-bezier(0.2, 1.2, 0.4, 1), box-shadow 0.3s cubic-bezier(0.2, 1.2, 0.4, 1);
-}
-button:active { transform: translate(2px, 2px); box-shadow: var(--sh-hover) !important; }
-:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
-h1, h2, .logo, .tm b, .big { font-family: 'Fraunces', Georgia, serif; letter-spacing: -0.03em; }
-h1 { font-size: 36px; font-weight: 600; line-height: 1.05; }
-h2 { font-size: 24px; font-weight: 600; margin: 40px 0 16px; border-bottom: 1.5px solid var(--ink); padding-bottom: 8px;}
-.lead { color: var(--mute); margin: 12px 0 24px; font-size: 17px; }
+
+button, input { font: inherit; color: inherit; border: none; background: none; }
+button { cursor: pointer; transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1); }
+button:active { transform: scale(0.96); }
+
+/* Tipografía de contraste */
+.serif { font-family: 'Fraunces', serif; letter-spacing: -0.03em; }
+.italic { font-style: italic; }
 
 header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  padding: calc(24px + env(safe-area-inset-top)) 24px 24px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 12px;
-  padding: calc(20px + env(safe-area-inset-top)) 20px 16px;
-  background: var(--bg);
-  border-bottom: 1.5px solid var(--ink);
+  border-bottom: 1.5px solid var(--line);
 }
-.logo { font-size: 24px; font-weight: 800; color: var(--ink); text-transform: uppercase; letter-spacing: 0; }
-.logo::after { content: ""; display: inline-block; width: 6px; height: 6px; background: var(--rust); margin-left: 4px; border-radius: 0; }
-.who { flex: 1; color: var(--mute); font-size: 14px; text-align: right; text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600; }
-.out { display: flex; gap: 6px; align-items: center; padding: 8px 12px; border: 1.5px solid var(--ink); font-weight: 600; font-size: 13px; background: var(--card); text-transform: uppercase; letter-spacing: 0.05em; box-shadow: 2px 2px 0px var(--ink); }
+.logo { font-size: 24px; font-weight: 600; text-transform: uppercase; letter-spacing: -0.04em; }
 
-main { max-width: 640px; margin: 0 auto; padding: 24px 20px calc(120px + env(safe-area-inset-bottom)); }
-main.wide { max-width: 880px; }
+main { max-width: 560px; margin: 0 auto; padding: 40px 24px 120px; }
 
-nav {
-  position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: calc(20px + env(safe-area-inset-bottom));
-  z-index: 20;
-  display: flex;
-  gap: 4px;
-  width: min(94vw, 440px);
-  padding: 6px;
-  border-radius: 4px;
-  background: var(--card);
-  border: 1.5px solid var(--ink);
-  box-shadow: var(--sh);
+h1 { font-size: clamp(32px, 8vw, 48px); font-weight: 300; line-height: 1.05; margin-bottom: 16px; }
+.lead { color: var(--mute); font-size: 16px; margin-bottom: 48px; max-width: 90%; }
+
+/* Segmented Control Asimétrico */
+.tabs { display: flex; gap: 12px; margin-bottom: 32px; border-bottom: 1px solid rgba(10,10,10,0.1); padding-bottom: 16px;}
+.tabs button { font-weight: 500; color: var(--mute); text-transform: uppercase; font-size: 13px; letter-spacing: 0.05em; }
+.tabs button[aria-pressed=true] { color: var(--ink); position: relative; }
+.tabs button[aria-pressed=true]::after { content: ''; position: absolute; bottom: -17px; left: 0; width: 100%; height: 1.5px; background: var(--ink); }
+
+/* Listado de Ofertas (Estilo Revista) */
+.tk {
+  position: relative;
+  padding: 24px 0;
+  border-bottom: 1.5px solid var(--line);
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 16px;
+  align-items: start;
 }
-nav button {
-  flex: 1;
-  padding: 14px 4px;
-  border-radius: 2px;
-  font-weight: 600;
+.tk-time { font-size: 32px; line-height: 1; }
+.tk-time small { display: block; font-family: 'Space Grotesk', sans-serif; font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--mute); margin-top: 8px; }
+
+.tk-info h3 { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+.tk-info p { color: var(--mute); font-size: 14px; margin-bottom: 16px; }
+
+.tk-price { display: flex; gap: 12px; align-items: baseline; margin-bottom: 20px;}
+.now { font-size: 24px; font-weight: 600; }
+.old { text-decoration: line-through; color: var(--mute); }
+
+/* Etiqueta rota artesanal (El Detalle Humano) */
+.tag {
+  position: absolute;
+  top: 16px;
+  right: 0;
+  background: var(--ink);
+  color: var(--paper);
+  padding: 4px 10px;
   font-size: 12px;
+  font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--mute);
+  transform: rotate(3deg);
+  box-shadow: 2px 2px 0px rgba(0,0,0,0.2);
 }
-nav button[aria-current=page] { background: var(--ink); color: var(--card); }
+.tag.gift { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); transform: rotate(-2deg); }
 
+/* Botones Brutalistas */
 .btn {
   background: var(--ink);
-  color: var(--card);
-  font-weight: 600;
+  color: var(--paper);
+  padding: 16px 24px;
+  font-weight: 500;
   font-size: 14px;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  padding: 16px 24px;
-  border: 1.5px solid var(--ink);
-  border-radius: 2px;
-  box-shadow: var(--sh);
-}
-.btn.s { padding: 10px 16px; font-size: 12px; background: var(--accent); color: var(--ink); box-shadow: 2px 2px 0px var(--ink); }
-.btn.s.d { color: var(--rust); background: #EEDCD9; }
-.btn.o { background: var(--card); color: var(--ink); }
-.btn.w { width: 100%; }
-
-.cd, .k { background: var(--card); border: 1.5px solid var(--ink); border-radius: 2px; padding: 24px; box-shadow: var(--sh); margin-bottom: 16px; }
-.tk {
-  display: grid;
-  grid-template-columns: 100px 1fr;
-  background: var(--card);
-  border: 1.5px solid var(--ink);
-  border-radius: 2px;
-  box-shadow: var(--sh);
-  position: relative;
-  margin-bottom: 24px;
-}
-.tm {
-  border-right: 1.5px dashed var(--ink);
-  padding: 24px 8px;
+  width: 100%;
+  display: block;
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
 }
-.tm b { font-size: 30px; display: block; line-height: 1; }
-.tm span { font-size: 13px; color: var(--mute); margin-top: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
-.mid { padding: 20px 16px; }
-.mid > b { font-size: 18px; display: block; }
-.mid small { color: var(--mute); font-size: 14px; display: block; margin: 6px 0; }
-.act { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+.btn.o { background: transparent; color: var(--ink); border: 1.5px solid var(--ink); }
 
-.old { text-decoration: line-through; color: var(--mute); }
-.now { font-weight: 800; color: var(--ink); font-size: 18px; }
-
-.pl {
-  display: inline-block;
-  font-weight: 600;
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  padding: 4px 10px;
-  border-radius: 2px;
-  background: var(--accent);
-  color: var(--ink);
-  border: 1.5px solid var(--ink);
-  margin-right: 8px;
-}
-.pl.g { background: #DDE8DF; color: var(--ok); border-color: var(--ok); }
-.pl.c { background: #EEDCD9; color: var(--rust); border-color: var(--rust); }
-.pl.o { background: var(--ink); color: var(--card); }
-
-.seg { display: inline-flex; background: var(--accent); border: 1.5px solid var(--ink); border-radius: 2px; padding: 4px; margin: 0 0 24px; box-shadow: 2px 2px 0px var(--ink); }
-.seg button { padding: 10px 18px; border-radius: 0; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--mute); }
-.seg button[aria-pressed=true] { background: var(--card); color: var(--ink); border: 1.5px solid var(--ink); }
-
-.kp { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
-.k span { font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--mute); font-weight: 600; }
-.big { display: block; font-size: 36px; font-weight: 500; margin-top: 8px; color: var(--ink); }
-.k.hero { grid-column: 1 / -1; background: var(--ink); color: var(--card); }
-.k.hero span { color: var(--accent); }
-.k.hero .big { font-size: 48px; color: var(--card); }
-@media(min-width:700px){ .kp { grid-template-columns: 2fr 1fr 1fr 1fr; } .k.hero { grid-column: auto; } }
-
-.row { display: grid; grid-template-columns: 56px 1fr auto; gap: 16px; align-items: center; padding: 16px 0; border-bottom: 1.5px solid var(--ink); }
-.row:last-child { border: 0; }
-.row small { display: block; color: var(--mute); font-size: 14px; margin-top: 4px; }
-.dy { width: 56px; height: 56px; border: 1.5px solid var(--ink); border-radius: 2px; background: var(--card); display: grid; place-items: center; font-weight: 600; font-size: 13px; text-transform: uppercase; color: var(--ink); box-shadow: 2px 2px 0px var(--ink); }
-
-.fl { display: grid; gap: 8px; margin-top: 20px; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink); }
-.fl input, .fl select { padding: 14px 16px; border-radius: 2px; border: 1.5px solid var(--ink); background: var(--bg); font-weight: 500; font-size: 16px; width: 100%; text-transform: none; letter-spacing: 0; transition: background 0.2s, box-shadow 0.2s; }
-.fl input:focus, .fl select:focus { outline: 0; background: var(--card); box-shadow: 3px 3px 0px var(--ink); }
-.fl input[type=range] { padding: 0; accent-color: var(--ink); border: none; background: transparent; }
-
-.rw { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-.avw { position: relative; width: 104px; margin: 12px 0 24px; }
-.av { width: 104px; height: 104px; border-radius: 2px; background: var(--card); display: grid; place-items: center; font-size: 48px; border: 1.5px solid var(--ink); box-shadow: var(--sh); overflow: hidden; }
-.av img { width: 100%; height: 100%; object-fit: cover; }
-.cam { position: absolute; right: -12px; bottom: -12px; width: 44px; height: 44px; border-radius: 2px; background: var(--accent); color: var(--ink); display: grid; place-items: center; cursor: pointer; border: 1.5px solid var(--ink); box-shadow: 2px 2px 0px var(--ink); }
-.cam svg { width: 18px; }
-
-.ems { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
-.ems button { width: 52px; height: 52px; border-radius: 2px; background: var(--card); font-size: 24px; border: 1.5px solid var(--ink); box-shadow: 2px 2px 0px var(--ink); }
-.ems button[aria-pressed=true] { background: var(--ink); box-shadow: none; transform: translate(2px, 2px); }
-
-.cc { display: flex; align-items: center; gap: 16px; padding: 16px; border-radius: 2px; border: 1.5px solid var(--ink); background: var(--card); color: var(--ink); margin-bottom: 16px; box-shadow: 2px 2px 0px var(--ink); }
-.cc b { flex: 1; font-weight: 600; letter-spacing: 0.1em; font-family: monospace; font-size: 15px; }
-.cc button { color: var(--rust); font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; }
-
-.sum { background: var(--card); border: 1.5px solid var(--ink); border-radius: 2px; padding: 16px; margin-top: 24px; box-shadow: var(--sh); }
-.sum div { display: flex; justify-content: space-between; padding: 8px 0; font-size: 15px; }
-.sum .t { font-weight: 800; border-top: 1.5px dashed var(--ink); margin-top: 8px; padding-top: 16px; font-size: 18px; }
-
-.veil { position: fixed; inset: 0; background: rgba(234, 230, 223, 0.9); backdrop-filter: blur(2px); z-index: 40; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.4s cubic-bezier(0.2, 1.2, 0.4, 1); }
+/* Modal simplificado */
+.veil { position: fixed; inset: 0; background: rgba(244,244,244,0.9); z-index: 50; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
 .veil.on { opacity: 1; pointer-events: auto; }
-.sheet { background: var(--card); width: 100%; max-width: 520px; border-top: 1.5px solid var(--ink); border-left: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink); border-radius: 2px 2px 0 0; padding: 32px 24px calc(32px + env(safe-area-inset-bottom)); max-height: 92dvh; overflow: auto; transform: translateY(40px); transition: transform 0.4s cubic-bezier(0.2, 1.1, 0.4, 1); box-shadow: 0 -8px 0px rgba(24, 24, 24, 0.05); }
-.veil.on .sheet { transform: none; }
-.sheet::before { content: ""; display: block; width: 48px; height: 4px; background: var(--ink); margin: 0 auto 24px; }
-.sheet h2 { margin-top: 0; border: none; padding-bottom: 0; }
-@media(min-width:700px) { .veil { align-items: center; } .sheet { border-radius: 2px; border-bottom: 1.5px solid var(--ink); box-shadow: 8px 8px 0px rgba(24, 24, 24, 1); transform: translateY(20px); } }
+.sheet { background: var(--paper); width: 100%; max-width: 440px; padding: 40px 24px; border: 1.5px solid var(--ink); box-shadow: 8px 8px 0 var(--ink); transform: translateY(20px); transition: transform 0.3s; }
+.veil.on .sheet { transform: translateY(0); }
 
-.toast { position: fixed; left: 50%; bottom: calc(100px + env(safe-area-inset-bottom)); transform: translate(-50%, 20px); background: var(--ink); color: var(--card); padding: 16px 24px; border-radius: 2px; font-weight: 600; font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; z-index: 60; opacity: 0; pointer-events: none; transition: 0.4s cubic-bezier(0.2, 1.1, 0.4, 1); max-width: 90%; text-align: center; box-shadow: 4px 4px 0px rgba(24, 24, 24, 0.2); border: 1.5px solid var(--ink); }
+/* Toast */
+.toast { position: fixed; bottom: 40px; left: 50%; transform: translate(-50%, 20px); background: var(--ink); color: var(--paper); padding: 12px 24px; font-size: 13px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; opacity: 0; transition: 0.3s; pointer-events: none; z-index: 100; }
 .toast.on { opacity: 1; transform: translate(-50%, 0); }
-
-.em { text-align: center; color: var(--mute); padding: 48px 16px; font-style: italic; font-family: 'Fraunces', serif; font-size: 17px; }
-
-.lw { min-height: 100dvh; display: flex; flex-direction: column; justify-content: center; background: var(--bg); padding: calc(30px + env(safe-area-inset-top)) 24px calc(24px + env(safe-area-inset-bottom)); }
-.lt { color: var(--ink); max-width: 440px; width: 100%; margin: 0 auto 32px; }
-.lt h1 { font-size: 64px; line-height: 0.9; }
-.lt p { color: var(--mute); font-size: 20px; margin-top: 16px; font-family: 'Fraunces', serif; font-style: italic; }
-.lc { background: var(--card); border-radius: 2px; padding: 32px; border: 1.5px solid var(--ink); box-shadow: 6px 6px 0px var(--ink); max-width: 440px; width: 100%; margin: 0 auto; }
-.er { color: var(--rust); font-weight: 600; font-size: 14px; min-height: 20px; margin-top: 12px; }
-
-.hint { font-size: 13px; color: var(--mute); margin-top: 16px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.bd { display: inline-block; font-style: normal; min-width: 20px; height: 20px; line-height: 20px; margin-left: 6px; background: var(--ink); color: var(--card); font-size: 11px; text-align: center; font-weight: 700; }
-nav [aria-current=page] .bd { background: var(--card); color: var(--ink); }
-.chk { display: flex; gap: 12px; align-items: center; margin-top: 20px; font-size: 15px; font-weight: 500; }
-.chk input { width: 20px; height: 20px; accent-color: var(--ink); border: 1.5px solid var(--ink); }
-
-.lsw { margin-top: 24px; font-size: 14px; color: var(--mute); text-align: center; }
-.lsw button { color: var(--ink); font-weight: 600; text-decoration: underline; text-transform: uppercase; letter-spacing: 0.05em; font-size: 12px; }
-
-.outb { margin-top: 48px; color: var(--rust) !important; border-color: var(--rust) !important; display: flex; gap: 12px; justify-content: center; align-items: center; box-shadow: 3px 3px 0px #EEDCD9; }
-.outb svg { width: 18px; }
-
-@media(prefers-reduced-motion:reduce){ *{ transition: none !important; } }
 </style>
 </head>
 <body>
 <div id="app"></div>
-<div class="veil" id="veil"><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
-<div class="toast" id="toast" role="status"></div>
+<div class="veil" id="veil"><div class="sheet" id="sheet"></div></div>
+<div class="toast" id="toast"></div>
+
 <script>
-const $=i=>document.getElementById(i),esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&','<':'<','>':'>','"':'"'}[c])),eur=n=>(Math.round(n*100)/100).toLocaleString('es-ES')+' €';
-const T=m=>{const d=new Date(Date.now()+m*6e4);d.setMinutes(Math.ceil(d.getMinutes()/5)*5,0,0);return d},hh=d=>d.toLocaleTimeString('es-ES',{hour:'2-digit',minute:'2-digit'});
-const same=d=>d.toDateString()===new Date().toDateString(),dl=d=>same(d)?'Hoy':d.toLocaleDateString('es-ES',{weekday:'short',day:'numeric',month:'short'});
-const left=m=>m<0?'ya empezó':m<60?`en ${m} min`:`en ${Math.floor(m/60)} h${m%60?' '+m%60+' min':''}`;
-const SV=[{id:1,n:'Corte y secado',p:38,d:60},{id:2,n:'Color y mechas',p:85,d:120},{id:3,n:'Peinado de fiesta',p:45,d:60},{id:4,n:'Tratamiento de keratina',p:70,d:90}];
-const SL=[{id:1,s:1,t:T(-110),disc:20,st:'done',cl:'Marta G.'},{id:2,s:2,t:T(-45),disc:20,st:'done',cl:'Elena V.'},{id:3,s:1,t:T(40),disc:30,st:'booked',cl:'Lucía M.'},{id:4,s:3,t:T(75),disc:25,st:'live'},{id:5,s:4,t:T(130),disc:0,gift:'Mascarilla de regalo',st:'live'},{id:6,s:2,t:T(200),disc:20,st:'booked',cl:'Andrea P.'},{id:7,s:1,t:T(260),disc:15,st:'live'},{id:9,s:3,t:T(1500),disc:25,st:'live'},{id:8,s:1,t:T(-4300),disc:20,st:'done',cl:'Iker Etxeberria',me:'iker'},{id:10,s:2,t:T(-9000),disc:15,st:'cancelled',cl:'Iker Etxeberria',me:'iker'}];
-SL.forEach(s=>s.o='peluqueria');
-const PF={iker:{name:'Iker Etxeberria',email:'iker@correo.es',tel:'612 345 678',av:'🌿',img:'',cards:[{id:1,b:'Visa',l:'4242',e:'09/28'}]}},BZ={peluqueria:{name:'Salón Marea',tel:'981 000 000',addr:'Calle Mayor 12, Oleiros',img:''}};let P=PF.iker,B=BZ.peluqueria;
-const USERS={peluqueria:{pw:'qwerty',role:'biz',email:'contacto@salonmarea.es'},iker:{pw:'qwerty',role:'cli',email:'iker@correo.es'}},ST={live:['Publicado','o'],booked:['Confirmada',''],done:['Atendida','g'],noshow:['No vino','c'],cancelled:['Cancelada','c']};
-const S={u:null,role:null,tab:'a',f:'all',err:'',mode:'in'};let OM='d',PM='s',RR='cli';
-const sv=s=>SV.find(x=>x.id===s.s),cp=s=>Math.round(sv(s).p*(1-s.disc/100)),by=id=>SL.find(s=>s.id==id);
-const pill=k=>`<span class="pl ${ST[k][1]}">${ST[k][0]}</span>`,offer=s=>s.disc?`<span class="pl o">−${s.disc}%</span>`:`<span class="pl g">Regalo: ${esc(s.gift)}</span>`;
-const WK=[['Marta G.',1,38,'done'],['Joan P.',2,85,'done'],['Carla S.',3,36,'done'],['Rubén A.',1,30,'noshow'],['Nerea T.',4,56,'done'],['Pau M.',1,32,'done'],['Aitana R.',3,34,'done']];
-const DN=['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'],TI=(new Date().getDay()+6)%7;
-const ic={out:'<path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>',cam:'<path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/>'};
-const svg=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ic[k]}</svg>`;
-const av=()=>P.img?`<img src="${P.img}" alt="Foto de perfil">`:P.av;
-function toast(t){const e=$('toast');e.textContent=t;e.classList.add('on');clearTimeout(toast.h);toast.h=setTimeout(()=>e.classList.remove('on'),2400)}
-const cardErr=(n,x)=>!/^\d{12,19}$/.test(n)?'Revisa el número de tarjeta':!/^(0[1-9]|1[0-2])\/\d{2}$/.test(x)?'La caducidad debe tener el formato MM/AA':'',br=n=>n[0]==='4'?'Visa':n[0]==='5'?'Mastercard':'Tarjeta';
-const enter=k=>{S.u=k;S.role=USERS[k].role;S.tab='a';S.err='';S.mode='in';if(S.role==='cli')P=PF[k];else B=BZ[k];render();scrollTo(0,0)};
-const close=()=>$('veil').classList.remove('on'),open=h=>{$('sheet').innerHTML=h;$('veil').classList.add('on')};
+const $ = id => document.getElementById(id);
+const eur = n => n + '€';
+const hh = d => d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 
-function login(){const up=S.mode==='up';return `<div class="lw"><div class="lt"><h1>Huecos</h1><p>Citas de última hora en tu peluquería, a mejor precio.</p></div>
-<form class="lc" id="${up?'rf':'lf'}" autocomplete="on"><h2 style="margin:0 0 4px">${up?'Crea tu cuenta':'Inicia sesión'}</h2>
-${up?`<div class="seg" style="margin:12px 0 0;display:flex"><button type="button" style="flex:1" data-a="rr" data-m="cli" aria-pressed="${RR==='cli'}">Soy cliente</button><button type="button" style="flex:1" data-a="rr" data-m="biz" aria-pressed="${RR==='biz'}">Tengo un negocio</button></div>
-<label class="fl" style="margin-top:6px"><span id="rnl">${RR==='biz'?'Nombre del negocio':'Nombre completo'}</span><input id="rn" autocomplete="name"></label><label class="fl">Usuario<input id="ru" autocomplete="username" autocapitalize="none"></label><label class="fl">Correo electrónico<input id="re" type="email" autocomplete="email"></label><label class="fl">Contraseña<input id="rp" type="password" autocomplete="new-password" placeholder="Mínimo 6 caracteres"></label>`
-:`<label class="fl">Usuario o correo<input id="lu" autocomplete="username" autocapitalize="none"></label><label class="fl">Contraseña<input id="lp" type="password" autocomplete="current-password"></label>`}
-<div class="er" id="er">${esc(S.err)}</div><button class="btn w" type="submit" style="margin-top:6px">${up?'Crear cuenta':'Entrar'}</button>
-<p class="lsw">${up?'¿Ya tienes cuenta?':'¿No tienes cuenta?'} <button type="button" data-a="mode" data-v="${up?'in':'up'}">${up?'Inicia sesión':'Regístrate'}</button></p></form></div>`}
+// Mock data realista
+const SV = [
+  { id: 1, n: 'Corte de autor y secado', p: 38, d: 60 },
+  { id: 2, n: 'Color completo y mechas', p: 85, d: 120 }
+];
+const SL = [
+  { id: 101, s: 1, t: new Date(Date.now() + 45*60000), disc: 20, st: 'live', sty: 'Marta' },
+  { id: 102, s: 2, t: new Date(Date.now() + 120*60000), disc: 30, st: 'live', sty: 'Elena' },
+  { id: 103, s: 1, t: new Date(Date.now() + 200*60000), disc: 0, gift: 'Tratamiento Olaplex', st: 'live', sty: 'Dani' }
+];
 
-function tk(s,a,n){const m=Math.round((s.t-Date.now())/6e4),x=sv(s);
-return `<div class="tk"><div class="tm"><b>${hh(s.t)}</b><span>${same(s.t)?left(m):dl(s.t)}</span></div><div class="mid"><b>${esc(x.n)}</b><small>${n?esc(n)+' · ':''}${x.d} min</small>${offer(s)} <span class="old">${eur(x.p)}</span> <span class="now">${eur(cp(s))}</span><div class="act">${a}</div></div></div>`}
+const sv = s => SV.find(x => x.id === s.s);
+const cp = s => Math.round(sv(s).p * (1 - s.disc / 100));
 
-function book(){const L=SL.filter(s=>s.st==='live'&&(S.f==='all'||(S.f==='today'?same(s.t):!same(s.t)))).sort((a,b)=>a.t-b.t);
-return `<h1>Huecos libres</h1><p class="lead">Salón Marea tiene estas citas disponibles. Reserva en dos toques.</p>
-<div class="seg">${[['all','Todos'],['today','Hoy'],['tom','Mañana']].map(([k,l])=>`<button data-a="f" data-v="${k}" aria-pressed="${S.f===k}">${l}</button>`).join('')}</div>
-${L.length?L.map(s=>tk(s,`<button class="btn" data-a="bk" data-id="${s.id}">Reservar</button>`,(BZ[s.o]||{}).name)).join(''):'<div class="em">No hay huecos en este día. Vuelve más tarde: el salón publica nuevos a menudo.</div>'}`}
+function viewBook() {
+  const L = SL.filter(s => s.st === 'live');
+  return `
+    <header>
+      <div class="logo">Huecos</div>
+      <button style="text-decoration:underline; font-weight:500; font-size:14px">Entrar</button>
+    </header>
+    <main>
+      <h1 class="serif">Alguien acaba de <i class="italic">cancelar</i>.</h1>
+      <p class="lead">Su pérdida es tu descuento. Huecos de última hora en salones premium de tu ciudad.</p>
+      
+      <div class="tabs">
+        <button aria-pressed="true">Para hoy</button>
+        <button aria-pressed="false">Mañana</button>
+      </div>
 
-function prof(){const my=SL.filter(s=>s.me===S.u).sort((a,b)=>b.t-a.t);
-return `<div class="avw"><div class="av">${av()}</div><label class="cam" aria-label="Subir foto">${svg('cam')}<input type="file" id="ph" accept="image/*" hidden></label></div><h1>${esc(P.name)}</h1><p class="lead">${esc(P.email)}</p>
-<div class="ems" role="group" aria-label="Avatar">${['🌿','🦊','🐻','🌻','🍂','🪴'].map(e=>`<button data-a="av" data-v="${e}" aria-pressed="${!P.img&&P.av===e}">${e}</button>`).join('')}</div>
-<h2>Datos personales</h2><form class="cd" id="pf"><label class="fl" style="margin:0">Nombre<input id="pn" value="${esc(P.name)}" required></label><label class="fl">Correo electrónico<input id="pe" type="email" value="${esc(P.email)}" required></label><label class="fl">Teléfono<input id="pt" type="tel" value="${esc(P.tel)}"></label><button class="btn w" style="margin-top:16px">Guardar cambios</button></form>
-<h2>Métodos de pago</h2><div class="cd">${P.cards.map(c=>`<div class="cc"><span>${c.b}</span><b>•••• ${c.l}</b><span>${c.e}</span><button data-a="rc" data-id="${c.id}">Eliminar</button></div>`).join('')||'<p class="em" style="padding:8px">Aún no tienes tarjetas. Añade una para reservar.</p>'}
-<form id="cf"><label class="fl">Número de tarjeta<input id="cn" inputmode="numeric" placeholder="4242 4242 4242 4242" required></label><label class="fl">Caducidad<input id="ce" placeholder="MM/AA" maxlength="5" required></label><button class="btn o w" style="margin-top:14px">Añadir tarjeta</button></form></div>
-<h2>Historial de citas</h2><div class="cd">${my.length?my.map(s=>`<div class="row" style="grid-template-columns:1fr auto"><div><b>${esc(sv(s).n)}</b><small>${dl(s.t)}, ${hh(s.t)} · ${eur(cp(s))}</small>${s.st==='booked'?`<button class="btn s d" style="margin-top:8px" data-a="cx" data-id="${s.id}">Cancelar cita</button>`:''}</div>${pill(s.st)}</div>`).join(''):'<p class="em">Todavía no has reservado ninguna cita.</p>'}</div>
-<button class="btn o w outb" data-a="out">${svg('out')}Cerrar sesión</button>`}
+      <div class="list">
+        ${L.map(s => {
+          const x = sv(s);
+          const min = Math.round((s.t - Date.now()) / 60000);
+          const tag = s.disc 
+            ? `<div class="tag">−${s.disc}% OFF</div>` 
+            : `<div class="tag gift">REGALO INCLUIDO</div>`;
+            
+          return `
+            <div class="tk">
+              ${tag}
+              <div class="tk-time serif">${hh(s.t)}<small>En ${min} min</small></div>
+              <div class="tk-info">
+                <h3>${x.n}</h3>
+                <p>${s.sty} se ha quedado libre. Duración: ${x.d} min.</p>
+                <div class="tk-price">
+                  <span class="now">${eur(cp(s))}</span>
+                  ${s.disc ? `<span class="old">${eur(x.p)}</span>` : ''}
+                </div>
+                <button class="btn o" onclick="checkout(${s.id})">Bloquear hueco</button>
+              </div>
+            </div>`;
+        }).join('')}
+      </div>
+    </main>
+  `;
+}
 
-function bprof(){return `<div class="avw"><div class="av" style="font-size:40px;font-family:Fraunces,serif;font-weight:800;background:var(--accent);color:var(--ink)">${B.img?`<img src="${B.img}" alt="Logo del negocio">`:esc((B.name[0]||'N').toUpperCase())}</div><label class="cam" aria-label="Subir logo">${svg('cam')}<input type="file" id="bl" accept="image/*" hidden></label></div><h1>${esc(B.name)}</h1><p class="lead">Así te ven los clientes en la app.</p>
-<h2>Datos del establecimiento</h2><form class="cd" id="bf"><label class="fl" style="margin:0">Nombre del negocio<input id="bnm" value="${esc(B.name)}"></label><label class="fl">Teléfono<input id="btl" type="tel" value="${esc(B.tel)}"></label><label class="fl">Dirección<input id="bad" value="${esc(B.addr)}" autocomplete="street-address"></label><button class="btn w" style="margin-top:16px">Guardar cambios</button></form>
-<button class="btn o w outb" data-a="out">${svg('out')}Cerrar sesión</button>`}
+function checkout(id) {
+  const s = SL.find(x => x.id === id);
+  const x = sv(s);
+  $('sheet').innerHTML = `
+    <h2 class="serif" style="font-size:28px; font-weight:300; margin-bottom:8px">Confirma tu cita</h2>
+    <p style="color:var(--mute); margin-bottom:24px; font-size:14px">${x.n} a las ${hh(s.t)}</p>
+    <div style="border-top:1px solid var(--line); border-bottom:1px solid var(--line); padding:16px 0; margin-bottom:32px; display:flex; justify-content:space-between; font-size:18px; font-weight:600">
+      <span>Total en el salón</span><span>${eur(cp(s))}</span>
+    </div>
+    <button class="btn" onclick="confirm(${id})">Confirmar asistencia</button>
+    <button class="btn o" style="border:none; margin-top:8px" onclick="closeModal()">Cancelar</button>
+  `;
+  $('veil').classList.add('on');
+}
 
-function pend(){const b=S.role==='biz',L=SL.filter(s=>s.st==='booked'&&(b?s.o===S.u:s.me===S.u)).sort((x,y)=>x.t-y.t);
-return `<h1>Reservas pendientes</h1><p class="lead">${b?'Clientes que han reservado y aún no has atendido.':'Tus próximas citas confirmadas.'}</p>${L.length?L.map(s=>tk(s,b?`<button class="btn s" data-a="att" data-id="${s.id}">Marcar atendida</button><button class="btn s d" data-a="ns" data-id="${s.id}">No vino</button>`:`<button class="btn s d" data-a="cx" data-id="${s.id}">Cancelar cita</button>`,b?s.cl:(BZ[s.o]||{}).name)).join(''):`<div class="em">${b?'No tienes reservas pendientes. Publica huecos para recibir nuevas citas.':'No tienes citas pendientes. Reserva un hueco y aparecerá aquí.'}</div>`}`}
+function confirm(id) {
+  SL.find(x => x.id === id).st = 'booked';
+  closeModal();
+  $('app').innerHTML = viewBook();
+  
+  const t = $('toast');
+  t.textContent = 'HUECO CONFIRMADO';
+  t.classList.add('on');
+  setTimeout(() => t.classList.remove('on'), 3000);
+}
 
-function dash(){const ws=new Date();ws.setHours(0,0,0,0);ws.setDate(ws.getDate()-TI);const we=new Date(+ws+7*864e5);
-const rows=[...WK.map((w,i)=>({d:TI?i%TI:0,cl:w[0],sv:SV[w[1]-1].n,amt:w[2],st:w[3],old:1})).filter(()=>TI>0&&S.u==='peluqueria'),...SL.filter(s=>s.cl&&!['cancelled','live'].includes(s.st)&&s.t>=ws&&s.t<we&&s.o===S.u).map(s=>({d:(s.t.getDay()+6)%7,cl:s.cl,sv:sv(s).n,amt:cp(s),st:s.st,id:s.id,t:s.t}))].sort((a,b)=>a.d-b.d||(a.t||0)-(b.t||0));
-const dn=rows.filter(r=>r.st==='done'),inc=dn.reduce((a,r)=>a+r.amt,0),pend=rows.filter(r=>r.st==='booked'),by7=DN.map((_,i)=>dn.filter(r=>r.d===i).reduce((a,r)=>a+r.amt,0)),mx=Math.max(...by7,1);
-const sold=SL.filter(s=>s.o===S.u&&['booked','done'].includes(s.st)).length,tot=SL.filter(s=>s.o===S.u&&s.st!=='cancelled').length;
-return `<h1>Panel de la semana</h1><p class="lead">${esc(B.name)} · clientes, ingresos y huecos de esta semana.</p>
-<div class="kp"><div class="k hero"><span>Ingresos de la semana</span><b class="big">${eur(inc)}</b></div><div class="k"><span>Huecos vendidos</span><b class="big">${sold}/${tot}</b></div><div class="k"><span>Atendidos</span><b class="big">${dn.length}</b></div><div class="k"><span>Pendientes</span><b class="big">${pend.length}</b></div></div>
-<h2>Ingresos por día</h2><div class="cd"><svg viewBox="0 0 340 140" style="width:100%" role="img" aria-label="Ingresos por día">${by7.map((v,i)=>{const h=v/mx*92;return `<rect x="${i*48+8}" y="${110-h}" width="32" height="${Math.max(h,3)}" rx="0" fill="${i===TI?'#181818':'#DCD6CD'}"/><text x="${i*48+24}" y="130" text-anchor="middle" font-size="11" font-weight="600" fill="#6C6861">${DN[i]}</text>${v?`<text x="${i*48+24}" y="${104-h}" text-anchor="middle" font-size="11" font-weight="800" fill="#181818">${Math.round(v)}</text>`:''}`}).join('')}</svg></div>
-<h2>Clientes de la semana</h2><div class="cd">${rows.length?rows.map(r=>`<div class="row"><div class="dy">${DN[r.d]}</div><div><b>${esc(r.cl)}</b><small>${esc(r.sv)} · ${eur(r.amt)}${r.t?' · '+hh(r.t):''}</small>${r.st==='booked'?`<div class="act"><button class="btn s" data-a="att" data-id="${r.id}">Marcar atendida</button><button class="btn s d" data-a="ns" data-id="${r.id}">No vino</button></div>`:''}</div>${pill(r.st)}</div>`).join(''):'<p class="em">Aún no hay citas esta semana. Publica un hueco para llenar la agenda.</p>'}</div>`}
+function closeModal() { $('veil').classList.remove('on'); }
 
-function slots(){const L=SL.filter(s=>s.o===S.u&&s.st==='live').sort((a,b)=>a.t-b.t);
-return `<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h1>Huecos</h1><button class="btn" data-a="nw">Publicar hueco</button></div><p class="lead">Citas libres que ofreces con descuento o regalo. Los clientes las ven al instante.</p>
-${L.length?L.map(s=>tk(s,`<button class="btn s" data-a="ed" data-id="${s.id}">Editar oferta</button><button class="btn s d" data-a="dl" data-id="${s.id}">Retirar</button>`)).join(''):'<div class="em">No tienes huecos publicados. Publica uno para recibir reservas de última hora.</div>'}`}
-
-function render(){const y=scrollY,a=$('app');if(!S.u){a.innerHTML=login();return}
-const b=S.role==='biz',tb=b?[['a','Panel'],['b','Huecos'],['p','Pendientes'],['c','Perfil']]:[['a','Reservar'],['p','Pendientes'],['c','Perfil']],n=SL.filter(s=>s.st==='booked'&&(b?s.o===S.u:s.me===S.u)).length;
-const v=S.tab==='p'?pend():b?(S.tab==='a'?dash():S.tab==='b'?slots():bprof()):(S.tab==='a'?book():prof());
-a.innerHTML=`<header><b class="logo">Huecos</b><span class="who">${b?esc(B.name):esc(P.name.split(' ')[0])}</span></header><main class="${b?'wide':''}">${v}</main><nav aria-label="Principal">${tb.map(([k,t])=>`<button data-a="tab" data-v="${k}" ${S.tab===k?'aria-current="page"':''}>${t}${k==='p'&&n?`<i class="bd">${n}</i>`:''}</button>`).join('')}</nav>`;scrollTo(0,y)}
-
-function bsheet(id){const s=id&&by(id),x=s?sv(s):SV[0],g=s&&!s.disc;OM=g?'g':'d';
-open(`<h2>${s?'Editar oferta':'Publicar hueco'}</h2><label class="fl" style="margin-top:0">Servicio<select id="fs" ${s?'disabled':''}>${SV.map(v=>`<option value="${v.id}" ${v.id===x.id?'selected':''}>${esc(v.n)} · ${eur(v.p)}</option>`).join('')}</select></label>
-<div class="rw"><label class="fl">Día<select id="fy" ${s?'disabled':''}><option value="0">Hoy</option><option value="1" ${s&&!same(s.t)?'selected':''}>Mañana</option></select></label><label class="fl">Hora<input id="ft" type="time" value="${hh(s?s.t:T(60))}" ${s?'disabled':''}></label></div>
-<div class="seg" style="margin-top:16px"><button type="button" data-a="mo" data-m="d" aria-pressed="${!g}">Descuento</button><button type="button" data-a="mo" data-m="g" aria-pressed="${!!g}">Regalo</button></div>
-<label class="fl" id="fd" style="margin-top:0" ${g?'hidden':''}>Descuento: <b id="dv">${s&&s.disc||25}%</b><input id="fr" type="range" min="10" max="50" step="5" value="${s&&s.disc||25}"></label>
-<label class="fl" id="fg" style="margin-top:0" ${g?'':'hidden'}>¿Qué regalas?<input id="fgi" maxlength="40" value="${esc(s&&s.gift||'Mascarilla de regalo')}"></label>
-<div class="sum" id="sm"></div><button class="btn w" style="margin-top:16px;padding:15px" data-a="sv" data-id="${s?s.id:''}">${s?'Guardar cambios':'Publicar hueco'}</button><button class="btn o w" style="margin-top:8px" data-a="close">Cancelar</button>`);bsum()}
-function bsum(){const x=SV.find(v=>v.id==$('fs').value),d=OM==='g'?0:+$('fr').value;$('dv').textContent=d+'%';$('sm').innerHTML=`<div><span>Precio normal</span><b>${eur(x.p)}</b></div><div class="t"><span>El cliente paga</span><b>${eur(Math.round(x.p*(1-d/100)))}</b></div>`}
-
-document.addEventListener('click',e=>{if(e.target.id==='veil')return close();const sb=e.target.closest('form button:not([data-a])');if(sb){e.preventDefault();return sub(sb.form.id)}const t=e.target.closest('button[data-a]');if(!t)return;const d=t.dataset,a=d.a;
-if(a==='fill'){$('lu').value=d.u;$('lp').value='qwerty';return $('er').textContent=''}
-if(a==='out'){S.u=null;S.err='';S.mode='in';close();return render()}
-if(a==='mode'){S.mode=d.v;S.err='';RR='cli';return render()}
-if(a==='rr'){RR=d.m;document.querySelectorAll('[data-a=rr]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.m===RR));return $('rnl').textContent=RR==='biz'?'Nombre del negocio':'Nombre completo'}
-if(a==='pm'){PM=d.m;document.querySelectorAll('[data-a=pm]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.m===PM));$('ps').hidden=PM==='n';$('pn2').hidden=PM==='s';return}
-if(a==='tab'){S.tab=d.v;render();return scrollTo(0,0)}
-if(a==='f'){S.f=d.v;return render()}
-if(a==='close')return close();
-if(a==='av'){P.av=d.v;P.img='';return render()}
-if(a==='rc'){P.cards=P.cards.filter(c=>c.id!=d.id);render();return toast('Tarjeta eliminada')}
-if(a==='cx'){const s=by(d.id);s.st='live';delete s.cl;delete s.me;render();return toast('Cita cancelada. El hueco vuelve a estar libre')}
-if(a==='bk'){const s=by(d.id),x=sv(s);PM=P.cards.length?'s':'n';return open(`<h2>Confirmar reserva</h2><b>${esc(x.n)}</b><p class="lead" style="margin:4px 0 0">${esc((BZ[s.o]||{}).name||'')} · ${dl(s.t)}, ${hh(s.t)} · ${x.d} min</p>
-<label class="fl">Nombre completo<input id="bn" value="${esc(P.name)}" autocomplete="name"></label>
-<div class="seg" style="margin-top:16px"><button type="button" data-a="pm" data-m="s" aria-pressed="${PM==='s'}">Tarjeta guardada</button><button type="button" data-a="pm" data-m="n" aria-pressed="${PM==='n'}">Tarjeta nueva</button></div>
-<div id="ps" ${PM==='s'?'':'hidden'}>${P.cards.length?`<label class="fl" style="margin-top:0">Pagar con<select id="pc">${P.cards.map(c=>`<option value="${c.id}">${c.b} •••• ${c.l} · ${c.e}</option>`).join('')}</select></label>`:'<p class="lead" style="margin:0">No tienes tarjetas guardadas. Elige «Tarjeta nueva» para pagar.</p>'}</div>
-<div id="pn2" ${PM==='n'?'':'hidden'}><label class="fl" style="margin-top:0">Número de tarjeta<input id="nn" inputmode="numeric" autocomplete="cc-number" placeholder="4242 4242 4242 4242"></label><div class="rw"><label class="fl">Caducidad<input id="ne" placeholder="MM/AA" maxlength="5" autocomplete="cc-exp"></label><label class="fl">CVC<input id="nv" inputmode="numeric" maxlength="4" placeholder="123" autocomplete="cc-csc"></label></div><label class="chk"><input type="checkbox" id="ns" checked>Guardar esta tarjeta en mi perfil</label></div>
-<div class="sum"><div><span>Precio normal</span><b>${eur(x.p)}</b></div><div><span>${s.disc?'Descuento −'+s.disc+'%':'Regalo: '+esc(s.gift)}</span><b>${eur(x.p-cp(s))}</b></div><div class="t"><span>Total</span><b>${eur(cp(s))}</b></div></div>
-<button class="btn w" style="margin-top:16px;padding:15px" data-a="pay" data-id="${s.id}">Confirmar y pagar</button><button class="btn o w" style="margin-top:8px" data-a="close">Cancelar</button>`)}
-if(a==='pay'){const s=by(d.id),nm=$('bn').value.trim();if(nm.split(/\s+/).length<2)return toast('Escribe tu nombre y apellidos');
-if(PM==='s'){if(!P.cards.length)return toast('No tienes tarjetas guardadas. Usa una tarjeta nueva')}
-else{const n=$('nn').value.replace(/\s/g,''),x=$('ne').value.trim(),er=cardErr(n,x)||(/^\d{3,4}$/.test($('nv').value)?'':'Revisa el código CVC');if(er)return toast(er);if($('ns').checked)P.cards.push({id:Date.now(),b:br(n),l:n.slice(-4),e:x})}
-if(s.st!=='live'){close();render();return toast('Ese hueco ya no está libre')}s.st='booked';s.cl=nm;s.me=S.u;close();S.tab='p';render();scrollTo(0,0);return toast('Reserva confirmada. Te esperamos a las '+hh(s.t))}
-if(a==='nw')return bsheet();if(a==='ed')return bsheet(d.id);
-if(a==='mo'){OM=d.m;document.querySelectorAll('[data-a=mo]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.m===OM));$('fd').hidden=OM==='g';$('fg').hidden=OM==='d';return bsum()}
-if(a==='sv'){const g=OM==='g',disc=g?0:+$('fr').value,gift=g?($('fgi').value.trim()||'Extra de regalo'):null;
-if(d.id){const s=by(d.id);s.disc=disc;s.gift=gift;close();render();return toast('Oferta actualizada')}
-const w=new Date();w.setDate(w.getDate()+ +$('fy').value);const[h,m]=($('ft').value||'00:00').split(':');w.setHours(+h,+m,0,0);if(w<=Date.now())return toast('Elige una hora futura');
-SL.push({id:Date.now(),s:+$('fs').value,t:w,disc,gift,st:'live',o:S.u});close();S.tab='b';render();return toast('Hueco publicado. Ya es visible para los clientes')}
-if(a==='dl'){const i=SL.findIndex(s=>s.id==d.id);SL.splice(i,1);render();return toast('Hueco retirado')}
-if(a==='att'){by(d.id).st='done';render();return toast('Cita marcada como atendida')}
-if(a==='ns'){by(d.id).st='noshow';render();return toast('Cita marcada como no asistida')}});
-const sub=i=>{
-if(i==='lf'){const v=$('lu').value.trim().toLowerCase(),k=Object.keys(USERS).find(x=>x===v||USERS[x].email===v);
-if(k&&USERS[k].pw===$('lp').value)return enter(k);
-S.err='Usuario o contraseña incorrectos. Revisa los datos e inténtalo de nuevo.';return $('er').textContent=S.err}
-if(i==='rf'){const nm=$('rn').value.trim(),u=$('ru').value.trim().toLowerCase(),em=$('re').value.trim().toLowerCase(),pw=$('rp').value;
-const er=!nm?'Escribe tu nombre':!/^[a-z0-9._-]{3,}$/.test(u)?'El usuario necesita 3 caracteres o más: letras, números, punto o guion':!/^\S+@\S+\.\S+$/.test(em)?'Escribe un correo electrónico válido':USERS[u]||Object.values(USERS).some(x=>x.email===em)?'Ese usuario o correo ya está registrado':pw.length<6?'La contraseña debe tener al menos 6 caracteres':'';
-if(er){S.err=er;return $('er').textContent=er}
-USERS[u]={pw,role:RR,email:em};if(RR==='cli')PF[u]={name:nm,email:em,tel:'',av:'🌿',img:'',cards:[]};else BZ[u]={name:nm,tel:'',addr:'',img:''};return enter(u)}
-if(i==='bf'){B.name=$('bnm').value.trim()||B.name;B.tel=$('btl').value.trim();B.addr=$('bad').value.trim();render();return toast('Datos del negocio guardados')}
-if(i==='pf'){P.name=$('pn').value.trim()||P.name;P.email=$('pe').value.trim();P.tel=$('pt').value.trim();render();return toast('Datos guardados')}
-if(i==='cf'){const n=$('cn').value.replace(/\s/g,''),x=$('ce').value.trim();if(!/^\d{12,19}$/.test(n))return toast('Revisa el número de tarjeta');if(!/^(0[1-9]|1[0-2])\/\d{2}$/.test(x))return toast('La caducidad debe tener el formato MM/AA');
-P.cards.push({id:Date.now(),b:n[0]==='4'?'Visa':n[0]==='5'?'Mastercard':'Tarjeta',l:n.slice(-4),e:x});render();toast('Tarjeta añadida')}};document.addEventListener('submit',e=>{e.preventDefault();sub(e.target.id)});
-document.addEventListener('input',e=>{if(e.target.id==='fr'||e.target.id==='fgi')bsum();if(['ce','ne'].includes(e.target.id)&&/^\d{2}$/.test(e.target.value)&&e.inputType!=='deleteContentBackward')e.target.value+='/'});
-document.addEventListener('change',e=>{if(['fs'].includes(e.target.id))bsum();if(['ph','bl'].includes(e.target.id)&&e.target.files[0]){const bl=e.target.id==='bl',r=new FileReader();r.onload=()=>{(bl?B:P).img=r.result;render();toast(bl?'Logo actualizado':'Foto de perfil actualizada')};r.readAsDataURL(e.target.files[0])}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape')close()});
-render();
+$('app').innerHTML = viewBook();
 </script>
 </body>
 </html>
