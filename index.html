@@ -207,4 +207,1194 @@
       text-transform: uppercase;
       letter-spacing: 0.06em;
       color: var(--mute);
-      margin-bottom:
+      margin-bottom: 6px;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      border-bottom: 1.5px solid var(--ink);
+      padding: 10px 0;
+      font-size: 16px;
+      border-radius: 0;
+      background: transparent;
+    }
+
+    .field input:focus, .field select:focus {
+      border-bottom-color: var(--accent);
+      border-bottom-width: 2.5px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .error-box {
+      padding: 12px 14px;
+      background: rgba(214, 69, 39, 0.1);
+      border-left: 3px solid var(--accent);
+      color: var(--ink);
+      font-size: 13px;
+      margin-bottom: 20px;
+    }
+
+    /* Botones */
+    .btn {
+      background: var(--ink);
+      color: var(--paper);
+      padding: 15px 22px;
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      width: 100%;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      border: 1.5px solid var(--ink);
+    }
+
+    .btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .btn.o {
+      background: transparent;
+      color: var(--ink);
+      border: 1.5px solid var(--ink);
+    }
+
+    .btn.o:hover {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .btn.sm {
+      padding: 10px 14px;
+      font-size: 12px;
+      width: auto;
+    }
+
+    .btn.apple {
+      background: #111;
+      border-color: #111;
+      color: #fff;
+      border-radius: 4px;
+      text-transform: none;
+      font-size: 16px;
+      letter-spacing: 0;
+    }
+
+    /* Tarjetas estilo Ticket de Imprenta */
+    .ticket-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .tk {
+      position: relative;
+      background: var(--paper-card);
+      border: 1px solid var(--line-strong);
+      padding: 22px 20px;
+      display: grid;
+      grid-template-columns: 82px 1fr;
+      gap: 16px;
+      align-items: start;
+      transition: transform 0.22s var(--ease-out), box-shadow 0.22s var(--ease-out);
+    }
+
+    .tk:hover {
+      transform: translateY(-2px);
+      box-shadow: 4px 4px 0 var(--ink);
+    }
+
+    /* Muescas de ticket perforado */
+    .tk::before, .tk::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 12px;
+      height: 12px;
+      background: var(--paper);
+      border: 1px solid var(--line-strong);
+      border-radius: 50%;
+      transform: translateY(-50%);
+    }
+
+    .tk::before {
+      left: -7px;
+      border-left-color: transparent;
+    }
+
+    .tk::after {
+      right: -7px;
+      border-right-color: transparent;
+    }
+
+    .tk-time {
+      font-size: 30px;
+      line-height: 0.95;
+      border-right: 1px dashed var(--line);
+      padding-right: 12px;
+    }
+
+    .tk-time small {
+      display: block;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--accent);
+      margin-top: 8px;
+    }
+
+    .tk-time small.soon {
+      color: var(--mute);
+    }
+
+    .tk-info h2 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 4px;
+      padding-right: 76px;
+    }
+
+    .tk-meta {
+      color: var(--mute);
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+
+    .tk-price {
+      display: flex;
+      gap: 10px;
+      align-items: baseline;
+      margin-bottom: 14px;
+    }
+
+    .now {
+      font-size: 22px;
+      font-weight: 700;
+    }
+
+    .old {
+      text-decoration: line-through;
+      color: var(--mute);
+      font-size: 14px;
+    }
+
+    .tag {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: var(--accent);
+      color: #fff;
+      padding: 4px 9px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      transform: rotate(2.5deg);
+      box-shadow: 2px 2px 0 rgba(20, 19, 17, 0.25);
+    }
+
+    .tag.saved {
+      background: var(--sage);
+      transform: rotate(-2deg);
+    }
+
+    /* Selector segmentado */
+    .seg {
+      display: flex;
+      border: 1.5px solid var(--ink);
+      margin-bottom: 24px;
+    }
+
+    .seg button {
+      flex: 1;
+      padding: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .seg button.active {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    /* Métricas editoriales */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border: 1.5px solid var(--ink);
+      margin-bottom: 24px;
+      background: var(--paper-card);
+    }
+
+    .stat-box {
+      padding: 16px;
+    }
+
+    .stat-box:first-child {
+      border-right: 1px solid var(--line);
+    }
+
+    .stat-num {
+      font-size: 28px;
+      line-height: 1.1;
+      display: block;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--mute);
+      font-weight: 600;
+    }
+
+    /* Pills de acceso rápido demo */
+    .demo-bar {
+      margin-top: 28px;
+      padding-top: 18px;
+      border-top: 1px dashed var(--line);
+      font-size: 12px;
+      color: var(--mute);
+    }
+
+    .demo-pills {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 8px;
+    }
+
+    .pill {
+      padding: 6px 10px;
+      border: 1px solid var(--line-strong);
+      font-size: 12px;
+      font-weight: 500;
+      background: var(--paper-card);
+    }
+
+    .pill:hover {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    /* Navegación Inferior */
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--paper);
+      border-top: 1.5px solid var(--ink);
+      display: flex;
+      justify-content: center;
+      padding-bottom: env(safe-area-inset-bottom);
+      z-index: 20;
+    }
+
+    .nav-inner {
+      width: 100%;
+      max-width: 580px;
+      display: flex;
+    }
+
+    nav button {
+      flex: 1;
+      padding: 16px 8px;
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--mute);
+      border-right: 1px solid var(--line);
+    }
+
+    nav button:last-child {
+      border-right: none;
+    }
+
+    nav button.active {
+      color: var(--ink);
+      background: var(--paper-card);
+      box-shadow: inset 0 3px 0 var(--accent);
+    }
+
+    footer {
+      max-width: 580px;
+      margin: 0 auto;
+      padding: 0 20px 96px;
+      font-size: 12px;
+      color: var(--mute);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+    }
+
+    /* Animaciones y Toast */
+    .fade-in {
+      animation: fadeIn 0.28s var(--ease-out);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .toast {
+      position: fixed;
+      top: calc(18px + env(safe-area-inset-top));
+      left: 50%;
+      transform: translate(-50%, -24px);
+      background: var(--ink);
+      color: var(--paper);
+      padding: 12px 20px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      opacity: 0;
+      transition: opacity 0.25s ease, transform 0.25s var(--ease-out);
+      pointer-events: none;
+      z-index: 100;
+      box-shadow: 4px 4px 0 var(--accent);
+      max-width: 90vw;
+      text-align: center;
+    }
+
+    .toast.on {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    @media (max-width: 400px) {
+      .tk {
+        grid-template-columns: 72px 1fr;
+        padding: 18px 14px;
+        gap: 12px;
+      }
+      .tk-time {
+        font-size: 25px;
+      }
+      .edition {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const STORAGE_KEY = 'huecos_editorial_v1';
+    const $ = id => document.getElementById(id);
+
+    // Sanitización básica contra inyección HTML
+    function esc(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&')
+        .replace(/</g, '<')
+        .replace(/>/g, '>')
+        .replace(/"/g, '"')
+        .replace(/'/g, ''');
+    }
+
+    const eur = n => `${n}€`;
+    const formatHour = ms => new Date(ms).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    const minsUntil = ms => Math.max(1, Math.round((ms - Date.now()) / 60000));
+    const finalPrice = slot => Math.round(slot.p * (1 - slot.disc / 100));
+
+    function getEditionDate() {
+      const d = new Date();
+      const day = d.toLocaleDateString('es-ES', { weekday: 'long', day: 'numeric', month: 'short' });
+      return day.charAt(0).toUpperCase() + day.slice(1);
+    }
+
+    // Datos iniciales de demostración
+    function getDefaultData() {
+      const now = Date.now();
+      return {
+        users: {
+          iker: {
+            pw: '123',
+            role: 'cli',
+            name: 'Iker Etxebarria',
+            cards: ['•••• 4242'],
+            radarPhone: ''
+          },
+          marea: {
+            pw: '123',
+            role: 'biz',
+            name: 'Salón Marea',
+            address: 'C/ Colón de Larreátegui, 18'
+          }
+        },
+        slots: [
+          {
+            id: 101,
+            s: 'Corte y secado exprés',
+            p: 38,
+            d: 45,
+            t: now + 40 * 60000,
+            disc: 25,
+            st: 'live',
+            bizId: 'marea',
+            biz: 'Salón Marea',
+            address: 'C/ Colón de Larreátegui, 18',
+            cliId: null,
+            cliName: null
+          },
+          {
+            id: 102,
+            s: 'Color completo e hidratación',
+            p: 85,
+            d: 120,
+            t: now + 115 * 60000,
+            disc: 30,
+            st: 'live',
+            bizId: 'marea',
+            biz: 'Salón Marea',
+            address: 'C/ Colón de Larreátegui, 18',
+            cliId: null,
+            cliName: null
+          },
+          {
+            id: 103,
+            s: 'Tratamiento capilar brillo',
+            p: 45,
+            d: 45,
+            t: now + 180 * 60000,
+            disc: 20,
+            st: 'booked',
+            bizId: 'marea',
+            biz: 'Salón Marea',
+            address: 'C/ Colón de Larreátegui, 18',
+            cliId: 'ana',
+            cliName: 'Ana Gómez'
+          }
+        ]
+      };
+    }
+
+    function loadData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return getDefaultData();
+        const parsed = JSON.parse(raw);
+        if (!parsed.users || !Array.isArray(parsed.slots)) return getDefaultData();
+        return parsed;
+      } catch {
+        return getDefaultData();
+      }
+    }
+
+    let DB = loadData();
+
+    function saveData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(DB));
+      } catch {
+        // Silencioso si el almacenamiento privado bloquea escritura
+      }
+    }
+
+    const STATE = {
+      view: 'feed',
+      loginTab: 'cli',
+      loginError: '',
+      user: null,
+      role: null,
+      selectedSlotId: null,
+      cardReturnView: 'checkout'
+    };
+
+    // --- COMPONENTES COMPARTIDOS ---
+
+    function renderHeader() {
+      const actionBtn = STATE.user
+        ? `<span style="font-size:12px; color:var(--mute)">${esc(DB.users[STATE.user].name.split(' ')[0])}</span>
+           <button type="button" class="link-btn" onclick="logout()">Salir</button>`
+        : `<button type="button" class="link-btn" onclick="navTo('login')">Entrar</button>`;
+
+      return `
+        <header>
+          <div class="header-inner">
+            <div class="brand">
+              <button type="button" class="logo" onclick="navTo('feed')" aria-label="Ir al inicio de Huecos">Huecos</button>
+              <span class="edition">${esc(getEditionDate())}</span>
+            </div>
+            <div class="header-actions">${actionBtn}</div>
+          </div>
+        </header>
+      `;
+    }
+
+    function renderNav() {
+      if (!STATE.user) return '';
+      if (STATE.role === 'cli') {
+        return `
+          <nav aria-label="Navegación principal">
+            <div class="nav-inner">
+              <button type="button" class="${STATE.view === 'feed' ? 'active' : ''}" onclick="navTo('feed')">Explorar</button>
+              <button type="button" class="${STATE.view === 'cli_dash' ? 'active' : ''}" onclick="navTo('cli_dash')">Mis Citas</button>
+            </div>
+          </nav>
+        `;
+      }
+      return `
+        <nav aria-label="Navegación de salón">
+          <div class="nav-inner">
+            <button type="button" class="${['biz_dash', 'biz_new'].includes(STATE.view) ? 'active' : ''}" onclick="navTo('biz_dash')">Mi Agenda</button>
+            <button type="button" class="${STATE.view === 'biz_settings' ? 'active' : ''}" onclick="navTo('biz_settings')">Mi Salón</button>
+          </div>
+        </nav>
+      `;
+    }
+
+    function renderFooter() {
+      return `
+        <footer>
+          <span>Huecos · Sin comisiones ocultas</span>
+          <button type="button" class="link-btn" style="font-size:11px; color:var(--mute)" onclick="resetDemo()">Restaurar demo</button>
+        </footer>
+      `;
+    }
+
+    // --- VISTAS ---
+
+    function viewFeed() {
+      const now = Date.now();
+      const liveSlots = DB.slots
+        .filter(s => s.st === 'live' && s.t > now)
+        .sort((a, b) => a.t - b.t);
+
+      return `
+        <main class="fade-in">
+          <h1 class="serif">Alguien acaba de <i class="italic">cancelar</i>.</h1>
+          <p class="lead">Su imprevisto es tu descuento. Sillas libres hoy mismo en salones del barrio.</p>
+
+          <div class="pulse-bar">
+            <span><span class="pulse-dot"></span><strong>${liveSlots.length} ${liveSlots.length === 1 ? 'hueco libre' : 'huecos libres'}</strong> ahora</span>
+            <span style="color:var(--mute)">Pago directo · Sin llamadas</span>
+          </div>
+
+          <section class="ticket-list" aria-label="Huecos disponibles hoy">
+            ${liveSlots.map(s => {
+              const mins = minsUntil(s.t);
+              const urgent = mins <= 60;
+              return `
+                <article class="tk">
+                  <div class="tag">−${esc(s.disc)}%</div>
+                  <div class="tk-time serif">
+                    ${esc(formatHour(s.t))}
+                    <small class="${urgent ? '' : 'soon'}">${urgent ? `En ${mins} min` : `Hoy · ${mins}m`}</small>
+                  </div>
+                  <div class="tk-info">
+                    <h2>${esc(s.s)}</h2>
+                    <p class="tk-meta">${esc(s.biz)} · ${esc(s.address || 'Centro')} · ${esc(s.d)} min</p>
+                    <div class="tk-price tabular">
+                      <span class="now">${eur(finalPrice(s))}</span>
+                      <span class="old">${eur(s.p)}</span>
+                    </div>
+                    <button type="button" class="btn o" onclick="startCheckout(${s.id})">Bloquear hueco</button>
+                  </div>
+                </article>
+              `;
+            }).join('')}
+
+            ${!liveSlots.length ? `
+              <div style="padding:44px 20px; text-align:center; border:1px dashed var(--line); background:var(--paper-card)">
+                <p class="serif" style="font-size:22px; margin-bottom:8px">Todo lleno por ahora.</p>
+                <p style="color:var(--mute); font-size:14px; margin-bottom:18px">Las cancelaciones suelen caer a media mañana y a primera hora de la tarde.</p>
+                <button type="button" class="btn o sm" onclick="navTo('login')">Activar aviso por WhatsApp</button>
+              </div>
+            ` : ''}
+          </section>
+        </main>
+      `;
+    }
+
+    function viewLogin() {
+      const isCli = STATE.loginTab === 'cli';
+      return `
+        <main class="fade-in">
+          <h1 class="serif">${isCli ? 'Ponte a punto.' : 'Llena esa silla.'}</h1>
+          <p class="lead">${isCli ? 'Entra para bloquear tu cita en un toque.' : 'Publica una cancelación y recupérala antes de que pase la hora.'}</p>
+
+          <div class="seg" role="tablist">
+            <button type="button" role="tab" aria-selected="${isCli}" class="${isCli ? 'active' : ''}" onclick="switchLoginTab('cli')">Soy Cliente</button>
+            <button type="button" role="tab" aria-selected="${!isCli}" class="${!isCli ? 'active' : ''}" onclick="switchLoginTab('biz')">Soy Salón</button>
+          </div>
+
+          ${STATE.loginError ? `<div class="error-box" role="alert">${esc(STATE.loginError)}</div>` : ''}
+
+          <form onsubmit="handleLogin(event)" novalidate>
+            <div class="field">
+              <label for="login-user">Usuario</label>
+              <input type="text" id="login-user" autocomplete="username" placeholder="${isCli ? 'iker' : 'marea'}" required>
+            </div>
+            <div class="field">
+              <label for="login-pass">Contraseña</label>
+              <input type="password" id="login-pass" autocomplete="current-password" placeholder="•••" required>
+            </div>
+            <button type="submit" class="btn">Entrar</button>
+          </form>
+
+          <div class="demo-bar">
+            <span>Acceso rápido de prueba:</span>
+            <div class="demo-pills">
+              <button type="button" class="pill" onclick="quickLogin('iker', 'cli')">Entrar como Iker (Cliente)</button>
+              <button type="button" class="pill" onclick="quickLogin('marea', 'biz')">Entrar como Salón Marea</button>
+            </div>
+          </div>
+        </main>
+      `;
+    }
+
+    function viewBizDash() {
+      const bizUser = DB.users[STATE.user];
+      const mySlots = DB.slots
+        .filter(s => s.bizId === STATE.user)
+        .sort((a, b) => a.t - b.t);
+
+      const savedSlots = mySlots.filter(s => s.st === 'booked');
+      const rescuedEur = savedSlots.reduce((acc, s) => acc + finalPrice(s), 0);
+
+      return `
+        <main class="fade-in">
+          <h1 class="serif">Agenda de hoy.</h1>
+          <p class="lead">${esc(bizUser.name)} · ${esc(bizUser.address)}</p>
+
+          <div class="stats-grid tabular">
+            <div class="stat-box">
+              <span class="stat-num serif">${savedSlots.length} / ${mySlots.length}</span>
+              <span class="stat-label">Huecos salvados</span>
+            </div>
+            <div class="stat-box">
+              <span class="stat-num serif">${eur(rescuedEur)}</span>
+              <span class="stat-label">Caja rescatada</span>
+            </div>
+          </div>
+
+          <button type="button" class="btn" style="margin-bottom:28px" onclick="navTo('biz_new')">+ Publicar hueco libre</button>
+
+          <section class="ticket-list" aria-label="Turnos publicados hoy">
+            ${mySlots.map(s => {
+              const isBooked = s.st === 'booked';
+              const expired = !isBooked && s.t <= Date.now();
+              return `
+                <article class="tk" style="${isBooked || expired ? 'opacity:0.88' : ''}">
+                  ${isBooked ? `<div class="tag saved">Salvado</div>` : expired ? `<div class="tag" style="background:var(--mute)">Pasado</div>` : `<div class="tag">−${esc(s.disc)}%</div>`}
+                  <div class="tk-time serif">
+                    ${esc(formatHour(s.t))}
+                    <small class="soon">${esc(s.d)} min</small>
+                  </div>
+                  <div class="tk-info">
+                    <h2>${esc(s.s)}</h2>
+                    <p class="tk-meta">
+                      ${isBooked
+                        ? `<strong>Reservado por ${esc(s.cliName)}</strong> · ${eur(finalPrice(s))}`
+                        : expired
+                          ? 'Hora superada sin reserva'
+                          : `En escaparate por ${eur(finalPrice(s))} (antes ${eur(s.p)})`}
+                    </p>
+                    ${!isBooked ? `<button type="button" class="btn o sm" onclick="removeSlot(${s.id})">Retirar hueco</button>` : ''}
+                  </div>
+                </article>
+              `;
+            }).join('')}
+          </section>
+        </main>
+      `;
+    }
+
+    function viewBizNew() {
+      return `
+        <main class="fade-in">
+          <button type="button" class="link-btn" style="margin-bottom:20px" onclick="navTo('biz_dash')">← Volver a la agenda</button>
+          <h1 class="serif">Soltar hueco.</h1>
+          <p class="lead">Publícalo en 10 segundos. Cuanto más cerca esté la hora, mejor funciona un descuento agresivo.</p>
+
+          <form onsubmit="createNewSlot(event)">
+            <div class="field">
+              <label for="slot-service">Servicio disponible</label>
+              <input type="text" id="slot-service" placeholder="Ej. Corte y barba, Mechas, Manicura..." required>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="slot-in">¿Dentro de cuánto?</label>
+                <select id="slot-in">
+                  <option value="30">En 30 minutos</option>
+                  <option value="45" selected>En 45 minutos</option>
+                  <option value="60">En 1 hora</option>
+                  <option value="90">En 1 hora y media</option>
+                  <option value="120">En 2 horas</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="slot-dur">Duración del turno</label>
+                <select id="slot-dur">
+                  <option value="30">30 min</option>
+                  <option value="45" selected>45 min</option>
+                  <option value="60">60 min</option>
+                  <option value="90">90 min</option>
+                  <option value="120">120 min</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="field">
+                <label for="slot-price">Precio habitual (€)</label>
+                <input type="number" id="slot-price" min="5" max="500" value="40" oninput="updateSlotPreview()" required>
+              </div>
+              <div class="field">
+                <label for="slot-disc">Descuento última hora</label>
+                <select id="slot-disc" onchange="updateSlotPreview()">
+                  <option value="15">−15%</option>
+                  <option value="25" selected>−25%</option>
+                  <option value="35">−35%</option>
+                  <option value="50">−50%</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="slot-preview" style="padding:14px; background:var(--paper-card); border:1px solid var(--line); margin-bottom:24px; font-size:14px">
+              El cliente pagará <strong class="tabular">30€</strong> (ahorra 10€).
+            </div>
+
+            <button type="submit" class="btn">Publicar ahora mismo</button>
+          </form>
+        </main>
+      `;
+    }
+
+    function viewBizSettings() {
+      const biz = DB.users[STATE.user];
+      return `
+        <main class="fade-in">
+          <h1 class="serif">Tu salón.</h1>
+          <p class="lead">Estos datos aparecen en cada ticket que publicas.</p>
+
+          <form onsubmit="saveBizSettings(event)">
+            <div class="field">
+              <label for="biz-name">Nombre del salón</label>
+              <input type="text" id="biz-name" value="${esc(biz.name)}" required>
+            </div>
+            <div class="field">
+              <label for="biz-address">Dirección o barrio</label>
+              <input type="text" id="biz-address" value="${esc(biz.address)}" required>
+            </div>
+            <button type="submit" class="btn">Guardar cambios</button>
+          </form>
+        </main>
+      `;
+    }
+
+    function viewCliDash() {
+      const u = DB.users[STATE.user];
+      const myBookings = DB.slots
+        .filter(s => s.cliId === STATE.user)
+        .sort((a, b) => a.t - b.t);
+
+      return `
+        <main class="fade-in">
+          <h1 class="serif">Hola, ${esc(u.name.split(' ')[0])}.</h1>
+          <p class="lead">Tus turnos confirmados y alertas del barrio.</p>
+
+          <h2 style="font-size:13px; text-transform:uppercase; letter-spacing:0.06em; margin:24px 0 12px; border-bottom:1.5px solid var(--ink); padding-bottom:6px">Próximas citas</h2>
+          ${myBookings.length ? myBookings.map(s => {
+            const canRelease = (s.t - Date.now()) > 30 * 60000;
+            return `
+              <div style="padding:16px 0; border-bottom:1px dashed var(--line); display:flex; justify-content:space-between; align-items:flex-start; gap:12px">
+                <div>
+                  <strong>${esc(s.s)}</strong>
+                  <div style="color:var(--mute); font-size:13px; margin-top:2px">${esc(s.biz)} · Hoy a las ${esc(formatHour(s.t))}</div>
+                  <div style="color:var(--mute); font-size:12px">${esc(s.address || '')}</div>
+                  ${canRelease ? `<button type="button" class="link-btn" style="font-size:12px; color:var(--accent); margin-top:8px" onclick="releaseBooking(${s.id})">No puedo ir · Liberar hueco</button>` : ''}
+                </div>
+                <div class="tabular" style="text-align:right">
+                  <strong style="font-size:18px">${eur(finalPrice(s))}</strong>
+                  <div style="font-size:11px; color:var(--sage); font-weight:600">Confirmada</div>
+                </div>
+              </div>
+            `;
+          }).join('') : `<p style="color:var(--mute); padding:12px 0">Aún no has bloqueado ningún hueco hoy.</p>`}
+
+          <h2 style="font-size:13px; text-transform:uppercase; letter-spacing:0.06em; margin:36px 0 12px; border-bottom:1.5px solid var(--ink); padding-bottom:6px">Métodos de pago</h2>
+          ${u.cards.map(c => `
+            <div style="padding:10px 0; font-family:monospace; font-size:15px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between">
+              <span>${esc(c)}</span>
+              <span style="font-family:'Space Grotesk',sans-serif; font-size:12px; color:var(--mute)">Lista</span>
+            </div>
+          `).join('')}
+          <button type="button" class="btn o sm" style="margin-top:14px" onclick="openCardForm('cli_dash')">+ Añadir tarjeta</button>
+
+          <section style="margin-top:44px; padding:22px; border:1.5px solid var(--ink); background:var(--paper-card)">
+            <h2 class="serif" style="font-size:24px; margin-bottom:6px">El Radar del barrio</h2>
+            <p style="font-size:13px; color:var(--mute); margin-bottom:16px">
+              ${u.radarPhone
+                ? `Activo en el <strong>${esc(u.radarPhone)}</strong>. Te escribiremos por WhatsApp en cuanto quede una silla libre hoy.`
+                : 'Déjanos tu WhatsApp y te avisamos al instante cuando un salón suelte un hueco hoy.'}
+            </p>
+            <form onsubmit="saveRadar(event)" style="display:flex; gap:10px; align-items:flex-end">
+              <div class="field" style="flex:1; margin-bottom:0">
+                <label for="radar-phone">Tu WhatsApp</label>
+                <input type="tel" id="radar-phone" value="${esc(u.radarPhone || '')}" placeholder="600 123 456" required>
+              </div>
+              <button type="submit" class="btn sm">${u.radarPhone ? 'Actualizar' : 'Activar'}</button>
+            </form>
+          </section>
+        </main>
+      `;
+    }
+
+    function viewCheckout() {
+      const s = DB.slots.find(x => x.id === STATE.selectedSlotId);
+      if (!s || s.st !== 'live') {
+        navTo('feed');
+        return '';
+      }
+      const u = DB.users[STATE.user];
+      const savedCard = u.cards[0];
+
+      return `
+        <main class="fade-in">
+          <button type="button" class="link-btn" style="margin-bottom:20px" onclick="navTo('feed')">← Volver a los huecos</button>
+          <h1 class="serif" style="font-size:34px">Cerrar reserva</h1>
+
+          <div style="padding:20px; background:var(--paper-card); border:1.5px solid var(--ink); margin:20px 0 28px">
+            <h2 style="font-size:18px; margin-bottom:4px">${esc(s.s)}</h2>
+            <p style="color:var(--mute); font-size:13px">${esc(s.biz)} · Hoy a las ${esc(formatHour(s.t))} (${esc(s.d)} min)</p>
+            <div class="tabular" style="display:flex; justify-content:space-between; align-items:baseline; margin-top:16px; padding-top:14px; border-top:1px dashed var(--line)">
+              <span style="font-size:13px; color:var(--mute)">Ahorras ${eur(s.p - finalPrice(s))} (−${esc(s.disc)}%)</span>
+              <span style="font-size:26px; font-weight:700">${eur(finalPrice(s))}</span>
+            </div>
+          </div>
+
+          <p style="font-size:11px; font-weight:700; margin-bottom:12px; text-transform:uppercase; letter-spacing:0.06em; color:var(--mute)">Elige cómo pagar</p>
+
+          <button type="button" class="btn apple" style="margin-bottom:10px" onclick="processPayment('Apple Pay')"> Pay</button>
+
+          ${savedCard ? `
+            <button type="button" class="btn" style="margin-bottom:10px" onclick="processPayment('Tarjeta ${esc(savedCard)}')">Pagar con ${esc(savedCard)}</button>
+          ` : ''}
+
+          <button type="button" class="btn o" style="margin-bottom:10px" onclick="openCardForm('checkout')">${savedCard ? 'Usar otra tarjeta' : 'Tarjeta de crédito o débito'}</button>
+
+          <div style="margin-top:26px; padding:16px; background:var(--paper-card); border-left:3px solid var(--ink)">
+            <button type="button" onclick="processPayment('Efectivo en el salón')" style="width:100%; text-align:left; font-weight:700; font-size:15px">Pagar en efectivo en el salón →</button>
+            <p style="font-size:12px; color:var(--mute); margin-top:6px">El salón guarda esta silla solo para ti. Si no acudes sin avisar con 30 min de margen, tu cuenta quedará suspendida.</p>
+          </div>
+        </main>
+      `;
+    }
+
+    function viewCardForm() {
+      const isCheckout = STATE.cardReturnView === 'checkout';
+      return `
+        <main class="fade-in">
+          <button type="button" class="link-btn" style="margin-bottom:24px" onclick="navTo('${STATE.cardReturnView}')">← Cancelar</button>
+          <h1 class="serif" style="font-size:32px">${isCheckout ? 'Tarjeta y confirmar' : 'Añadir tarjeta'}</h1>
+          <p class="lead">Cifrado bancario. No guardamos el código de seguridad.</p>
+
+          <form onsubmit="handleCardSubmit(event)">
+            <div class="field">
+              <label for="card-num">Número de tarjeta</label>
+              <input type="text" id="card-num" inputmode="numeric" maxlength="19" placeholder="4242 4242 4242 4242" oninput="formatCardNumber(this)" required>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label for="card-exp">Caducidad</label>
+                <input type="text" id="card-exp" inputmode="numeric" maxlength="5" placeholder="MM/AA" oninput="formatCardExpiry(this)" required>
+              </div>
+              <div class="field">
+                <label for="card-cvc">CVC</label>
+                <input type="text" id="card-cvc" inputmode="numeric" maxlength="4" placeholder="123" required>
+              </div>
+            </div>
+            <div class="field">
+              <label for="card-holder">Titular</label>
+              <input type="text" id="card-holder" autocomplete="cc-name" placeholder="Nombre y apellidos" required>
+            </div>
+            <button type="submit" class="btn" style="margin-top:8px">${isCheckout ? 'Pagar y bloquear hueco' : 'Guardar tarjeta'}</button>
+          </form>
+        </main>
+      `;
+    }
+
+    // --- CONTROLADOR Y ACCIONES ---
+
+    function renderApp(viewHtml) {
+      return `${renderHeader()}${viewHtml}${renderFooter()}${renderNav()}`;
+    }
+
+    function navTo(view) {
+      STATE.view = view;
+      STATE.loginError = '';
+      const routes = {
+        feed: viewFeed,
+        login: viewLogin,
+        biz_dash: viewBizDash,
+        biz_new: viewBizNew,
+        biz_settings: viewBizSettings,
+        cli_dash: viewCliDash,
+        checkout: viewCheckout,
+        card_form: viewCardForm
+      };
+      const renderer = routes[view] || viewFeed;
+      $('app').innerHTML = renderApp(renderer());
+      window.scrollTo(0, 0);
+    }
+
+    function switchLoginTab(tab) {
+      STATE.loginTab = tab;
+      STATE.loginError = '';
+      navTo('login');
+    }
+
+    function handleLogin(e) {
+      e.preventDefault();
+      const u = $('login-user').value.trim().toLowerCase();
+      const p = $('login-pass').value;
+      const record = DB.users[u];
+
+      if (record && record.pw === p && record.role === STATE.loginTab) {
+        STATE.user = u;
+        STATE.role = record.role;
+        STATE.loginError = '';
+        toast(`Dentro, ${record.name.split(' ')[0]}`);
+        if (STATE.selectedSlotId && record.role === 'cli') {
+          navTo('checkout');
+        } else {
+          navTo(record.role === 'cli' ? 'feed' : 'biz_dash');
+        }
+      } else {
+        STATE.loginError = 'Usuario o contraseña incorrectos para este perfil.';
+        $('app').innerHTML = renderApp(viewLogin());
+      }
+    }
+
+    function quickLogin(username, role) {
+      STATE.loginTab = role;
+      STATE.user = username;
+      STATE.role = role;
+      toast(`Sesión iniciada como ${DB.users[username].name}`);
+      if (STATE.selectedSlotId && role === 'cli') {
+        navTo('checkout');
+      } else {
+        navTo(role === 'cli' ? 'feed' : 'biz_dash');
+      }
+    }
+
+    function logout() {
+      STATE.user = null;
+      STATE.role = null;
+      STATE.selectedSlotId = null;
+      navTo('feed');
+      toast('Has salido de tu cuenta');
+    }
+
+    function startCheckout(slotId) {
+      STATE.selectedSlotId = slotId;
+      if (!STATE.user || STATE.role !== 'cli') {
+        STATE.loginTab = 'cli';
+        toast('Entra un segundo para guardar tu cita');
+        navTo('login');
+      } else {
+        navTo('checkout');
+      }
+    }
+
+    function openCardForm(returnView) {
+      STATE.cardReturnView = returnView;
+      navTo('card_form');
+    }
+
+    function formatCardNumber(input) {
+      const digits = input.value.replace(/\D/g, '').slice(0, 16);
+      input.value = digits.replace(/(.{4})/g, '$1 ').trim();
+    }
+
+    function formatCardExpiry(input) {
+      const digits = input.value.replace(/\D/g, '').slice(0, 4);
+      input.value = digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits;
+    }
+
+    function handleCardSubmit(e) {
+      e.preventDefault();
+      const digits = $('card-num').value.replace(/\D/g, '');
+      if (digits.length < 13) {
+        toast('Revisa los números de la tarjeta');
+        return;
+      }
+      const masked = `•••• ${digits.slice(-4)}`;
+      const u = DB.users[STATE.user];
+      if (!u.cards.includes(masked)) {
+        u.cards.unshift(masked);
+        saveData();
+      }
+      if (STATE.cardReturnView === 'checkout') {
+        processPayment(`Tarjeta ${masked}`);
+      } else {
+        toast('Tarjeta guardada');
+        navTo('cli_dash');
+      }
+    }
+
+    function processPayment(method) {
+      const slot = DB.slots.find(x => x.id === STATE.selectedSlotId);
+      if (!slot || slot.st !== 'live') {
+        toast('Este hueco acaba de ocuparse');
+        navTo('feed');
+        return;
+      }
+      const user = DB.users[STATE.user];
+      slot.st = 'booked';
+      slot.cliId = STATE.user;
+      slot.cliName = user.name;
+      STATE.selectedSlotId = null;
+      saveData();
+
+      $('app').innerHTML = renderApp(`
+        <main class="fade-in" style="text-align:center; padding-top:56px">
+          <div class="tag saved" style="position:static; display:inline-block; margin-bottom:20px">Confirmado · ${esc(method)}</div>
+          <h1 class="serif" style="font-size:44px">Silla guardada.</h1>
+          <p class="lead" style="margin:0 auto 32px">Te esperan en <strong>${esc(slot.biz)}</strong> hoy a las <strong>${esc(formatHour(slot.t))}</strong>.</p>
+          <button type="button" class="btn" onclick="navTo('cli_dash')">Ver mis citas</button>
+        </main>
+      `);
+    }
+
+    function releaseBooking(slotId) {
+      const slot = DB.slots.find(x => x.id === slotId);
+      if (!slot) return;
+      slot.st = 'live';
+      slot.cliId = null;
+      slot.cliName = null;
+      saveData();
+      navTo('cli_dash');
+      toast('Hueco liberado y devuelto al escaparate');
+    }
+
+    function updateSlotPreview() {
+      const price = Number($('slot-price')?.value || 0);
+      const disc = Number($('slot-disc')?.value || 0);
+      const finalP = Math.round(price * (1 - disc / 100));
+      const saved = Math.max(0, price - finalP);
+      const preview = $('slot-preview');
+      if (preview) {
+        preview.innerHTML = `El cliente pagará <strong class="tabular">${eur(finalP)}</strong> (ahorra ${eur(saved)}).`;
+      }
+    }
+
+    function createNewSlot(e) {
+      e.preventDefault();
+      const service = $('slot-service').value.trim();
+      const inMins = Number($('slot-in').value);
+      const duration = Number($('slot-dur').value);
+      const price = Number($('slot-price').value);
+      const disc = Number($('slot-disc').value);
+      const biz = DB.users[STATE.user];
+
+      if (!service || price <= 0) return;
+
+      DB.slots.push({
+        id: Date.now(),
+        s: service,
+        p: price,
+        d: duration,
+        t: Date.now() + inMins * 60000,
+        disc,
+        st: 'live',
+        bizId: STATE.user,
+        biz: biz.name,
+        address: biz.address,
+        cliId: null,
+        cliName: null
+      });
+
+      saveData();
+      toast('Hueco publicado en el feed');
+      navTo('biz_dash');
+    }
+
+    function removeSlot(slotId) {
+      DB.slots = DB.slots.filter(s => s.id !== slotId);
+      saveData();
+      navTo('biz_dash');
+      toast('Hueco retirado');
+    }
+
+    function saveBizSettings(e) {
+      e.preventDefault();
+      const name = $('biz-name').value.trim();
+      const address = $('biz-address').value.trim();
+      if (!name || !address) return;
+
+      DB.users[STATE.user].name = name;
+      DB.users[STATE.user].address = address;
+      DB.slots.forEach(s => {
+        if (s.bizId === STATE.user) {
+          s.biz = name;
+          s.address = address;
+        }
+      });
+      saveData();
+      toast('Datos del salón actualizados');
+      navTo('biz_dash');
+    }
+
+    function saveRadar(e) {
+      e.preventDefault();
+      const phone = $('radar-phone').value.trim();
+      if (!phone) return;
+      DB.users[STATE.user].radarPhone = phone;
+      saveData();
+      navTo('cli_dash');
+      toast('Radar activado por WhatsApp');
+    }
+
+    function resetDemo() {
+      localStorage.removeItem(STORAGE_KEY);
+      DB = getDefaultData();
+      STATE.user = null;
+      STATE.role = null;
+      STATE.selectedSlotId = null;
+      navTo('feed');
+      toast('Demo restaurada con datos frescos');
+    }
+
+    let toastTimer;
+    function toast(msg) {
+      const t = $('toast');
+      t.textContent = msg;
+      t.classList.add('on');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('on'), 2800);
+    }
+
+    // Actualización automática de minutos restantes en el feed
+    setInterval(() => {
+      if (STATE.view === 'feed') {
+        $('app').innerHTML = renderApp(viewFeed());
+      }
+    }, 30000);
+
+    navTo('feed');
+  </script>
+</body>
+</html>
