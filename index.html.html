@@ -1,0 +1,2842 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Huecos · Citas de peluquería y estética de última hora</title>
+  <meta name="description" content="Alguien acaba de cancelar su cita. Aprovecha huecos de última hora en peluquerías y salones de tu barrio con descuentos directos.">
+
+  <!-- Tipografías: Plus Jakarta Sans (interfaz moderna y cercana) + Fraunces (acentos editoriales) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       1. TOKENS DE DISEÑO (ESTÉTICA MELOCOTÓN CÁLIDO + CORAL VIBRANTE #F4743B)
+       ========================================================================== */
+    :root {
+      --bg-outer: #F3E5DC;
+      --peach-top: #FBF3EE;
+      --peach-bottom: #F7EAE2;
+      --peach-blob: rgba(244, 116, 59, 0.085);
+      --card: #FFFFFF;
+      --card-soft: #FFF9F5;
+      --coral: #F4743B;
+      --coral-dark: #E05C22;
+      --coral-soft: rgba(244, 116, 59, 0.12);
+      --ink: #1F1B18;
+      --ink-soft: #5C534C;
+      --mute: #9A8F87;
+      --line: rgba(31, 27, 24, 0.08);
+      --sage: #278056;
+      --sage-soft: rgba(39, 128, 86, 0.12);
+      --gold: #F5A623;
+      --shadow-card: 0 12px 30px rgba(178, 108, 74, 0.10);
+      --shadow-elevated: 0 18px 38px rgba(244, 116, 59, 0.18);
+      --shadow-shell: 0 28px 70px rgba(135, 78, 49, 0.18);
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background: var(--bg-outer);
+      -webkit-font-smoothing: antialiased;
+      overscroll-behavior-y: none;
+    }
+
+    /* Centrado tipo marco móvil elegante en escritorio */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .app-shell {
+      position: relative;
+      width: 100%;
+      max-width: 430px;
+      height: 100%;
+      max-height: 880px;
+      background: linear-gradient(180deg, var(--peach-top) 0%, var(--peach-bottom) 100%);
+      border-radius: 36px;
+      box-shadow: var(--shadow-shell), 0 0 0 8px rgba(255, 255, 255, 0.55);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Ondas orgánicas de fondo melocotón como en la referencia */
+    .app-shell::before {
+      content: "";
+      position: absolute;
+      top: -90px;
+      right: -70px;
+      width: 310px;
+      height: 310px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(244, 116, 59, 0.11) 0%, rgba(244, 116, 59, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app-shell::after {
+      content: "";
+      position: absolute;
+      bottom: 80px;
+      left: -90px;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(244, 116, 59, 0.08) 0%, rgba(244, 116, 59, 0) 72%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 0;
+        background: var(--peach-top);
+      }
+      .app-shell {
+        max-width: 100%;
+        max-height: 100dvh;
+        height: 100dvh;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+
+    .scroll-area {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: calc(16px + env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom));
+      scrollbar-width: none;
+    }
+
+    .scroll-area::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scroll-area.with-sticky-cta {
+      padding-bottom: calc(96px + env(safe-area-inset-bottom));
+    }
+
+    button, input, select {
+      font: inherit;
+      color: inherit;
+      border: none;
+      background: none;
+    }
+
+    button {
+      cursor: pointer;
+      transition: transform 0.18s var(--ease-out), background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--coral);
+      outline-offset: 2px;
+    }
+
+    .serif {
+      font-family: 'Fraunces', Georgia, serif;
+      letter-spacing: -0.02em;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ==========================================================================
+       2. CABECERA SUPERIOR (HAMBURGUESA CORAL + BOLSA CON BADGE + AVATAR)
+       ========================================================================== */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      min-height: 42px;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(8px);
+      box-shadow: 0 4px 12px rgba(178, 108, 74, 0.08);
+      position: relative;
+    }
+
+    .icon-btn:hover {
+      background: #FFFFFF;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .badge-count {
+      position: absolute;
+      top: -3px;
+      right: -3px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      border-radius: 999px;
+      background: var(--coral);
+      color: #FFFFFF;
+      font-size: 10px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(244, 116, 59, 0.45);
+    }
+
+    .avatar-pill {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #FF9B6A 0%, var(--coral) 100%);
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 14px rgba(244, 116, 59, 0.28);
+      border: 2px solid #FFFFFF;
+    }
+
+    /* ==========================================================================
+       3. TÍTULO HERO EN DOS LÍNEAS Y BARRA DE BÚSQUEDA
+       ========================================================================== */
+    .hero-title {
+      font-size: 27px;
+      line-height: 1.18;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 18px;
+    }
+
+    .hero-title strong {
+      display: block;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border-radius: 18px;
+      padding: 6px 8px 6px 16px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 22px;
+    }
+
+    .search-bar input {
+      flex: 1;
+      font-size: 14px;
+      color: var(--ink);
+      min-width: 0;
+      padding: 8px 0;
+    }
+
+    .search-bar input::placeholder {
+      color: var(--mute);
+    }
+
+    .filter-trigger {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: var(--card-soft);
+      color: var(--ink);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .filter-trigger.has-filters {
+      background: var(--coral);
+      color: #FFFFFF;
+    }
+
+    /* ==========================================================================
+       4. SECCIÓN CATEGORÍAS (CARRUSEL HORIZONTAL CUADRADO REDONDEADO)
+       ========================================================================== */
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .section-sub {
+      font-size: 12px;
+      color: var(--coral);
+      font-weight: 600;
+    }
+
+    .cat-row {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin: 0 -20px 20px;
+      padding-left: 20px;
+      padding-right: 20px;
+      scrollbar-width: none;
+    }
+
+    .cat-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      flex-shrink: 0;
+      width: 66px;
+    }
+
+    .cat-box {
+      width: 62px;
+      height: 62px;
+      border-radius: 18px;
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 20px rgba(178, 108, 74, 0.08);
+      color: var(--coral);
+      transition: all 0.22s var(--ease-out);
+    }
+
+    .cat-item.active .cat-box {
+      background: var(--coral);
+      color: #FFFFFF;
+      box-shadow: 0 10px 22px rgba(244, 116, 59, 0.35);
+      transform: translateY(-2px);
+    }
+
+    .cat-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    .cat-item.active .cat-label {
+      color: var(--coral-dark);
+      font-weight: 700;
+    }
+
+    /* ==========================================================================
+       5. CARRUSEL DESTACADO DE HUECOS (CON TARJETA CENTRAL ELEVADA)
+       ========================================================================== */
+    .featured-row {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 12px 20px 22px;
+      margin: 0 -20px 8px;
+      scrollbar-width: none;
+      align-items: center;
+    }
+
+    .featured-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .slot-card {
+      scroll-snap-align: center;
+      flex-shrink: 0;
+      width: 196px;
+      background: var(--card);
+      border-radius: 26px;
+      padding: 14px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      transition: transform 0.28s var(--ease-out), box-shadow 0.28s var(--ease-out);
+      cursor: pointer;
+    }
+
+    .slot-card.elevated {
+      width: 214px;
+      padding: 16px;
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-elevated);
+      border: 1.5px solid rgba(244, 116, 59, 0.22);
+    }
+
+    .slot-top-badges {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .disc-pill {
+      background: var(--coral);
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 9px;
+      border-radius: 999px;
+    }
+
+    .time-pill {
+      background: var(--coral-soft);
+      color: var(--coral-dark);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 999px;
+    }
+
+    .slot-visual {
+      height: 92px;
+      border-radius: 20px;
+      background: linear-gradient(145deg, #FFF5EE 0%, #FDE7D9 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .slot-card.elevated .slot-visual {
+      height: 106px;
+    }
+
+    .slot-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.25;
+      margin-bottom: 3px;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .slot-salon {
+      font-size: 11.5px;
+      color: var(--mute);
+      margin-bottom: 8px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .slot-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      margin-bottom: 10px;
+    }
+
+    .slot-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+    }
+
+    .price-group {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .price-now {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .price-old {
+      font-size: 12px;
+      color: var(--mute);
+      text-decoration: line-through;
+    }
+
+    .mini-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mini-icon-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      background: var(--card-soft);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--mute);
+    }
+
+    .mini-icon-btn.fav-on {
+      color: #E53935;
+      background: rgba(229, 57, 53, 0.1);
+    }
+
+    .mini-icon-btn.book-quick {
+      background: var(--coral);
+      color: #FFFFFF;
+    }
+
+    /* ==========================================================================
+       6. SECCIÓN MEJORES OFERTAS DE HOY (TARJETAS COMPACTAS)
+       ========================================================================== */
+    .deals-row {
+      display: flex;
+      gap: 12px;
+      overflow-x: auto;
+      padding: 4px 20px 14px;
+      margin: 0 -20px;
+      scrollbar-width: none;
+    }
+
+    .deals-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .deal-card {
+      flex-shrink: 0;
+      width: 142px;
+      background: var(--card);
+      border-radius: 22px;
+      padding: 12px;
+      box-shadow: 0 8px 22px rgba(178, 108, 74, 0.08);
+      cursor: pointer;
+      position: relative;
+    }
+
+    .deal-visual {
+      height: 66px;
+      border-radius: 15px;
+      background: #FFF6F0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 9px;
+      position: relative;
+    }
+
+    .deal-badge {
+      position: absolute;
+      top: 6px;
+      left: 6px;
+      background: var(--coral);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+
+    .deal-title {
+      font-size: 12.5px;
+      font-weight: 700;
+      line-height: 1.25;
+      margin-bottom: 3px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .deal-meta {
+      font-size: 11px;
+      color: var(--mute);
+      margin-bottom: 7px;
+    }
+
+    /* ==========================================================================
+       7. PANTALLA DE DETALLE DEL HUECO (ESTILO PANTALLA DERECHA DE REFERENCIA)
+       ========================================================================== */
+    .detail-viewer {
+      background: var(--card);
+      border-radius: 30px;
+      padding: 18px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .slide-stage {
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 8px 24px;
+    }
+
+    .slide-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--card-soft);
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    }
+
+    .slide-arrow.prev { left: 0; }
+    .slide-arrow.next { right: 0; }
+
+    .dots-row {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(31, 27, 24, 0.16);
+      transition: all 0.22s ease;
+    }
+
+    .dot.active {
+      width: 20px;
+      background: var(--coral);
+    }
+
+    .detail-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .detail-title {
+      font-size: 22px;
+      font-weight: 800;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .controls-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin: 18px 0 20px;
+      flex-wrap: wrap;
+    }
+
+    .qty-stepper {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      padding: 5px 8px;
+      border-radius: 14px;
+      box-shadow: 0 4px 14px rgba(178, 108, 74, 0.08);
+    }
+
+    .qty-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 9px;
+      background: var(--coral);
+      color: #FFFFFF;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .qty-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .info-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: var(--card);
+      padding: 8px 11px;
+      border-radius: 13px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      box-shadow: 0 4px 14px rgba(178, 108, 74, 0.07);
+    }
+
+    .detail-big-price {
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--ink);
+    }
+
+    .sticky-cta-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 14px 20px calc(18px + env(safe-area-inset-bottom));
+      background: linear-gradient(180deg, rgba(247, 234, 226, 0) 0%, var(--peach-bottom) 32%);
+      z-index: 15;
+    }
+
+    /* ==========================================================================
+       8. BOTONES PÍLDORA Y FORMULARIOS LIMPIOS
+       ========================================================================== */
+    .btn-pill {
+      width: 100%;
+      background: var(--coral);
+      color: #FFFFFF;
+      padding: 16px 24px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 700;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 12px 26px rgba(244, 116, 59, 0.36);
+    }
+
+    .btn-pill:hover {
+      background: var(--coral-dark);
+    }
+
+    .btn-pill.secondary {
+      background: var(--card);
+      color: var(--ink);
+      box-shadow: var(--shadow-card);
+    }
+
+    .btn-pill.apple {
+      background: #181615;
+      color: #FFFFFF;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.18);
+    }
+
+    .input-card {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 20px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 16px;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-soft);
+      margin-bottom: 6px;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      background: var(--card-soft);
+      border: 1.5px solid rgba(31, 27, 24, 0.08);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 14.5px;
+      color: var(--ink);
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .field input:focus, .field select:focus {
+      border-color: var(--coral);
+      background: #FFFFFF;
+      outline: none;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* ==========================================================================
+       9. MENÚ LATERAL DESLIZABLE (DRAWER) Y MODALES
+       ========================================================================== */
+    .drawer-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(31, 27, 24, 0.38);
+      backdrop-filter: blur(3px);
+      z-index: 40;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer-panel {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 82%;
+      max-width: 310px;
+      background: linear-gradient(180deg, #FFFBF8 0%, var(--peach-bottom) 100%);
+      border-radius: 0 30px 30px 0;
+      padding: calc(24px + env(safe-area-inset-top)) 20px calc(24px + env(safe-area-inset-bottom));
+      z-index: 50;
+      transform: translateX(-105%);
+      transition: transform 0.3s var(--ease-out);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 16px 0 40px rgba(31, 27, 24, 0.14);
+    }
+
+    .drawer-panel.open {
+      transform: translateX(0);
+    }
+
+    .drawer-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 13px 14px;
+      border-radius: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .drawer-item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .drawer-item.active {
+      background: var(--coral);
+      color: #FFFFFF;
+      box-shadow: 0 8px 18px rgba(244, 116, 59, 0.28);
+    }
+
+    .drawer-item:not(.active):hover {
+      background: rgba(255, 255, 255, 0.75);
+    }
+
+    /* Bottom Sheet para Filtros */
+    .sheet-panel {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #FFFFFF;
+      border-radius: 30px 30px 0 0;
+      padding: 22px 22px calc(26px + env(safe-area-inset-bottom));
+      z-index: 50;
+      transform: translateY(105%);
+      transition: transform 0.3s var(--ease-out);
+      box-shadow: 0 -16px 40px rgba(31, 27, 24, 0.14);
+    }
+
+    .sheet-panel.open {
+      transform: translateY(0);
+    }
+
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .filter-chip {
+      padding: 9px 14px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 600;
+      background: var(--card-soft);
+      color: var(--ink-soft);
+      border: 1px solid var(--line);
+    }
+
+    .filter-chip.active {
+      background: var(--coral);
+      color: #FFFFFF;
+      border-color: var(--coral);
+    }
+
+    /* Toast flotante */
+    .toast {
+      position: absolute;
+      top: calc(16px + env(safe-area-inset-top));
+      left: 50%;
+      transform: translate(-50%, -24px);
+      background: var(--ink);
+      color: #FFFFFF;
+      padding: 11px 18px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 600;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 80;
+      transition: opacity 0.22s ease, transform 0.25s var(--ease-out);
+      box-shadow: 0 10px 24px rgba(31, 27, 24, 0.25);
+      white-space: nowrap;
+      max-width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .toast.on {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .fade-in {
+      animation: fadeIn 0.26s var(--ease-out);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell" id="app-shell">
+    <div id="view-container" style="display:flex; flex-direction:column; flex:1; overflow:hidden;"></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script>
+    /**
+     * ==========================================================================
+     * HUECOS · MARKETPLACE MÓVIL DE CITAS DE ÚLTIMA HORA
+     * Flujo completo: Login Unificado (autodetección de rol) -> Home Consumidor /
+     * Detalle Interactivo / Checkout / Drawer / Panel de Salón.
+     * ==========================================================================
+     */
+
+    const STORAGE_KEY = 'huecos_coral_app_v1';
+    const $ = id => document.getElementById(id);
+
+    /** Sanitización segura contra XSS */
+    function esc(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    const eur = n => `${n}€`;
+    const formatHour = ms => new Date(ms).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    const minsUntil = ms => Math.max(5, Math.round((ms - Date.now()) / 60000));
+    const finalPrice = slot => Math.round(slot.p * (1 - slot.disc / 100));
+
+    /* ==========================================================================
+       ICONOS SVG LINEALES E ILUSTRACIONES PERSONALIZADAS
+       ========================================================================== */
+    const ICONS = {
+      menu: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F4743B" stroke-width="2.4" stroke-linecap="round"><line x1="4" y1="7" x2="15" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="12" y2="17"/></svg>`,
+      bag: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>`,
+      search: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9A8F87" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.2" y2="16.2"/></svg>`,
+      sliders: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2.5" fill="currentColor"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2.5" fill="currentColor"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="10" cy="18" r="2.5" fill="currentColor"/></svg>`,
+      back: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>`,
+      dots: `<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="5" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="12" cy="19" r="1.8"/></svg>`,
+      heart: (filled) => `<svg width="18" height="18" viewBox="0 0 24 24" fill="${filled ? '#E53935' : 'none'}" stroke="${filled ? '#E53935' : 'currentColor'}" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
+      share: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`,
+      star: `<svg width="13" height="13" viewBox="0 0 24 24" fill="#F5A623" stroke="#F5A623" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+      walk: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F4743B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="M7 21l3-7 3 2v5"/><path d="M10 14l2-5 4 2 2-2"/></svg>`,
+      clock: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#F4743B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>`,
+      pin: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F4743B" stroke-width="2.2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+      check: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#278056" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+      radar: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20a8 8 0 1 0-8-8"/><path d="M12 16a4 4 0 1 0-4-4"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>`,
+      help: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+      logout: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>`,
+      plus: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`
+    };
+
+    /** Iconos de Categorías (lineales limpios) */
+    const CAT_ICONS = {
+      Todo: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>`,
+      Corte: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>`,
+      Color: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M18.37 2.63 14 7l-1.59-1.59a2 2 0 0 0-2.82 0L8 7l9 9 1.59-1.59a2 2 0 0 0 0-2.82L17 10l4.37-4.37a2.12 2.12 0 1 0-3-3Z"/><path d="M9 8c-2 3-4 3.5-7 4l8 10c2-1 6-5 6-7"/></svg>`,
+      Barba: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4H7z"/><path d="M9 8v4a3 3 0 0 0 6 0V8"/><line x1="12" y1="15" x2="12" y2="21"/><line x1="9" y1="21" x2="15" y2="21"/></svg>`,
+      Uñas: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v5H9z"/><path d="M7 8h10l1 11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L7 8z"/><path d="M12 12v4"/></svg>`,
+      Tratamientos: `<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/><path d="M12 17a3 3 0 0 0 3-3"/></svg>`
+    };
+
+    /** Ilustraciones vectoriales ricas por categoría para las tarjetas de huecos */
+    function renderServiceArt(cat, size = 58) {
+      const map = {
+        Corte: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="26" fill="#F4743B" fill-opacity="0.14"/><circle cx="20" cy="22" r="6.5" stroke="#F4743B" stroke-width="3"/><circle cx="20" cy="42" r="6.5" stroke="#1F1B18" stroke-width="3"/><path d="M47 17L25 37" stroke="#F4743B" stroke-width="3.2" stroke-linecap="round"/><path d="M25 27L47 47" stroke="#1F1B18" stroke-width="3.2" stroke-linecap="round"/></svg>`,
+        Color: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="26" fill="#F4743B" fill-opacity="0.14"/><path d="M22 38C22 30 32 18 32 18C32 18 42 30 42 38C42 43.5228 37.5228 48 32 48C26.4772 48 22 43.5228 22 38Z" fill="#F4743B" fill-opacity="0.25" stroke="#F4743B" stroke-width="3"/><path d="M28 38C28 40.5 30 42.5 32.5 42.5" stroke="#1F1B18" stroke-width="2.8" stroke-linecap="round"/></svg>`,
+        Barba: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="26" fill="#F4743B" fill-opacity="0.14"/><rect x="21" y="16" width="22" height="9" rx="3" stroke="#1F1B18" stroke-width="3"/><path d="M25 25V33C25 36.866 28.134 40 32 40C35.866 40 39 36.866 39 33V25" stroke="#F4743B" stroke-width="3"/><path d="M32 40V49" stroke="#1F1B18" stroke-width="3.2" stroke-linecap="round"/></svg>`,
+        Uñas: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="26" fill="#F4743B" fill-opacity="0.14"/><rect x="26" y="15" width="12" height="10" rx="2.5" stroke="#1F1B18" stroke-width="3"/><path d="M21 27C21 25.8954 21.8954 25 23 25H41C42.1046 25 43 25.8954 43 27L41 46C40.8 47.7 39.4 49 37.7 49H26.3C24.6 49 23.2 47.7 23 46L21 27Z" fill="#F4743B" fill-opacity="0.22" stroke="#F4743B" stroke-width="3"/></svg>`,
+        Tratamientos: `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="26" fill="#F4743B" fill-opacity="0.14"/><path d="M32 17C32 17 45 27 45 37C45 44.1797 39.1797 50 32 50C24.8203 50 19 44.1797 19 37C19 27 32 17 32 17Z" stroke="#F4743B" stroke-width="3"/><path d="M32 27V42M26 35H38" stroke="#1F1B18" stroke-width="2.8" stroke-linecap="round"/></svg>`
+      };
+      return map[cat] || map.Corte;
+    }
+
+    /* ==========================================================================
+       BASE DE DATOS INICIAL (USUARIOS, SALONES Y HUECOS DEL DÍA)
+       ========================================================================== */
+    function getDefaultData() {
+      const now = Date.now();
+      return {
+        users: {
+          iker: {
+            pw: '123',
+            role: 'cli',
+            name: 'Iker Etxebarria',
+            email: 'iker@huecos.es',
+            cards: ['•••• 4242'],
+            favorites: [101, 104],
+            radarPhone: ''
+          },
+          marea: {
+            pw: '123',
+            role: 'biz',
+            name: 'Salón Marea',
+            email: 'marea@huecos.es',
+            address: 'C/ Colón de Larreátegui, 18 · Abando',
+            neighborhood: 'Abando'
+          }
+        },
+        slots: [
+          {
+            id: 101,
+            cat: 'Corte',
+            s: 'Corte y secado exprés',
+            p: 38,
+            d: 45,
+            t: now + 35 * 60000,
+            disc: 25,
+            walkMins: 6,
+            rating: 4.9,
+            reviewsCount: 124,
+            spotsLeft: 2,
+            st: 'live',
+            bizId: 'marea',
+            biz: 'Salón Marea',
+            address: 'C/ Colón de Larreátegui, 18 · Abando',
+            stylist: {
+              name: 'Bea Mendoza',
+              role: 'Estilista Senior · 8 años exp.',
+              includes: ['Diagnóstico rápido del cabello', 'Lavado con masaje capilar', 'Corte personalizado y secado natural', 'Café de especialidad o infusión']
+            },
+            reviews: [
+              { author: 'Lucía R.', rating: 5, text: 'Cogí el hueco 20 minutos antes y Bea me dejó el corte impecable. Repetiré seguro.' },
+              { author: 'Marta G.', rating: 5, text: 'Puntualidad total y cero esperas. El descuento merece muchísimo la pena.' }
+            ],
+            bookings: []
+          },
+          {
+            id: 102,
+            cat: 'Color',
+            s: 'Baño de color e hidratación',
+            p: 85,
+            d: 90,
+            t: now + 55 * 60000,
+            disc: 35,
+            walkMins: 6,
+            rating: 4.9,
+            reviewsCount: 98,
+            spotsLeft: 1,
+            st: 'live',
+            bizId: 'marea',
+            biz: 'Salón Marea',
+            address: 'C/ Colón de Larreátegui, 18 · Abando',
+            stylist: {
+              name: 'Nerea Soler',
+              role: 'Colorista Especialista',
+              includes: ['Matiz o baño de brillo sin amoníaco', 'Mascarilla de keratina vegetal', 'Peinado con ondas suaves']
+            },
+            reviews: [
+              { author: 'Paula V.', rating: 5, text: 'Un brillo espectacular y un ahorro de casi 30€ por ir a mediodía.' }
+            ],
+            bookings: []
+          },
+          {
+            id: 103,
+            cat: 'Barba',
+            s: 'Arreglo de barba y toalla caliente',
+            p: 24,
+            d: 30,
+            t: now + 25 * 60000,
+            disc: 30,
+            walkMins: 4,
+            rating: 4.8,
+            reviewsCount: 76,
+            spotsLeft: 1,
+            st: 'live',
+            bizId: 'barberia_norte',
+            biz: 'Barbería Norte',
+            address: 'Alameda Urquijo, 42 · Indautxu',
+            stylist: {
+              name: 'Jon Ander',
+              role: 'Maestro Barbero',
+              includes: ['Perfilado a navaja tradicional', 'Ritual de toalla caliente con eucalipto', 'Aceite nutritivo de cedro']
+            },
+            reviews: [
+              { author: 'Carlos M.', rating: 5, text: 'A 4 minutos de la oficina, salí nuevo en media hora.' }
+            ],
+            bookings: []
+          },
+          {
+            id: 104,
+            cat: 'Uñas',
+            s: 'Manicura semipermanente',
+            p: 32,
+            d: 45,
+            t: now + 75 * 60000,
+            disc: 30,
+            walkMins: 9,
+            rating: 5.0,
+            reviewsCount: 142,
+            spotsLeft: 2,
+            st: 'live',
+            bizId: 'atelier_rosa',
+            biz: 'Atelier Rosa',
+            address: 'C/ Ercilla, 29 · Moyúa',
+            stylist: {
+              name: 'Sofía Lin',
+              role: 'Técnica de Uñas',
+              includes: ['Limado y cuidado de cutícula', 'Esmaltado semipermanente +60 tonos', 'Hidratación de manos']
+            },
+            reviews: [
+              { author: 'Elena T.', rating: 5, text: 'Acabado súper fino y limpio. Me salvó antes de una cena.' }
+            ],
+            bookings: []
+          },
+          {
+            id: 105,
+            cat: 'Tratamientos',
+            s: 'Ritual spa capilar detox',
+            p: 50,
+            d: 50,
+            t: now + 110 * 60000,
+            disc: 40,
+            walkMins: 12,
+            rating: 4.9,
+            reviewsCount: 61,
+            spotsLeft: 1,
+            st: 'live',
+            bizId: 'marea',
+            biz: 'Salón Marea',
+            address: 'C/ Colón de Larreátegui, 18 · Abando',
+            stylist: {
+              name: 'Bea Mendoza',
+              role: 'Estilista Senior',
+              includes: ['Exfoliación suave del cuero cabelludo', 'Vapor ozono hidratante', 'Secado con volumen']
+            },
+            reviews: [
+              { author: 'Irati B.', rating: 5, text: 'Salí flotando, el masaje capilar es una maravilla.' }
+            ],
+            bookings: []
+          },
+          {
+            id: 106,
+            cat: 'Corte',
+            s: 'Corte caballero y lavado',
+            p: 26,
+            d: 35,
+            t: now + 150 * 60000,
+            disc: 20,
+            walkMins: 6,
+            rating: 4.9,
+            reviewsCount: 89,
+            spotsLeft: 0,
+            st: 'booked',
+            bizId: 'marea',
+            biz: 'Salón Marea',
+            address: 'C/ Colón de Larreátegui, 18 · Abando',
+            stylist: { name: 'Bea Mendoza', role: 'Estilista Senior', includes: ['Corte a tijera y máquina', 'Lavado refrescante'] },
+            reviews: [],
+            bookings: [{ cliId: 'ana', cliName: 'Ana Gómez', qty: 1, pin: '7391', method: 'Apple Pay', total: 21 }]
+          }
+        ]
+      };
+    }
+
+    function loadData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return getDefaultData();
+        const parsed = JSON.parse(raw);
+        if (!parsed.users || !Array.isArray(parsed.slots)) return getDefaultData();
+        return parsed;
+      } catch (e) {
+        return getDefaultData();
+      }
+    }
+
+    let DB = loadData();
+
+    function saveData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(DB));
+      } catch (e) {}
+    }
+
+    /* ==========================================================================
+       ESTADO DE LA APLICACIÓN (INICIA DIRECTAMENTE EN LOGIN UNIFICADO)
+       ========================================================================== */
+    const STATE = {
+      view: 'login',       // 'login', 'home', 'detail', 'checkout', 'card_form', 'bookings', 'favorites', 'radar', 'how', 'biz_dash', 'biz_new', 'biz_settings'
+      authMode: 'login',   // 'login' o 'register' (solo cliente nuevo)
+      authError: '',
+      user: null,
+      role: null,
+      drawerOpen: false,
+      filterOpen: false,
+      detailMenuOpen: false,
+      searchQuery: '',
+      selectedCat: 'Todo',
+      sortBy: 'soon',      // 'soon', 'discount', 'rating'
+      maxWalk: 99,         // 10, 15, 99
+      featuredIndex: 0,
+      detailSlotId: null,
+      detailSlide: 0,
+      detailQty: 1,
+      cardReturnView: 'checkout',
+      lastConfirmation: null
+    };
+
+    /* ==========================================================================
+       UTILIDADES DE CONSULTA Y BÚSQUEDA
+       ========================================================================== */
+    function getFilteredLiveSlots() {
+      const now = Date.now();
+      const q = STATE.searchQuery.trim().toLowerCase();
+
+      let list = DB.slots.filter(s => s.st === 'live' && s.spotsLeft > 0 && s.t > now);
+
+      if (STATE.selectedCat !== 'Todo') {
+        list = list.filter(s => s.cat === STATE.selectedCat);
+      }
+
+      if (STATE.maxWalk < 99) {
+        list = list.filter(s => (s.walkMins || 10) <= STATE.maxWalk);
+      }
+
+      if (q) {
+        list = list.filter(s =>
+          s.s.toLowerCase().includes(q) ||
+          s.biz.toLowerCase().includes(q) ||
+          (s.address || '').toLowerCase().includes(q) ||
+          s.cat.toLowerCase().includes(q)
+        );
+      }
+
+      if (STATE.sortBy === 'discount') {
+        list.sort((a, b) => b.disc - a.disc);
+      } else if (STATE.sortBy === 'rating') {
+        list.sort((a, b) => b.rating - a.rating);
+      } else {
+        list.sort((a, b) => a.t - b.t);
+      }
+
+      return list;
+    }
+
+    function getUserBookings() {
+      if (!STATE.user) return [];
+      const res = [];
+      DB.slots.forEach(s => {
+        (s.bookings || []).forEach((b, idx) => {
+          if (b.cliId === STATE.user) {
+            res.push({ slot: s, booking: b, idx });
+          }
+        });
+      });
+      return res.sort((a, b) => a.slot.t - b.slot.t);
+    }
+
+    function isFavorite(slotId) {
+      if (!STATE.user || STATE.role !== 'cli') return false;
+      const favs = DB.users[STATE.user].favorites || [];
+      return favs.includes(slotId);
+    }
+
+    /* ==========================================================================
+       1. PRIMERA PANTALLA: INICIO DE SESIÓN UNIFICADO (SIN SELECTOR DE ROL)
+       ========================================================================== */
+    function viewLogin() {
+      const isReg = STATE.authMode === 'register';
+      return `
+        <div class="scroll-area fade-in" style="display:flex; flex-direction:column; justify-content:center;">
+          <div style="text-align:center; margin-bottom:26px;">
+            <div style="width:68px; height:68px; border-radius:24px; background:linear-gradient(135deg, #FF9466 0%, var(--coral) 100%); margin:0 auto 16px; display:flex; align-items:center; justify-content:center; box-shadow:0 14px 30px rgba(244,116,59,0.34); color:#fff;">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>
+            </div>
+            <h1 class="serif" style="font-size:32px; font-weight:600; margin-bottom:6px;">Huecos</h1>
+            <p style="font-size:14px; color:var(--ink-soft); max-width:290px; margin:0 auto;">
+              ${isReg ? 'Crea tu cuenta y caza turnos de última hora en tu barrio.' : 'Inicia sesión para reservar citas con descuento o gestionar tu salón.'}
+            </p>
+          </div>
+
+          <div class="input-card">
+            <div style="display:flex; gap:8px; background:var(--card-soft); padding:5px; border-radius:14px; margin-bottom:18px;">
+              <button type="button" onclick="setAuthMode('login')" style="flex:1; padding:9px; border-radius:10px; font-size:13px; font-weight:700; ${!isReg ? 'background:#fff; color:var(--coral); box-shadow:0 3px 10px rgba(0,0,0,0.06);' : 'color:var(--mute);'}">Iniciar sesión</button>
+              <button type="button" onclick="setAuthMode('register')" style="flex:1; padding:9px; border-radius:10px; font-size:13px; font-weight:700; ${isReg ? 'background:#fff; color:var(--coral); box-shadow:0 3px 10px rgba(0,0,0,0.06);' : 'color:var(--mute);'}">Crear cuenta</button>
+            </div>
+
+            ${STATE.authError ? `
+              <div style="background:rgba(244,116,59,0.12); border-left:3px solid var(--coral); padding:10px 12px; border-radius:10px; font-size:12.5px; color:var(--ink); margin-bottom:14px;" role="alert">
+                ${esc(STATE.authError)}
+              </div>
+            ` : ''}
+
+            ${isReg ? `
+              <form onsubmit="handleRegister(event)" novalidate>
+                <div class="field">
+                  <label for="reg-name">Tu nombre</label>
+                  <input type="text" id="reg-name" placeholder="Ej. Clara Vidal" required>
+                </div>
+                <div class="field">
+                  <label for="reg-user">Usuario o email</label>
+                  <input type="text" id="reg-user" placeholder="Ej. clara" required>
+                </div>
+                <div class="field">
+                  <label for="reg-pass">Contraseña</label>
+                  <input type="password" id="reg-pass" placeholder="Mínimo 3 caracteres" required>
+                </div>
+                <button type="submit" class="btn-pill" style="margin-top:6px;">Crear cuenta y explorar</button>
+              </form>
+            ` : `
+              <form onsubmit="handleUnifiedLogin(event)" novalidate>
+                <div class="field">
+                  <label for="auth-id">Usuario o email</label>
+                  <input type="text" id="auth-id" autocomplete="username" placeholder="iker o marea" required>
+                </div>
+                <div class="field">
+                  <label for="auth-pw">Contraseña</label>
+                  <input type="password" id="auth-pw" autocomplete="current-password" placeholder="•••" required>
+                </div>
+                <button type="submit" class="btn-pill" style="margin-top:6px;">Entrar</button>
+              </form>
+            `}
+          </div>
+
+          <div style="text-align:center; margin-top:6px;">
+            <p style="font-size:12px; color:var(--mute); margin-bottom:10px;">Acceso rápido de prueba (autodetección de perfil):</p>
+            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+              <button type="button" onclick="quickLogin('iker')" style="background:#fff; padding:10px 14px; border-radius:999px; font-size:12.5px; font-weight:700; color:var(--ink); box-shadow:0 6px 16px rgba(178,108,74,0.10); display:inline-flex; align-items:center; gap:6px;">
+                <span style="width:8px; height:8px; border-radius:50%; background:var(--coral);"></span>
+                Entrar como Iker
+              </button>
+              <button type="button" onclick="quickLogin('marea')" style="background:#fff; padding:10px 14px; border-radius:999px; font-size:12.5px; font-weight:700; color:var(--ink); box-shadow:0 6px 16px rgba(178,108,74,0.10); display:inline-flex; align-items:center; gap:6px;">
+                <span style="width:8px; height:8px; border-radius:50%; background:var(--sage);"></span>
+                Entrar como Salón Marea
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       2. CABECERA Y MENÚ LATERAL DESLIZABLE (DRAWER)
+       ========================================================================== */
+    function renderConsumerTopbar() {
+      const u = DB.users[STATE.user];
+      const initials = u.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+      const bookingsCount = getUserBookings().length;
+
+      return `
+        <header class="topbar">
+          <button type="button" class="icon-btn" onclick="toggleDrawer(true)" aria-label="Abrir menú lateral">
+            ${ICONS.menu}
+          </button>
+          <div class="topbar-right">
+            <button type="button" class="icon-btn" onclick="navTo('bookings')" aria-label="Mis citas y bolsa">
+              ${ICONS.bag}
+              ${bookingsCount > 0 ? `<span class="badge-count">${bookingsCount}</span>` : ''}
+            </button>
+            <button type="button" class="avatar-pill" onclick="toggleDrawer(true)" aria-label="Perfil de ${esc(u.name)}">
+              ${esc(initials)}
+            </button>
+          </div>
+        </header>
+      `;
+    }
+
+    function renderDrawer() {
+      const u = DB.users[STATE.user];
+      if (!u) return '';
+      const isBiz = STATE.role === 'biz';
+      const bookingsCount = getUserBookings().length;
+      const favCount = (u.favorites || []).length;
+
+      return `
+        <div class="drawer-backdrop ${STATE.drawerOpen ? 'open' : ''}" onclick="toggleDrawer(false)"></div>
+        <aside class="drawer-panel ${STATE.drawerOpen ? 'open' : ''}" aria-label="Menú principal">
+          <div style="display:flex; align-items:center; gap:12px; padding-bottom:20px; border-bottom:1px solid var(--line); margin-bottom:18px;">
+            <div class="avatar-pill" style="width:46px; height:46px; font-size:16px;">
+              ${esc(u.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase())}
+            </div>
+            <div style="min-width:0;">
+              <div style="font-weight:800; font-size:15px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${esc(u.name)}</div>
+              <div style="font-size:12px; color:var(--coral); font-weight:600;">${isBiz ? 'Salón Asociado' : 'Cliente del Barrio'}</div>
+            </div>
+          </div>
+
+          <nav style="flex:1;">
+            ${isBiz ? `
+              <button type="button" class="drawer-item ${STATE.view === 'biz_dash' ? 'active' : ''}" onclick="drawerNav('biz_dash')">
+                <span class="drawer-item-left">${ICONS.clock} Mi Agenda de Hoy</span>
+              </button>
+              <button type="button" class="drawer-item ${STATE.view === 'biz_new' ? 'active' : ''}" onclick="drawerNav('biz_new')">
+                <span class="drawer-item-left">${ICONS.plus} Publicar Hueco</span>
+              </button>
+              <button type="button" class="drawer-item ${STATE.view === 'biz_settings' ? 'active' : ''}" onclick="drawerNav('biz_settings')">
+                <span class="drawer-item-left">${ICONS.pin} Perfil del Salón</span>
+              </button>
+            ` : `
+              <button type="button" class="drawer-item ${STATE.view === 'home' ? 'active' : ''}" onclick="drawerNav('home')">
+                <span class="drawer-item-left">${CAT_ICONS.Todo.replace('26', '18').replace('26', '18')} Explorar huecos</span>
+              </button>
+              <button type="button" class="drawer-item ${STATE.view === 'bookings' ? 'active' : ''}" onclick="drawerNav('bookings')">
+                <span class="drawer-item-left">${ICONS.bag} Mis citas y bolsa</span>
+                ${bookingsCount > 0 ? `<span style="background:${STATE.view === 'bookings' ? '#fff' : 'var(--coral)'}; color:${STATE.view === 'bookings' ? 'var(--coral)' : '#fff'}; font-size:11px; font-weight:800; padding:2px 8px; border-radius:999px;">${bookingsCount}</span>` : ''}
+              </button>
+              <button type="button" class="drawer-item ${STATE.view === 'favorites' ? 'active' : ''}" onclick="drawerNav('favorites')">
+                <span class="drawer-item-left">${ICONS.heart(false)} Favoritos guardados</span>
+                ${favCount > 0 ? `<span style="font-size:11px; font-weight:700; opacity:0.8;">${favCount}</span>` : ''}
+              </button>
+              <button type="button" class="drawer-item ${STATE.view === 'radar' ? 'active' : ''}" onclick="drawerNav('radar')">
+                <span class="drawer-item-left">${ICONS.radar} Radar WhatsApp</span>
+              </button>
+              <button type="button" class="drawer-item ${STATE.view === 'how' ? 'active' : ''}" onclick="drawerNav('how')">
+                <span class="drawer-item-left">${ICONS.help} Cómo funciona</span>
+              </button>
+            `}
+          </nav>
+
+          <div style="padding-top:14px; border-top:1px solid var(--line);">
+            <button type="button" class="drawer-item" onclick="resetDemo()" style="font-size:13px; color:var(--ink-soft);">
+              <span class="drawer-item-left">${ICONS.clock} Restaurar datos demo</span>
+            </button>
+            <button type="button" class="drawer-item" onclick="logout()" style="color:#D32F2F;">
+              <span class="drawer-item-left">${ICONS.logout} Cerrar sesión</span>
+            </button>
+          </div>
+        </aside>
+      `;
+    }
+
+    /* ==========================================================================
+       3. VISTA PRINCIPAL DEL CONSUMIDOR (HOME INSPIRADO EN APP DE DELIVERY)
+       ========================================================================== */
+    function viewConsumerHome() {
+      const liveSlots = getFilteredLiveSlots();
+      const categories = ['Todo', 'Corte', 'Color', 'Barba', 'Uñas', 'Tratamientos'];
+      const hasActiveFilters = STATE.sortBy !== 'soon' || STATE.maxWalk < 99;
+
+      // Asegura índice válido para la tarjeta destacada
+      if (STATE.featuredIndex >= liveSlots.length) STATE.featuredIndex = 0;
+
+      // Mejores ofertas del día ordenadas por mayor descuento
+      const bestDeals = [...DB.slots]
+        .filter(s => s.st === 'live' && s.spotsLeft > 0 && s.t > Date.now())
+        .sort((a, b) => b.disc - a.disc);
+
+      return `
+        <div class="scroll-area fade-in" id="home-scroll">
+          ${renderConsumerTopbar()}
+
+          <h1 class="hero-title">
+            Aprovecha los
+            <strong>Huecos de hoy</strong>
+          </h1>
+
+          <!-- Barra de búsqueda en tiempo real + botón de filtros -->
+          <div class="search-bar">
+            ${ICONS.search}
+            <input
+              type="search"
+              id="search-input"
+              value="${esc(STATE.searchQuery)}"
+              placeholder="Buscar corte, color, salón o barrio..."
+              oninput="handleSearchInput(this.value)"
+              aria-label="Buscar servicio, salón o barrio"
+            >
+            ${STATE.searchQuery ? `
+              <button type="button" onclick="handleSearchInput('')" style="padding:4px 6px; color:var(--mute); font-weight:700;" aria-label="Limpiar búsqueda">×</button>
+            ` : ''}
+            <button type="button" class="filter-trigger ${hasActiveFilters ? 'has-filters' : ''}" onclick="toggleFilterSheet(true)" aria-label="Ordenar y filtrar">
+              ${ICONS.sliders}
+            </button>
+          </div>
+
+          <!-- Categorías -->
+          <div class="section-head">
+            <h2 class="section-title">Categorías</h2>
+            <span class="section-sub">${liveSlots.length} disponibles</span>
+          </div>
+
+          <div class="cat-row" role="tablist" aria-label="Categorías de servicios">
+            ${categories.map(cat => `
+              <button
+                type="button"
+                role="tab"
+                aria-selected="${STATE.selectedCat === cat}"
+                class="cat-item ${STATE.selectedCat === cat ? 'active' : ''}"
+                onclick="selectCategory('${cat}')"
+              >
+                <div class="cat-box">${CAT_ICONS[cat]}</div>
+                <span class="cat-label">${cat}</span>
+              </button>
+            `).join('')}
+          </div>
+
+          <!-- Carrusel destacado de Huecos (con tarjeta activa elevada) -->
+          ${liveSlots.length ? `
+            <div class="featured-row" id="featured-carousel" onscroll="handleCarouselScroll(this)">
+              ${liveSlots.map((s, idx) => {
+                const isElevated = idx === STATE.featuredIndex;
+                const fav = isFavorite(s.id);
+                return `
+                  <article
+                    class="slot-card ${isElevated ? 'elevated' : ''}"
+                    onclick="openSlotDetail(${s.id})"
+                  >
+                    <div class="slot-top-badges">
+                      <span class="disc-pill">−${esc(s.disc)}%</span>
+                      <span class="time-pill">En ${minsUntil(s.t)} min</span>
+                    </div>
+
+                    <div class="slot-visual">
+                      ${renderServiceArt(s.cat, isElevated ? 66 : 56)}
+                    </div>
+
+                    <h3 class="slot-name">${esc(s.s)}</h3>
+                    <p class="slot-salon">${esc(s.biz)} · A ${esc(s.walkMins)} min</p>
+
+                    <div class="slot-rating">
+                      ${ICONS.star}
+                      <span>${esc(s.rating)}</span>
+                      <span style="color:var(--mute); font-weight:500;">(${esc(s.reviewsCount)})</span>
+                    </div>
+
+                    <div class="slot-bottom">
+                      <div class="price-group tabular">
+                        <span class="price-now">${eur(finalPrice(s))}</span>
+                        <span class="price-old">${eur(s.p)}</span>
+                      </div>
+                      <div class="mini-actions">
+                        <button
+                          type="button"
+                          class="mini-icon-btn ${fav ? 'fav-on' : ''}"
+                          onclick="event.stopPropagation(); toggleFavorite(${s.id})"
+                          aria-label="Guardar en favoritos"
+                        >
+                          ${ICONS.heart(fav)}
+                        </button>
+                        <button
+                          type="button"
+                          class="mini-icon-btn book-quick"
+                          onclick="event.stopPropagation(); quickBookFromCard(${s.id})"
+                          aria-label="Bloquear este hueco"
+                        >
+                          ${ICONS.plus}
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                `;
+              }).join('')}
+            </div>
+          ` : `
+            <div class="input-card" style="text-align:center; padding:32px 20px;">
+              <p style="font-weight:700; font-size:16px; margin-bottom:6px;">No hay huecos con ese filtro</p>
+              <p style="font-size:13px; color:var(--mute); margin-bottom:16px;">Prueba otra categoría o amplía la distancia a pie.</p>
+              <button type="button" class="btn-pill" style="padding:12px 20px; font-size:13px;" onclick="resetFilters()">Ver todos los huecos</button>
+            </div>
+          `}
+
+          <!-- Sección: Mejores ofertas de hoy -->
+          <div class="section-head" style="margin-top:8px;">
+            <h2 class="section-title">Mejores ofertas de hoy</h2>
+            <span class="section-sub">Hasta −40%</span>
+          </div>
+
+          <div class="deals-row">
+            ${bestDeals.map(s => `
+              <article class="deal-card" onclick="openSlotDetail(${s.id})">
+                <div class="deal-visual">
+                  <span class="deal-badge">−${esc(s.disc)}%</span>
+                  ${renderServiceArt(s.cat, 44)}
+                </div>
+                <h3 class="deal-title">${esc(s.s)}</h3>
+                <p class="deal-meta">${esc(formatHour(s.t))} · A ${esc(s.walkMins)}m</p>
+                <div class="price-group tabular">
+                  <span class="price-now" style="font-size:15px;">${eur(finalPrice(s))}</span>
+                  <span class="price-old" style="font-size:11px;">${eur(s.p)}</span>
+                </div>
+              </article>
+            `).join('')}
+          </div>
+        </div>
+
+        <!-- Bottom Sheet de Ordenación y Distancia -->
+        <div class="drawer-backdrop ${STATE.filterOpen ? 'open' : ''}" onclick="toggleFilterSheet(false)"></div>
+        <div class="sheet-panel ${STATE.filterOpen ? 'open' : ''}" role="dialog" aria-label="Filtros y orden">
+          <div style="width:40px; height:4px; border-radius:99px; background:var(--line); margin:0 auto 16px;"></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+            <h3 style="font-size:18px; font-weight:800;">Ordenar y filtrar</h3>
+            <button type="button" onclick="resetFilters()" style="font-size:13px; font-weight:700; color:var(--coral);">Restablecer</button>
+          </div>
+
+          <p style="font-size:12px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em;">Ordenar por</p>
+          <div class="chip-group" style="margin-bottom:20px;">
+            <button type="button" class="filter-chip ${STATE.sortBy === 'soon' ? 'active' : ''}" onclick="setSort('soon')">Más próximo</button>
+            <button type="button" class="filter-chip ${STATE.sortBy === 'discount' ? 'active' : ''}" onclick="setSort('discount')">Mayor descuento</button>
+            <button type="button" class="filter-chip ${STATE.sortBy === 'rating' ? 'active' : ''}" onclick="setSort('rating')">Mejor valorado</button>
+          </div>
+
+          <p style="font-size:12px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.04em;">Distancia a pie</p>
+          <div class="chip-group" style="margin-bottom:24px;">
+            <button type="button" class="filter-chip ${STATE.maxWalk === 99 ? 'active' : ''}" onclick="setWalk(99)">Todos</button>
+            <button type="button" class="filter-chip ${STATE.maxWalk === 10 ? 'active' : ''}" onclick="setWalk(10)">&lt; 10 min a pie</button>
+            <button type="button" class="filter-chip ${STATE.maxWalk === 15 ? 'active' : ''}" onclick="setWalk(15)">&lt; 15 min a pie</button>
+          </div>
+
+          <button type="button" class="btn-pill" onclick="toggleFilterSheet(false)">Aplicar filtros</button>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       4. PANTALLA DE DETALLE DEL HUECO (VISOR 3 SLIDES, STEPPER, CHIPS, CTA FIJO)
+       ========================================================================== */
+    function viewSlotDetail() {
+      const s = DB.slots.find(x => x.id === STATE.detailSlotId);
+      if (!s) {
+        navTo('home');
+        return '';
+      }
+      const fav = isFavorite(s.id);
+      const bookingsCount = getUserBookings().length;
+      const unitPrice = finalPrice(s);
+      const totalPrice = unitPrice * STATE.detailQty;
+      const otherLive = DB.slots.filter(x => x.id !== s.id && x.st === 'live' && x.spotsLeft > 0 && x.t > Date.now());
+
+      // Contenido de cada slide del visor interactivo
+      let slideHtml = '';
+      if (STATE.detailSlide === 0) {
+        slideHtml = `
+          <div style="text-align:center;">
+            <div style="display:inline-flex; gap:8px; margin-bottom:12px;">
+              <span class="disc-pill">−${esc(s.disc)}% DTO</span>
+              <span class="time-pill">Hoy ${esc(formatHour(s.t))} · En ${minsUntil(s.t)} min</span>
+            </div>
+            <div style="margin:4px auto 8px;">${renderServiceArt(s.cat, 108)}</div>
+            <p style="font-size:12px; color:var(--mute); font-weight:600;">
+              ${s.spotsLeft === 1 ? '¡Última plaza disponible a este precio!' : `${s.spotsLeft} plazas libres a esta hora`}
+            </p>
+          </div>
+        `;
+      } else if (STATE.detailSlide === 1) {
+        const st = s.stylist || { name: 'Equipo del Salón', role: 'Especialista', includes: ['Servicio completo'] };
+        slideHtml = `
+          <div style="width:100%;">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px; padding-bottom:10px; border-bottom:1px solid var(--line);">
+              <div class="avatar-pill" style="width:38px; height:38px; font-size:13px;">${esc(st.name.slice(0, 2).toUpperCase())}</div>
+              <div>
+                <div style="font-size:13.5px; font-weight:800;">Te atiende ${esc(st.name)}</div>
+                <div style="font-size:11.5px; color:var(--coral); font-weight:600;">${esc(st.role)}</div>
+              </div>
+            </div>
+            <div style="display:flex; flex-direction:column; gap:7px;">
+              ${st.includes.map(item => `
+                <div style="display:flex; align-items:center; gap:8px; font-size:12.5px; color:var(--ink-soft);">
+                  ${ICONS.check}
+                  <span>${esc(item)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else {
+        const revs = (s.reviews && s.reviews.length) ? s.reviews : [{ author: 'Cliente verificado', rating: 5, text: 'Atención rápida y resultado excelente.' }];
+        slideHtml = `
+          <div style="width:100%; display:flex; flex-direction:column; gap:10px;">
+            <div style="font-size:12px; font-weight:700; color:var(--ink-soft);">Opiniones verificadas (${esc(s.reviewsCount)})</div>
+            ${revs.map(r => `
+              <div style="background:var(--card-soft); padding:10px 12px; border-radius:14px;">
+                <div style="display:flex; justify-content:space-between; font-size:11.5px; font-weight:700; margin-bottom:3px;">
+                  <span>${esc(r.author)}</span>
+                  <span style="color:var(--gold);">★★★★★</span>
+                </div>
+                <p style="font-size:12px; color:var(--ink-soft); line-height:1.35;">“${esc(r.text)}”</p>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      return `
+        <div class="scroll-area with-sticky-cta fade-in">
+          <!-- Cabecera Detalle -->
+          <header class="topbar" style="position:relative;">
+            <button type="button" class="icon-btn" onclick="navTo('home')" aria-label="Volver atrás">
+              ${ICONS.back}
+            </button>
+            <div class="topbar-right">
+              <button type="button" class="icon-btn" onclick="navTo('bookings')" aria-label="Ver mis citas">
+                ${ICONS.bag}
+                ${bookingsCount > 0 ? `<span class="badge-count">${bookingsCount}</span>` : ''}
+              </button>
+              <button type="button" class="icon-btn" onclick="toggleDetailMenu()" aria-label="Más opciones">
+                ${ICONS.dots}
+              </button>
+            </div>
+
+            ${STATE.detailMenuOpen ? `
+              <div style="position:absolute; top:48px; right:0; background:#fff; border-radius:18px; padding:8px; box-shadow:0 14px 34px rgba(31,27,24,0.16); z-index:30; min-width:190px;">
+                <button type="button" onclick="shareSlot(${s.id}); toggleDetailMenu(false)" style="width:100%; text-align:left; padding:10px 12px; border-radius:12px; font-size:13px; font-weight:600;">Compartir oferta</button>
+                <button type="button" onclick="copyText('${esc(s.address)}', 'Dirección copiada'); toggleDetailMenu(false)" style="width:100%; text-align:left; padding:10px 12px; border-radius:12px; font-size:13px; font-weight:600;">Copiar dirección</button>
+              </div>
+            ` : ''}
+          </header>
+
+          <!-- Visor interactivo con flechas y puntos de paginación -->
+          <div class="detail-viewer" ontouchstart="handleDetailTouchStart(event)" ontouchend="handleDetailTouchEnd(event)">
+            <div class="slide-stage">
+              <button type="button" class="slide-arrow prev" onclick="stepDetailSlide(-1)" aria-label="Anterior">‹</button>
+              ${slideHtml}
+              <button type="button" class="slide-arrow next" onclick="stepDetailSlide(1)" aria-label="Siguiente">›</button>
+            </div>
+            <div class="dots-row" role="tablist" aria-label="Información del hueco">
+              <button type="button" class="dot ${STATE.detailSlide === 0 ? 'active' : ''}" onclick="setDetailSlide(0)" aria-label="Resumen"></button>
+              <button type="button" class="dot ${STATE.detailSlide === 1 ? 'active' : ''}" onclick="setDetailSlide(1)" aria-label="Estilista e incluidos"></button>
+              <button type="button" class="dot ${STATE.detailSlide === 2 ? 'active' : ''}" onclick="setDetailSlide(2)" aria-label="Reseñas"></button>
+            </div>
+          </div>
+
+          <!-- Título, favorito, compartir y ubicación -->
+          <div class="detail-header-row">
+            <h1 class="detail-title">${esc(s.s)}</h1>
+            <div class="detail-actions">
+              <button type="button" class="icon-btn ${fav ? 'fav-on' : ''}" onclick="toggleFavorite(${s.id})" aria-label="Favorito">
+                ${ICONS.heart(fav)}
+              </button>
+              <button type="button" class="icon-btn" onclick="shareSlot(${s.id})" aria-label="Compartir">
+                ${ICONS.share}
+              </button>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:5px; font-size:13px; color:var(--ink-soft); margin-bottom:6px;">
+            ${ICONS.pin}
+            <span>${esc(s.biz)} · ${esc(s.address)}</span>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:700;">
+            ${ICONS.star}
+            <span>${esc(s.rating)}</span>
+            <span style="color:var(--mute); font-weight:500;">(${esc(s.reviewsCount)} reseñas verificadas)</span>
+          </div>
+
+          <!-- Fila de controles (- 1 + plazas, distancia, duración y precio grande) -->
+          <div class="controls-strip">
+            <div class="qty-stepper" aria-label="Número de plazas">
+              <button type="button" class="qty-btn" onclick="changeDetailQty(-1)" ${STATE.detailQty <= 1 ? 'disabled' : ''} aria-label="Quitar plaza">−</button>
+              <span class="tabular" style="font-weight:800; font-size:14px; min-width:16px; text-align:center;">${STATE.detailQty}</span>
+              <button type="button" class="qty-btn" onclick="changeDetailQty(1)" ${STATE.detailQty >= s.spotsLeft ? 'disabled' : ''} aria-label="Añadir plaza">+</button>
+            </div>
+
+            <div class="info-chip">
+              ${ICONS.walk}
+              <span>A ${esc(s.walkMins)} min</span>
+            </div>
+
+            <div class="info-chip">
+              ${ICONS.clock}
+              <span>${esc(s.d)} min</span>
+            </div>
+
+            <div class="detail-big-price tabular">
+              ${eur(totalPrice)}
+            </div>
+          </div>
+
+          <!-- También libres hoy -->
+          ${otherLive.length ? `
+            <div class="section-head" style="margin-top:6px;">
+              <h2 class="section-title" style="font-size:15px;">También libres hoy</h2>
+            </div>
+            <div class="deals-row">
+              ${otherLive.map(other => `
+                <article class="deal-card" onclick="openSlotDetail(${other.id})">
+                  <div class="deal-visual">
+                    <span class="deal-badge">−${esc(other.disc)}%</span>
+                    ${renderServiceArt(other.cat, 42)}
+                  </div>
+                  <h3 class="deal-title">${esc(other.s)}</h3>
+                  <p class="deal-meta">${esc(formatHour(other.t))} · ${eur(finalPrice(other))}</p>
+                </article>
+              `).join('')}
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- Botón fijo inferior en píldora naranja -->
+        <div class="sticky-cta-bar">
+          <button type="button" class="btn-pill" onclick="goToCheckout()">
+            ${ICONS.bag}
+            <span>Bloquear hueco · ${eur(totalPrice)}</span>
+          </button>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       5. CHECKOUT RÁPIDO Y ALTA DE TARJETA
+       ========================================================================== */
+    function viewCheckout() {
+      const s = DB.slots.find(x => x.id === STATE.detailSlotId);
+      if (!s || s.st !== 'live') {
+        navTo('home');
+        return '';
+      }
+      const u = DB.users[STATE.user];
+      const savedCard = (u.cards || [])[0];
+      const unitPrice = finalPrice(s);
+      const total = unitPrice * STATE.detailQty;
+      const savedTotal = (s.p - unitPrice) * STATE.detailQty;
+
+      return `
+        <div class="scroll-area fade-in">
+          <header class="topbar">
+            <button type="button" class="icon-btn" onclick="navTo('detail')" aria-label="Volver al detalle">
+              ${ICONS.back}
+            </button>
+            <span style="font-weight:800; font-size:16px;">Confirmar hueco</span>
+            <div style="width:40px;"></div>
+          </header>
+
+          <div class="input-card" style="display:flex; gap:14px; align-items:center;">
+            <div style="width:64px; height:64px; border-radius:18px; background:#FFF5EE; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              ${renderServiceArt(s.cat, 46)}
+            </div>
+            <div style="flex:1; min-width:0;">
+              <h2 style="font-size:16px; font-weight:800; margin-bottom:2px;">${esc(s.s)}</h2>
+              <p style="font-size:12.5px; color:var(--mute);">${esc(s.biz)} · Hoy ${esc(formatHour(s.t))}</p>
+              <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:8px;">
+                <span style="font-size:12px; font-weight:700; color:var(--sage);">${STATE.detailQty} ${STATE.detailQty === 1 ? 'plaza' : 'plazas'} · Ahorras ${eur(savedTotal)}</span>
+                <span class="tabular" style="font-size:20px; font-weight:800;">${eur(total)}</span>
+              </div>
+            </div>
+          </div>
+
+          <p style="font-size:12px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.05em; margin:20px 0 12px;">Elige método de bloqueo</p>
+
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <button type="button" class="btn-pill apple" onclick="completeBooking('Apple Pay')">
+               Pagar con Apple Pay
+            </button>
+
+            ${savedCard ? `
+              <button type="button" class="btn-pill" onclick="completeBooking('Tarjeta ${esc(savedCard)}')">
+                Pagar con tarjeta ${esc(savedCard)}
+              </button>
+            ` : ''}
+
+            <button type="button" class="btn-pill secondary" onclick="openCardForm('checkout')">
+              ${savedCard ? '+ Usar otra tarjeta' : '+ Añadir tarjeta de débito / crédito'}
+            </button>
+          </div>
+
+          <div class="input-card" style="margin-top:20px; border-left:4px solid var(--coral);">
+            <button type="button" onclick="completeBooking('Efectivo en el salón')" style="width:100%; text-align:left; font-weight:800; font-size:14.5px; color:var(--ink); display:flex; justify-content:space-between; align-items:center;">
+              <span>Pagar en efectivo en el salón</span>
+              <span style="color:var(--coral);">→</span>
+            </button>
+            <p style="font-size:12px; color:var(--mute); margin-top:6px; line-height:1.4;">
+              El salón reserva esta silla en exclusiva para ti. Si surge un imprevisto, puedes liberarla desde «Mis citas» hasta 30 min antes.
+            </p>
+          </div>
+        </div>
+      `;
+    }
+
+    function viewCardForm() {
+      const isCheckout = STATE.cardReturnView === 'checkout';
+      return `
+        <div class="scroll-area fade-in">
+          <header class="topbar">
+            <button type="button" class="icon-btn" onclick="navTo('${STATE.cardReturnView}')" aria-label="Cancelar">
+              ${ICONS.back}
+            </button>
+            <span style="font-weight:800; font-size:16px;">${isCheckout ? 'Pagar con tarjeta' : 'Nueva tarjeta'}</span>
+            <div style="width:40px;"></div>
+          </header>
+
+          <form class="input-card" onsubmit="handleCardSubmit(event)">
+            <div class="field">
+              <label for="card-num">Número de tarjeta</label>
+              <input type="text" id="card-num" inputmode="numeric" maxlength="19" placeholder="4242 4242 4242 4242" oninput="formatCardNum(this)" required>
+            </div>
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="card-exp">Caducidad</label>
+                <input type="text" id="card-exp" inputmode="numeric" maxlength="5" placeholder="MM/AA" oninput="formatCardExp(this)" required>
+              </div>
+              <div class="field">
+                <label for="card-cvc">CVC</label>
+                <input type="text" id="card-cvc" inputmode="numeric" maxlength="4" placeholder="123" required>
+              </div>
+            </div>
+            <div class="field">
+              <label for="card-holder">Titular de la tarjeta</label>
+              <input type="text" id="card-holder" autocomplete="cc-name" placeholder="Nombre y apellidos" required>
+            </div>
+            <button type="submit" class="btn-pill" style="margin-top:8px;">
+              ${isCheckout ? 'Pagar y bloquear hueco' : 'Guardar tarjeta'}
+            </button>
+          </form>
+        </div>
+      `;
+    }
+
+    function viewBookingSuccess() {
+      const conf = STATE.lastConfirmation;
+      if (!conf) {
+        navTo('home');
+        return '';
+      }
+      return `
+        <div class="scroll-area fade-in" style="display:flex; flex-direction:column; justify-content:center; text-align:center;">
+          <div style="width:74px; height:74px; border-radius:26px; background:var(--sage-soft); color:var(--sage); margin:0 auto 18px; display:flex; align-items:center; justify-content:center;">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+
+          <span style="display:inline-block; margin:0 auto 10px; background:var(--coral-soft); color:var(--coral-dark); font-size:12px; font-weight:800; padding:5px 12px; border-radius:999px;">
+            ¡Silla bloqueada!
+          </span>
+          <h1 class="serif" style="font-size:30px; margin-bottom:8px;">Te esperan a las ${esc(formatHour(conf.time))}</h1>
+          <p style="font-size:14px; color:var(--ink-soft); margin-bottom:22px;">
+            <strong>${esc(conf.service)}</strong> en ${esc(conf.biz)} (${esc(conf.qty)} ${conf.qty === 1 ? 'plaza' : 'plazas'}).
+          </p>
+
+          <div class="input-card" style="background:#FFFBF8; border:1.5px dashed var(--coral);">
+            <div style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.06em; color:var(--mute); margin-bottom:4px;">PIN de recepción</div>
+            <div class="tabular" style="font-size:32px; font-weight:800; letter-spacing:0.14em; color:var(--coral);">#${esc(conf.pin)}</div>
+            <div style="font-size:12px; color:var(--ink-soft); margin-top:6px;">Muéstralo al llegar · ${esc(conf.method)} (${eur(conf.total)})</div>
+          </div>
+
+          <button type="button" class="btn-pill" style="margin-top:8px;" onclick="navTo('bookings')">Ver mis citas</button>
+          <button type="button" class="btn-pill secondary" style="margin-top:10px;" onclick="navTo('home')">Seguir explorando</button>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       6. VISTAS DEL MENÚ LATERAL DEL CONSUMIDOR (CITAS, FAVORITOS, RADAR, GUÍA)
+       ========================================================================== */
+    function viewBookings() {
+      const list = getUserBookings();
+      return `
+        <div class="scroll-area fade-in">
+          ${renderConsumerTopbar()}
+          <h1 class="hero-title" style="font-size:24px;">Mis citas <strong>y bolsa</strong></h1>
+
+          ${list.length ? list.map(({ slot, booking, idx }) => {
+            const canCancel = (slot.t - Date.now()) > 30 * 60000;
+            return `
+              <div class="input-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <span style="background:var(--sage-soft); color:var(--sage); font-size:11px; font-weight:800; padding:4px 10px; border-radius:999px;">Confirmada · Hoy ${esc(formatHour(slot.t))}</span>
+                  <span class="tabular" style="font-weight:800; font-size:14px; color:var(--coral);">PIN #${esc(booking.pin)}</span>
+                </div>
+                <h3 style="font-size:16px; font-weight:800; margin-bottom:3px;">${esc(slot.s)} (${esc(booking.qty)} ${booking.qty === 1 ? 'plaza' : 'plazas'})</h3>
+                <p style="font-size:12.5px; color:var(--mute); margin-bottom:12px;">${esc(slot.biz)} · ${esc(slot.address)}</p>
+                <div style="display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:1px solid var(--line);">
+                  <span style="font-size:12.5px; font-weight:700;">${esc(booking.method)} · ${eur(booking.total)}</span>
+                  ${canCancel ? `
+                    <button type="button" onclick="releaseUserBooking(${slot.id}, ${idx})" style="font-size:12px; font-weight:700; color:#D32F2F;">Liberar cita</button>
+                  ` : `<span style="font-size:11px; color:var(--mute);">En curso</span>`}
+                </div>
+              </div>
+            `;
+          }).join('') : `
+            <div class="input-card" style="text-align:center; padding:34px 20px;">
+              <p style="font-weight:700; margin-bottom:6px;">Aún no tienes citas bloqueadas</p>
+              <p style="font-size:13px; color:var(--mute); margin-bottom:18px;">Explora los huecos libres de hoy con descuento directo.</p>
+              <button type="button" class="btn-pill" onclick="navTo('home')">Explorar huecos</button>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function viewFavorites() {
+      const favIds = (DB.users[STATE.user].favorites || []);
+      const favSlots = DB.slots.filter(s => favIds.includes(s.id));
+      return `
+        <div class="scroll-area fade-in">
+          ${renderConsumerTopbar()}
+          <h1 class="hero-title" style="font-size:24px;">Tus salones <strong>y favoritos</strong></h1>
+
+          ${favSlots.length ? favSlots.map(s => `
+            <div class="input-card" style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="openSlotDetail(${s.id})">
+              <div style="width:56px; height:56px; border-radius:16px; background:#FFF5EE; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                ${renderServiceArt(s.cat, 40)}
+              </div>
+              <div style="flex:1; min-width:0;">
+                <h3 style="font-size:14.5px; font-weight:800; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${esc(s.s)}</h3>
+                <p style="font-size:12px; color:var(--mute);">${esc(s.biz)} · −${esc(s.disc)}%</p>
+                <span class="tabular" style="font-weight:800; font-size:14px; color:var(--coral);">${eur(finalPrice(s))}</span>
+              </div>
+              <button type="button" class="mini-icon-btn fav-on" onclick="event.stopPropagation(); toggleFavorite(${s.id})" aria-label="Quitar de favoritos">
+                ${ICONS.heart(true)}
+              </button>
+            </div>
+          `).join('') : `
+            <div class="input-card" style="text-align:center; padding:34px 20px;">
+              <p style="font-weight:700; margin-bottom:6px;">Sin favoritos todavía</p>
+              <p style="font-size:13px; color:var(--mute); margin-bottom:18px;">Pulsa el corazón en cualquier servicio para tenerlo siempre a mano.</p>
+              <button type="button" class="btn-pill" onclick="navTo('home')">Ver huecos de hoy</button>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function viewRadar() {
+      const u = DB.users[STATE.user];
+      return `
+        <div class="scroll-area fade-in">
+          ${renderConsumerTopbar()}
+          <h1 class="hero-title" style="font-size:24px;">Radar de <strong>WhatsApp</strong></h1>
+          <p style="font-size:13.5px; color:var(--ink-soft); margin-bottom:18px;">
+            Recibe un aviso inmediato cuando un salón del barrio suelte un hueco de última hora.
+          </p>
+
+          <form class="input-card" onsubmit="saveRadar(event)">
+            <div class="field">
+              <label for="radar-tel">Tu teléfono WhatsApp</label>
+              <input type="tel" id="radar-tel" value="${esc(u.radarPhone || '')}" placeholder="600 123 456" required>
+            </div>
+            <button type="submit" class="btn-pill">
+              ${u.radarPhone ? 'Actualizar aviso WhatsApp' : 'Activar Radar gratis'}
+            </button>
+          </form>
+
+          ${u.radarPhone ? `
+            <div class="input-card" style="background:var(--sage-soft); box-shadow:none;">
+              <div style="font-weight:800; font-size:13.5px; color:var(--sage); margin-bottom:3px;">Radar encendido en ${esc(u.radarPhone)}</div>
+              <p style="font-size:12px; color:var(--ink-soft);">Te escribiremos solo cuando haya cancelaciones reales en tu zona.</p>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function viewHowItWorks() {
+      const steps = [
+        { n: '01', title: 'Elige un hueco libre hoy', desc: 'Los salones publican citas que acaban de quedar libres en las próximas horas con descuentos reales de hasta el 40%.' },
+        { n: '02', title: 'Bloquéalo en 15 segundos', desc: 'Sin llamadas ni esperas. Reserva con Apple Pay, tarjeta o compromiso en efectivo y recibe tu PIN de recepción.' },
+        { n: '03', title: 'Llega y disfruta tu turno', desc: 'Acércate al salón a la hora acordada, enseña tu PIN y disfruta del servicio al precio cerrado.' }
+      ];
+      return `
+        <div class="scroll-area fade-in">
+          ${renderConsumerTopbar()}
+          <h1 class="hero-title" style="font-size:24px;">Cómo funciona <strong>Huecos</strong></h1>
+          ${steps.map(st => `
+            <div class="input-card" style="display:flex; gap:14px; align-items:flex-start;">
+              <div style="width:36px; height:36px; border-radius:12px; background:var(--coral-soft); color:var(--coral); font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                ${st.n}
+              </div>
+              <div>
+                <h3 style="font-size:15px; font-weight:800; margin-bottom:4px;">${st.title}</h3>
+                <p style="font-size:13px; color:var(--ink-soft); line-height:1.45;">${st.desc}</p>
+              </div>
+            </div>
+          `).join('')}
+          <button type="button" class="btn-pill" style="margin-top:8px;" onclick="navTo('home')">Ir a los huecos de hoy</button>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       7. PANEL DEL SALÓN (DETECTADO AUTOMÁTICAMENTE AL ENTRAR COMO 'marea')
+       ========================================================================== */
+    function renderBizTopbar() {
+      const biz = DB.users[STATE.user];
+      return `
+        <header class="topbar">
+          <button type="button" class="icon-btn" onclick="toggleDrawer(true)" aria-label="Menú del salón">
+            ${ICONS.menu}
+          </button>
+          <span style="font-size:12px; font-weight:700; background:var(--sage-soft); color:var(--sage); padding:5px 11px; border-radius:999px;">
+            ● Escaparate activo
+          </span>
+          <button type="button" class="avatar-pill" onclick="toggleDrawer(true)" aria-label="Perfil del salón">
+            ${esc(biz.name.slice(0, 2).toUpperCase())}
+          </button>
+        </header>
+      `;
+    }
+
+    function viewBizDash() {
+      const biz = DB.users[STATE.user];
+      const mySlots = DB.slots
+        .filter(s => s.bizId === STATE.user)
+        .sort((a, b) => a.t - b.t);
+
+      let savedCount = 0;
+      let rescuedEur = 0;
+      mySlots.forEach(s => {
+        (s.bookings || []).forEach(b => {
+          savedCount += b.qty;
+          rescuedEur += b.total;
+        });
+      });
+
+      return `
+        <div class="scroll-area fade-in">
+          ${renderBizTopbar()}
+
+          <h1 class="hero-title">
+            Hola,
+            <strong>${esc(biz.name)}</strong>
+          </h1>
+
+          <!-- Métricas del día -->
+          <div class="form-grid-2" style="margin-bottom:18px;">
+            <div class="input-card" style="margin-bottom:0; padding:16px;">
+              <div style="font-size:11.5px; font-weight:700; color:var(--mute); margin-bottom:4px;">Huecos salvados</div>
+              <div class="tabular" style="font-size:26px; font-weight:800; color:var(--ink);">${savedCount} <span style="font-size:14px; color:var(--mute); font-weight:600;">turnos</span></div>
+            </div>
+            <div class="input-card" style="margin-bottom:0; padding:16px;">
+              <div style="font-size:11.5px; font-weight:700; color:var(--mute); margin-bottom:4px;">Caja rescatada</div>
+              <div class="tabular" style="font-size:26px; font-weight:800; color:var(--coral);">${eur(rescuedEur)}</div>
+            </div>
+          </div>
+
+          <button type="button" class="btn-pill" style="margin-bottom:22px;" onclick="navTo('biz_new')">
+            ${ICONS.plus}
+            <span>Publicar hueco libre en 10s</span>
+          </button>
+
+          <div class="section-head">
+            <h2 class="section-title">Turnos publicados hoy</h2>
+            <span class="section-sub">${mySlots.length} total</span>
+          </div>
+
+          ${mySlots.map(s => {
+            const hasBookings = (s.bookings || []).length > 0;
+            const isFull = s.spotsLeft <= 0 || s.st === 'booked';
+            return `
+              <div class="input-card" style="padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <span class="tabular" style="font-size:18px; font-weight:800;">${esc(formatHour(s.t))} <span style="font-size:12px; font-weight:600; color:var(--mute);">· ${esc(s.d)} min</span></span>
+                  ${isFull
+                    ? `<span style="background:var(--sage-soft); color:var(--sage); font-size:11px; font-weight:800; padding:4px 10px; border-radius:999px;">Salvado</span>`
+                    : `<span style="background:var(--coral-soft); color:var(--coral-dark); font-size:11px; font-weight:800; padding:4px 10px; border-radius:999px;">En vivo · −${esc(s.disc)}%</span>`}
+                </div>
+
+                <h3 style="font-size:15px; font-weight:800; margin-bottom:4px;">${esc(s.s)}</h3>
+
+                ${hasBookings ? s.bookings.map(b => `
+                  <div style="background:var(--card-soft); padding:9px 12px; border-radius:12px; font-size:12.5px; margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span><strong>${esc(b.cliName)}</strong> (${esc(b.qty)} pl.)</span>
+                    <span class="tabular" style="font-weight:800; color:var(--sage);">PIN #${esc(b.pin)} · ${eur(b.total)}</span>
+                  </div>
+                `).join('') : `
+                  <p style="font-size:12.5px; color:var(--mute); margin-bottom:10px;">
+                    Escaparate: <strong>${eur(finalPrice(s))}</strong> (antes ${eur(s.p)}) · ${s.spotsLeft} ${s.spotsLeft === 1 ? 'plaza' : 'plazas'}
+                  </p>
+                `}
+
+                ${!isFull ? `
+                  <div style="margin-top:10px; display:flex; justify-content:flex-end;">
+                    <button type="button" onclick="removeBizSlot(${s.id})" style="font-size:12px; font-weight:700; color:#D32F2F; padding:4px 8px;">Retirar hueco</button>
+                  </div>
+                ` : ''}
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function viewBizNew() {
+      return `
+        <div class="scroll-area fade-in">
+          <header class="topbar">
+            <button type="button" class="icon-btn" onclick="navTo('biz_dash')" aria-label="Volver">
+              ${ICONS.back}
+            </button>
+            <span style="font-weight:800; font-size:16px;">Publicar hueco</span>
+            <div style="width:40px;"></div>
+          </header>
+
+          <form class="input-card" onsubmit="createBizSlot(event)">
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="new-cat">Categoría</label>
+                <select id="new-cat">
+                  <option value="Corte">Corte</option>
+                  <option value="Color">Color</option>
+                  <option value="Barba">Barba</option>
+                  <option value="Uñas">Uñas</option>
+                  <option value="Tratamientos">Tratamientos</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="new-spots">Plazas</label>
+                <select id="new-spots">
+                  <option value="1" selected>1 silla</option>
+                  <option value="2">2 sillas</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="new-service">Nombre del servicio</label>
+              <input type="text" id="new-service" placeholder="Ej. Corte y secado, Mechas, Manicura..." required>
+            </div>
+
+            <div class="field">
+              <label for="new-stylist">Estilista que atiende</label>
+              <input type="text" id="new-stylist" value="Bea Mendoza" required>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="new-in">Empieza en</label>
+                <select id="new-in">
+                  <option value="30">30 min</option>
+                  <option value="45" selected>45 min</option>
+                  <option value="60">1 hora</option>
+                  <option value="90">1 h 30 min</option>
+                  <option value="120">2 horas</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="new-dur">Duración</label>
+                <select id="new-dur">
+                  <option value="30">30 min</option>
+                  <option value="45" selected>45 min</option>
+                  <option value="60">60 min</option>
+                  <option value="90">90 min</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="new-price">Precio habitual (€)</label>
+                <input type="number" id="new-price" min="5" max="400" value="40" oninput="updateBizPreview()" required>
+              </div>
+              <div class="field">
+                <label for="new-disc">Descuento</label>
+                <select id="new-disc" onchange="updateBizPreview()">
+                  <option value="15">−15%</option>
+                  <option value="25" selected>−25%</option>
+                  <option value="35">−35%</option>
+                  <option value="40">−40%</option>
+                  <option value="50">−50%</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="biz-price-preview" style="background:var(--coral-soft); color:var(--coral-dark); padding:12px 14px; border-radius:14px; font-size:13px; font-weight:700; margin-bottom:16px;">
+              Precio final para el cliente: 30€ (ahorra 10€)
+            </div>
+
+            <button type="submit" class="btn-pill">Lanzar al escaparate ahora</button>
+          </form>
+        </div>
+      `;
+    }
+
+    function viewBizSettings() {
+      const biz = DB.users[STATE.user];
+      return `
+        <div class="scroll-area fade-in">
+          ${renderBizTopbar()}
+          <h1 class="hero-title" style="font-size:24px;">Perfil del <strong>Salón</strong></h1>
+
+          <form class="input-card" onsubmit="saveBizProfile(event)">
+            <div class="field">
+              <label for="biz-name">Nombre comercial</label>
+              <input type="text" id="biz-name" value="${esc(biz.name)}" required>
+            </div>
+            <div class="field">
+              <label for="biz-addr">Dirección y barrio</label>
+              <input type="text" id="biz-addr" value="${esc(biz.address)}" required>
+            </div>
+            <button type="submit" class="btn-pill">Guardar cambios</button>
+          </form>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       CONTROLADOR PRINCIPAL Y ACCIONES INTERACTIVAS
+       ========================================================================== */
+    function render() {
+      const views = {
+        login: viewLogin,
+        home: viewConsumerHome,
+        detail: viewSlotDetail,
+        checkout: viewCheckout,
+        card_form: viewCardForm,
+        success: viewBookingSuccess,
+        bookings: viewBookings,
+        favorites: viewFavorites,
+        radar: viewRadar,
+        how: viewHowItWorks,
+        biz_dash: viewBizDash,
+        biz_new: viewBizNew,
+        biz_settings: viewBizSettings
+      };
+
+      const activeRenderer = views[STATE.view] || viewLogin;
+      const drawerHtml = STATE.user ? renderDrawer() : '';
+      $('view-container').innerHTML = `${activeRenderer()}${drawerHtml}`;
+    }
+
+    function navTo(view) {
+      STATE.view = view;
+      STATE.drawerOpen = false;
+      STATE.filterOpen = false;
+      STATE.detailMenuOpen = false;
+      render();
+    }
+
+    function setAuthMode(mode) {
+      STATE.authMode = mode;
+      STATE.authError = '';
+      render();
+    }
+
+    /** Inicio de sesión unificado con autodetección de rol ('cli' vs 'biz') */
+    function handleUnifiedLogin(e) {
+      e.preventDefault();
+      const rawId = $('auth-id').value.trim().toLowerCase();
+      const pw = $('auth-pw').value;
+
+      const matchedKey = Object.keys(DB.users).find(k => {
+        const u = DB.users[k];
+        return k === rawId || (u.email && u.email.toLowerCase() === rawId);
+      });
+
+      if (matchedKey && DB.users[matchedKey].pw === pw) {
+        const account = DB.users[matchedKey];
+        STATE.user = matchedKey;
+        STATE.role = account.role;
+        STATE.authError = '';
+        toast(`Hola, ${account.name.split(' ')[0]}`);
+        navTo(account.role === 'biz' ? 'biz_dash' : 'home');
+      } else {
+        STATE.authError = 'Credenciales no válidas. Prueba con iker / 123 o marea / 123.';
+        render();
+      }
+    }
+
+    function quickLogin(userKey) {
+      const account = DB.users[userKey];
+      if (!account) return;
+      STATE.user = userKey;
+      STATE.role = account.role;
+      STATE.authError = '';
+      toast(`Sesión iniciada como ${account.name}`);
+      navTo(account.role === 'biz' ? 'biz_dash' : 'home');
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const name = $('reg-name').value.trim();
+      const rawUser = $('reg-user').value.trim().toLowerCase().replace(/[^a-z0-9@._-]/g, '');
+      const pw = $('reg-pass').value;
+
+      if (!name || !rawUser || pw.length < 3) {
+        STATE.authError = 'Completa tu nombre, usuario y una contraseña de al menos 3 caracteres.';
+        render();
+        return;
+      }
+      if (DB.users[rawUser]) {
+        STATE.authError = 'Ese usuario ya existe. Prueba con otro o inicia sesión.';
+        render();
+        return;
+      }
+
+      DB.users[rawUser] = {
+        pw,
+        role: 'cli',
+        name,
+        email: rawUser.includes('@') ? rawUser : `${rawUser}@huecos.es`,
+        cards: [],
+        favorites: [101],
+        radarPhone: ''
+      };
+      saveData();
+
+      STATE.user = rawUser;
+      STATE.role = 'cli';
+      STATE.authError = '';
+      toast(`Bienvenido/a, ${name.split(' ')[0]}`);
+      navTo('home');
+    }
+
+    function logout() {
+      STATE.user = null;
+      STATE.role = null;
+      STATE.drawerOpen = false;
+      STATE.authError = '';
+      navTo('login');
+      toast('Sesión cerrada');
+    }
+
+    function toggleDrawer(open) {
+      STATE.drawerOpen = open;
+      render();
+    }
+
+    function drawerNav(view) {
+      STATE.drawerOpen = false;
+      navTo(view);
+    }
+
+    function toggleFilterSheet(open) {
+      STATE.filterOpen = open;
+      render();
+    }
+
+    function handleSearchInput(val) {
+      STATE.searchQuery = val;
+      STATE.featuredIndex = 0;
+      render();
+      const inp = $('search-input');
+      if (inp) {
+        inp.focus();
+        inp.setSelectionRange(val.length, val.length);
+      }
+    }
+
+    function selectCategory(cat) {
+      STATE.selectedCat = cat;
+      STATE.featuredIndex = 0;
+      render();
+    }
+
+    function setSort(sortBy) {
+      STATE.sortBy = sortBy;
+      render();
+    }
+
+    function setWalk(maxWalk) {
+      STATE.maxWalk = maxWalk;
+      render();
+    }
+
+    function resetFilters() {
+      STATE.selectedCat = 'Todo';
+      STATE.searchQuery = '';
+      STATE.sortBy = 'soon';
+      STATE.maxWalk = 99;
+      STATE.featuredIndex = 0;
+      STATE.filterOpen = false;
+      render();
+    }
+
+    /** Detecta qué tarjeta está centrada en el carrusel horizontal para elevarla */
+    function handleCarouselScroll(el) {
+      const cardWidth = 210;
+      const newIdx = Math.round(el.scrollLeft / cardWidth);
+      if (newIdx !== STATE.featuredIndex) {
+        STATE.featuredIndex = newIdx;
+        const cards = el.querySelectorAll('.slot-card');
+        cards.forEach((c, i) => c.classList.toggle('elevated', i === newIdx));
+      }
+    }
+
+    function toggleFavorite(slotId) {
+      if (!STATE.user || STATE.role !== 'cli') return;
+      const favs = DB.users[STATE.user].favorites || [];
+      const idx = favs.indexOf(slotId);
+      if (idx >= 0) {
+        favs.splice(idx, 1);
+        toast('Quitado de favoritos');
+      } else {
+        favs.push(slotId);
+        toast('Guardado en favoritos');
+      }
+      DB.users[STATE.user].favorites = favs;
+      saveData();
+      render();
+    }
+
+    function openSlotDetail(slotId) {
+      STATE.detailSlotId = slotId;
+      STATE.detailSlide = 0;
+      STATE.detailQty = 1;
+      STATE.detailMenuOpen = false;
+      navTo('detail');
+    }
+
+    function quickBookFromCard(slotId) {
+      STATE.detailSlotId = slotId;
+      STATE.detailQty = 1;
+      navTo('checkout');
+    }
+
+    function stepDetailSlide(dir) {
+      STATE.detailSlide = (STATE.detailSlide + dir + 3) % 3;
+      render();
+    }
+
+    function setDetailSlide(idx) {
+      STATE.detailSlide = idx;
+      render();
+    }
+
+    let touchStartX = 0;
+    function handleDetailTouchStart(e) {
+      touchStartX = e.changedTouches[0].clientX;
+    }
+
+    function handleDetailTouchEnd(e) {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) {
+        stepDetailSlide(dx < 0 ? 1 : -1);
+      }
+    }
+
+    function changeDetailQty(delta) {
+      const s = DB.slots.find(x => x.id === STATE.detailSlotId);
+      if (!s) return;
+      const next = STATE.detailQty + delta;
+      if (next >= 1 && next <= s.spotsLeft) {
+        STATE.detailQty = next;
+        render();
+      }
+    }
+
+    function toggleDetailMenu(force) {
+      STATE.detailMenuOpen = typeof force === 'boolean' ? force : !STATE.detailMenuOpen;
+      render();
+    }
+
+    function copyText(text, msg) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        toast(msg);
+      } catch (e) {
+        toast('No se pudo copiar');
+      }
+      document.body.removeChild(ta);
+    }
+
+    function shareSlot(slotId) {
+      const s = DB.slots.find(x => x.id === slotId);
+      if (!s) return;
+      copyText(`${s.s} en ${s.biz} hoy a las ${formatHour(s.t)} por ${eur(finalPrice(s))} (−${s.disc}%) en Huecos`, 'Enlace de oferta copiado');
+    }
+
+    function goToCheckout() {
+      navTo('checkout');
+    }
+
+    function openCardForm(returnView) {
+      STATE.cardReturnView = returnView;
+      navTo('card_form');
+    }
+
+    function formatCardNum(inp) {
+      const digits = inp.value.replace(/\D/g, '').slice(0, 16);
+      inp.value = digits.replace(/(.{4})/g, '$1 ').trim();
+    }
+
+    function formatCardExp(inp) {
+      const digits = inp.value.replace(/\D/g, '').slice(0, 4);
+      inp.value = digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits;
+    }
+
+    function handleCardSubmit(e) {
+      e.preventDefault();
+      const digits = $('card-num').value.replace(/\D/g, '');
+      if (digits.length < 13) {
+        toast('Introduce un número de tarjeta válido');
+        return;
+      }
+      const masked = `•••• ${digits.slice(-4)}`;
+      const u = DB.users[STATE.user];
+      if (!u.cards.includes(masked)) {
+        u.cards.unshift(masked);
+        saveData();
+      }
+      if (STATE.cardReturnView === 'checkout') {
+        completeBooking(`Tarjeta ${masked}`);
+      } else {
+        toast('Tarjeta guardada');
+        navTo(STATE.cardReturnView);
+      }
+    }
+
+    function completeBooking(method) {
+      const s = DB.slots.find(x => x.id === STATE.detailSlotId);
+      if (!s || s.st !== 'live' || s.spotsLeft < STATE.detailQty) {
+        toast('Este hueco ya no tiene plazas suficientes');
+        navTo('home');
+        return;
+      }
+
+      const u = DB.users[STATE.user];
+      const total = finalPrice(s) * STATE.detailQty;
+      const pin = String(Math.floor(1000 + Math.random() * 9000));
+
+      s.spotsLeft -= STATE.detailQty;
+      if (s.spotsLeft <= 0) {
+        s.spotsLeft = 0;
+        s.st = 'booked';
+      }
+      s.bookings = s.bookings || [];
+      s.bookings.push({
+        cliId: STATE.user,
+        cliName: u.name,
+        qty: STATE.detailQty,
+        pin,
+        method,
+        total
+      });
+
+      STATE.lastConfirmation = {
+        service: s.s,
+        biz: s.biz,
+        time: s.t,
+        qty: STATE.detailQty,
+        pin,
+        method,
+        total
+      };
+
+      saveData();
+      navTo('success');
+    }
+
+    function releaseUserBooking(slotId, bookingIdx) {
+      const s = DB.slots.find(x => x.id === slotId);
+      if (!s || !s.bookings || !s.bookings[bookingIdx]) return;
+      const [removed] = s.bookings.splice(bookingIdx, 1);
+      s.spotsLeft += removed.qty;
+      s.st = 'live';
+      saveData();
+      toast('Cita liberada · Hueco devuelto');
+      render();
+    }
+
+    function saveRadar(e) {
+      e.preventDefault();
+      const tel = $('radar-tel').value.trim();
+      if (!tel) return;
+      DB.users[STATE.user].radarPhone = tel;
+      saveData();
+      toast('Radar de WhatsApp activado');
+      render();
+    }
+
+    /* ==========================================================================
+       ACCIONES DEL PANEL DE SALÓN
+       ========================================================================== */
+    function updateBizPreview() {
+      const p = Number($('new-price')?.value || 0);
+      const d = Number($('new-disc')?.value || 0);
+      const fp = Math.round(p * (1 - d / 100));
+      const box = $('biz-price-preview');
+      if (box) {
+        box.textContent = `Precio final para el cliente: ${eur(fp)} (ahorra ${eur(Math.max(0, p - fp))})`;
+      }
+    }
+
+    function createBizSlot(e) {
+      e.preventDefault();
+      const cat = $('new-cat').value;
+      const spots = Number($('new-spots').value);
+      const service = $('new-service').value.trim();
+      const stylistName = $('new-stylist').value.trim();
+      const inMins = Number($('new-in').value);
+      const dur = Number($('new-dur').value);
+      const price = Number($('new-price').value);
+      const disc = Number($('new-disc').value);
+      const biz = DB.users[STATE.user];
+
+      if (!service || price <= 0) return;
+
+      DB.slots.unshift({
+        id: Date.now(),
+        cat,
+        s: service,
+        p: price,
+        d: dur,
+        t: Date.now() + inMins * 60000,
+        disc,
+        walkMins: 6,
+        rating: 4.9,
+        reviewsCount: 125,
+        spotsLeft: spots,
+        st: 'live',
+        bizId: STATE.user,
+        biz: biz.name,
+        address: biz.address,
+        stylist: {
+          name: stylistName || 'Equipo del Salón',
+          role: 'Especialista del salón',
+          includes: ['Diagnóstico personalizado', 'Productos profesionales incluidos', 'Acabado de salón']
+        },
+        reviews: [
+          { author: 'Cliente verificado', rating: 5, text: 'Atención rápida y puntual.' }
+        ],
+        bookings: []
+      });
+
+      saveData();
+      toast('Hueco publicado en vivo');
+      navTo('biz_dash');
+    }
+
+    function removeBizSlot(slotId) {
+      DB.slots = DB.slots.filter(s => s.id !== slotId);
+      saveData();
+      toast('Hueco retirado');
+      render();
+    }
+
+    function saveBizProfile(e) {
+      e.preventDefault();
+      const name = $('biz-name').value.trim();
+      const addr = $('biz-addr').value.trim();
+      if (!name || !addr) return;
+      DB.users[STATE.user].name = name;
+      DB.users[STATE.user].address = addr;
+      DB.slots.forEach(s => {
+        if (s.bizId === STATE.user) {
+          s.biz = name;
+          s.address = addr;
+        }
+      });
+      saveData();
+      toast('Perfil del salón guardado');
+      navTo('biz_dash');
+    }
+
+    function resetDemo() {
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      DB = getDefaultData();
+      STATE.user = null;
+      STATE.role = null;
+      STATE.drawerOpen = false;
+      STATE.selectedCat = 'Todo';
+      STATE.searchQuery = '';
+      navTo('login');
+      toast('Datos de demostración restaurados');
+    }
+
+    let toastTimer;
+    function toast(msg) {
+      const t = $('toast');
+      t.textContent = msg;
+      t.classList.add('on');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('on'), 2600);
+    }
+
+    /* Refresco periódico de minutos restantes */
+    setInterval(() => {
+      if (STATE.view === 'home' && !STATE.filterOpen && !STATE.drawerOpen) {
+        render();
+      }
+    }, 30000);
+
+    window.addEventListener('DOMContentLoaded', render);
+  </script>
+</body>
+</html>
