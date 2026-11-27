@@ -1,0 +1,4033 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Gappy · Reservas de última hora cerca de ti</title>
+  <meta name="description" content="Alguien acaba de cancelar su cita. Aprovecha huecos de última hora en peluquerías, estética, barberías y clínicas de tu barrio con descuentos directos.">
+
+  <!-- Favicon SVG oficial de Gappy -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2306183D'/%3E%3Cpath d='M22 14v5M38 14v5M30 27v7h6' stroke='%23FFF' stroke-width='4.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3Cpath d='M43 26c0-4.4-3.6-8-8-8H23c-5.5 0-10 4.5-10 10v11c0 5.5 4.5 10 10 10h11' stroke='%23FFF' stroke-width='5.5' stroke-linecap='round' fill='none'/%3E%3Cpath d='M46 15l4-4M49 20l5-1' stroke='%2300D8B6' stroke-width='3.5' stroke-linecap='round'/%3E%3Cpath d='M44 31c-4.4 0-8 3.5-8 7.9 0 5.6 8 13.1 8 13.1s8-7.5 8-13.1c0-4.4-3.6-7.9-8-7.9zm0 10.6a2.7 2.7 0 1 1 0-5.4 2.7 2.7 0 0 1 0 5.4z' fill='%2300D8B6'/%3E%3C/svg%3E">
+
+  <!-- Tipografías modernas redondeadas y editoriales -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       1. TOKENS DE MARCA GAPPY (AZUL MARINO #06183D + MENTA #00D8B6 + CORAL #FF6B35)
+       ========================================================================== */
+    :root {
+      --bg-outer: #EFE9E3;
+      --surface-bg: #FAF6F2;
+      --surface-warm: #F5EFE9;
+      --card: #FFFFFF;
+      --card-soft: #F7F5F2;
+      --navy: #06183D;
+      --navy-mid: #0C2A6E;
+      --mint: #00D8B6;
+      --mint-dark: #00A88D;
+      --mint-soft: rgba(0, 216, 182, 0.14);
+      --coral: #FF6B35;
+      --coral-dark: #E5531E;
+      --coral-soft: rgba(255, 107, 53, 0.12);
+      --ink: #141B29;
+      --ink-soft: #4F5969;
+      --mute: #8892A2;
+      --line: rgba(6, 24, 61, 0.08);
+      --gold: #F5A623;
+      --shadow-card: 0 12px 28px rgba(6, 24, 61, 0.07);
+      --shadow-elevated: 0 18px 36px rgba(6, 24, 61, 0.13);
+      --shadow-shell: 0 28px 70px rgba(6, 24, 61, 0.18);
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      height: 100%;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      color: var(--ink);
+      background: var(--bg-outer);
+      -webkit-font-smoothing: antialiased;
+      overscroll-behavior-y: none;
+    }
+
+    /* Marco móvil centrado en escritorio, pantalla completa en móvil */
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+
+    .app-shell {
+      position: relative;
+      width: 100%;
+      max-width: 430px;
+      height: 100%;
+      max-height: 890px;
+      background: linear-gradient(180deg, #FCF9F6 0%, var(--surface-bg) 55%, var(--surface-warm) 100%);
+      border-radius: 36px;
+      box-shadow: var(--shadow-shell), 0 0 0 8px rgba(255, 255, 255, 0.65);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Destellos ambientales suaves */
+    .app-shell::before {
+      content: "";
+      position: absolute;
+      top: -90px;
+      right: -80px;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(0, 216, 182, 0.10) 0%, rgba(0, 216, 182, 0) 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .app-shell::after {
+      content: "";
+      position: absolute;
+      bottom: 60px;
+      left: -90px;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 107, 53, 0.08) 0%, rgba(255, 107, 53, 0) 72%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 0;
+        background: var(--surface-bg);
+      }
+      .app-shell {
+        max-width: 100%;
+        max-height: 100dvh;
+        height: 100dvh;
+        border-radius: 0;
+        box-shadow: none;
+      }
+    }
+
+    .scroll-area {
+      position: relative;
+      z-index: 1;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: calc(16px + env(safe-area-inset-top)) 20px calc(28px + env(safe-area-inset-bottom));
+      scrollbar-width: none;
+    }
+
+    .scroll-area::-webkit-scrollbar {
+      display: none;
+    }
+
+    .scroll-area.with-sticky-cta {
+      padding-bottom: calc(98px + env(safe-area-inset-bottom));
+    }
+
+    button, input, select, textarea {
+      font: inherit;
+      color: inherit;
+      border: none;
+      background: none;
+    }
+
+    button {
+      cursor: pointer;
+      transition: transform 0.18s var(--ease-out), background-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
+    }
+
+    button:active {
+      transform: scale(0.96);
+    }
+
+    button:focus-visible, input:focus-visible, select:focus-visible {
+      outline: 2px solid var(--mint-dark);
+      outline-offset: 2px;
+    }
+
+    .serif {
+      font-family: 'Fraunces', Georgia, serif;
+      letter-spacing: -0.02em;
+    }
+
+    .tabular {
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* ==========================================================================
+       2. CABECERA SUPERIOR (HAMBURGUESA + LOGO HORIZONTAL GAPPY + BOLSA + AVATAR)
+       ========================================================================== */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 18px;
+      min-height: 44px;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(6, 24, 61, 0.06);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .icon-btn:hover {
+      background: #F4F7FB;
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .badge-count {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      min-width: 18px;
+      height: 18px;
+      padding: 0 5px;
+      border-radius: 999px;
+      background: var(--coral);
+      color: #FFFFFF;
+      font-size: 10px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(255, 107, 53, 0.45);
+    }
+
+    .avatar-pill {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+      color: var(--mint);
+      font-weight: 800;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 6px 14px rgba(6, 24, 61, 0.22);
+      border: 2px solid #FFFFFF;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       3. HERO Y BARRA DE BÚSQUEDA INTELIGENTE (SIN DISTINCIÓN DE TILDES)
+       ========================================================================== */
+    .hero-title {
+      font-size: 25px;
+      line-height: 1.18;
+      font-weight: 500;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    .hero-title strong {
+      display: block;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.03em;
+    }
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border-radius: 18px;
+      padding: 6px 8px 6px 15px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 20px;
+      border: 1.5px solid transparent;
+      transition: border-color 0.2s ease;
+    }
+
+    .search-bar:focus-within {
+      border-color: var(--mint);
+    }
+
+    .search-bar input {
+      flex: 1;
+      font-size: 14px;
+      color: var(--ink);
+      min-width: 0;
+      padding: 8px 0;
+    }
+
+    .search-bar input::placeholder {
+      color: var(--mute);
+    }
+
+    .filter-trigger {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      background: var(--card-soft);
+      color: var(--navy);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .filter-trigger.has-filters {
+      background: var(--navy);
+      color: var(--mint);
+    }
+
+    /* ==========================================================================
+       4. CATEGORÍAS HORIZONTALES
+       ========================================================================== */
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 16.5px;
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+    }
+
+    .section-sub {
+      font-size: 12px;
+      color: var(--coral);
+      font-weight: 700;
+    }
+
+    .cat-row {
+      display: flex;
+      gap: 11px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin: 0 -20px 18px;
+      padding-left: 20px;
+      padding-right: 20px;
+      scrollbar-width: none;
+    }
+
+    .cat-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .cat-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+      width: 68px;
+    }
+
+    .cat-box {
+      width: 60px;
+      height: 60px;
+      border-radius: 18px;
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 8px 18px rgba(6, 24, 61, 0.06);
+      color: var(--navy);
+      transition: all 0.22s var(--ease-out);
+    }
+
+    .cat-item.active .cat-box {
+      background: var(--navy);
+      color: var(--mint);
+      box-shadow: 0 10px 22px rgba(6, 24, 61, 0.24);
+      transform: translateY(-2px);
+    }
+
+    .cat-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      text-align: center;
+    }
+
+    .cat-item.active .cat-label {
+      color: var(--navy);
+      font-weight: 800;
+    }
+
+    /* ==========================================================================
+       5. CARRUSEL HORIZONTAL: HUECOS URGENTES (PRÓXIMAS 2H)
+       ========================================================================== */
+    .featured-row {
+      display: flex;
+      gap: 14px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      padding: 10px 20px 20px;
+      margin: 0 -20px 6px;
+      scrollbar-width: none;
+      align-items: center;
+    }
+
+    .featured-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .slot-card {
+      scroll-snap-align: center;
+      flex-shrink: 0;
+      width: 204px;
+      background: var(--card);
+      border-radius: 24px;
+      padding: 14px;
+      box-shadow: var(--shadow-card);
+      position: relative;
+      transition: transform 0.28s var(--ease-out), box-shadow 0.28s var(--ease-out);
+      cursor: pointer;
+    }
+
+    .slot-card.elevated {
+      width: 218px;
+      padding: 16px;
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-elevated);
+      border: 1.5px solid rgba(0, 216, 182, 0.45);
+    }
+
+    .slot-top-badges {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .disc-pill {
+      background: var(--coral);
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 9px;
+      border-radius: 999px;
+    }
+
+    .time-pill {
+      background: var(--navy);
+      color: var(--mint);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 999px;
+    }
+
+    .slot-visual {
+      height: 88px;
+      border-radius: 18px;
+      background: linear-gradient(145deg, #F2F7FB 0%, #E7F6F3 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 11px;
+    }
+
+    .slot-card.elevated .slot-visual {
+      height: 100px;
+    }
+
+    .slot-name {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--ink);
+      line-height: 1.25;
+      margin-bottom: 3px;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .slot-salon {
+      font-size: 11.5px;
+      color: var(--ink-soft);
+      font-weight: 600;
+      margin-bottom: 7px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .slot-rating {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--ink-soft);
+      margin-bottom: 10px;
+    }
+
+    .slot-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 8px;
+      border-top: 1px solid var(--line);
+    }
+
+    .price-group {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .price-now {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .price-old {
+      font-size: 12px;
+      color: var(--mute);
+      text-decoration: line-through;
+    }
+
+    .mini-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mini-icon-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      background: var(--card-soft);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--mute);
+    }
+
+    .mini-icon-btn.fav-on {
+      color: #E53935;
+      background: rgba(229, 57, 53, 0.1);
+    }
+
+    .mini-icon-btn.book-quick {
+      background: var(--coral);
+      color: #FFFFFF;
+    }
+
+    /* ==========================================================================
+       6. MEJORES OFERTAS DE HOY (LISTADO DETALLADO CON DISTANCIA A PIE)
+       ========================================================================== */
+    .deals-list {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .deal-row-card {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 13px;
+      box-shadow: 0 8px 20px rgba(6, 24, 61, 0.05);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      transition: transform 0.2s var(--ease-out);
+    }
+
+    .deal-row-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .deal-row-art {
+      width: 62px;
+      height: 62px;
+      border-radius: 16px;
+      background: linear-gradient(145deg, #F2F7FB 0%, #E7F6F3 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .deal-row-badge {
+      position: absolute;
+      top: -5px;
+      left: -5px;
+      background: var(--coral);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+
+    .deal-row-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .deal-row-title {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 2px;
+    }
+
+    .deal-row-biz {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-soft);
+      margin-bottom: 4px;
+    }
+
+    .deal-row-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--mute);
+      font-weight: 600;
+    }
+
+    .deal-row-right {
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    /* ==========================================================================
+       7. PANTALLA DE DETALLE DEL HUECO
+       ========================================================================== */
+    .detail-viewer {
+      background: var(--card);
+      border-radius: 26px;
+      padding: 18px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 18px;
+      position: relative;
+    }
+
+    .slide-stage {
+      min-height: 185px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      padding: 6px 26px;
+    }
+
+    .slide-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: var(--card-soft);
+      color: var(--navy);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+    }
+
+    .slide-arrow.prev { left: 0; }
+    .slide-arrow.next { right: 0; }
+
+    .dots-row {
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: rgba(6, 24, 61, 0.16);
+      transition: all 0.22s ease;
+    }
+
+    .dot.active {
+      width: 22px;
+      background: var(--mint-dark);
+    }
+
+    .detail-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+
+    .detail-title {
+      font-size: 21px;
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--navy);
+      letter-spacing: -0.02em;
+    }
+
+    .detail-actions {
+      display: flex;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .pills-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 14px 0 16px;
+    }
+
+    .info-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--card);
+      padding: 8px 12px;
+      border-radius: 13px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-soft);
+      box-shadow: 0 4px 12px rgba(6, 24, 61, 0.05);
+    }
+
+    .human-note-card {
+      background: #FFFFFF;
+      border-radius: 22px;
+      padding: 15px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 18px;
+      border-left: 4px solid var(--mint);
+    }
+
+    .also-free-row {
+      display: flex;
+      gap: 11px;
+      overflow-x: auto;
+      padding: 4px 20px 10px;
+      margin: 0 -20px;
+      scrollbar-width: none;
+    }
+
+    .also-free-row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .mini-deal-card {
+      flex-shrink: 0;
+      width: 154px;
+      background: var(--card);
+      border-radius: 20px;
+      padding: 12px;
+      box-shadow: 0 6px 16px rgba(6, 24, 61, 0.05);
+      cursor: pointer;
+    }
+
+    .sticky-cta-bar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 14px 20px calc(18px + env(safe-area-inset-bottom));
+      background: linear-gradient(180deg, rgba(245, 239, 233, 0) 0%, var(--surface-warm) 35%);
+      z-index: 15;
+    }
+
+    /* ==========================================================================
+       8. BOTONES PÍLDORA Y TARJETAS DE FORMULARIO
+       ========================================================================== */
+    .btn-pill {
+      width: 100%;
+      background: var(--coral);
+      color: #FFFFFF;
+      padding: 16px 22px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 800;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 12px 24px rgba(255, 107, 53, 0.34);
+    }
+
+    .btn-pill:hover {
+      background: var(--coral-dark);
+    }
+
+    .btn-pill.navy {
+      background: var(--navy);
+      color: #FFFFFF;
+      box-shadow: 0 12px 24px rgba(6, 24, 61, 0.25);
+    }
+
+    .btn-pill.secondary {
+      background: var(--card);
+      color: var(--navy);
+      box-shadow: var(--shadow-card);
+    }
+
+    .btn-pill.apple {
+      background: #11151C;
+      color: #FFFFFF;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.16);
+    }
+
+    .input-card {
+      background: var(--card);
+      border-radius: 24px;
+      padding: 18px;
+      box-shadow: var(--shadow-card);
+      margin-bottom: 14px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--ink-soft);
+      margin-bottom: 6px;
+    }
+
+    .field input, .field select, .field textarea {
+      width: 100%;
+      background: var(--card-soft);
+      border: 1.5px solid rgba(6, 24, 61, 0.08);
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 14.5px;
+      color: var(--ink);
+      transition: border-color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--mint-dark);
+      background: #FFFFFF;
+      outline: none;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 11px;
+    }
+
+    /* ==========================================================================
+       9. MENÚ LATERAL DESLIZABLE (DRAWER) Y SHEET DE FILTROS
+       ========================================================================== */
+    .drawer-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(6, 24, 61, 0.42);
+      backdrop-filter: blur(3px);
+      z-index: 40;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+
+    .drawer-backdrop.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer-panel {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 84%;
+      max-width: 326px;
+      background: linear-gradient(180deg, #FFFFFF 0%, var(--surface-bg) 100%);
+      border-radius: 0 30px 30px 0;
+      padding: calc(18px + env(safe-area-inset-top)) 16px calc(18px + env(safe-area-inset-bottom));
+      z-index: 50;
+      transform: translateX(-105%);
+      transition: transform 0.3s var(--ease-out);
+      display: flex;
+      flex-direction: column;
+      box-shadow: 16px 0 40px rgba(6, 24, 61, 0.16);
+    }
+
+    .drawer-panel.open {
+      transform: translateX(0);
+    }
+
+    .drawer-profile-card {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+      padding: 12px;
+      border-radius: 20px;
+      background: var(--card-soft);
+      border: 1px solid var(--line);
+      margin-bottom: 10px;
+      text-align: left;
+      width: 100%;
+    }
+
+    .drawer-profile-card:hover {
+      border-color: var(--mint);
+      background: #FFFFFF;
+    }
+
+    .drawer-nav-scroll {
+      flex: 1;
+      overflow-y: auto;
+      scrollbar-width: none;
+      padding: 2px 2px 10px;
+    }
+
+    .drawer-nav-scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    .drawer-section-label {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--mute);
+      padding: 12px 10px 6px;
+    }
+
+    .drawer-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 3px;
+      text-align: left;
+    }
+
+    .drawer-item-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .drawer-item-left span {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .drawer-item.active {
+      background: var(--navy);
+      color: #FFFFFF;
+      box-shadow: 0 8px 18px rgba(6, 24, 61, 0.2);
+    }
+
+    .drawer-item.active svg {
+      color: var(--mint);
+    }
+
+    .drawer-item:not(.active):hover {
+      background: rgba(6, 24, 61, 0.05);
+    }
+
+    /* Interruptores (Toggles), barra de seguridad y bloques legales */
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .switch-row:last-child {
+      border-bottom: none;
+      padding-bottom: 2px;
+    }
+
+    .switch-row:first-child {
+      padding-top: 2px;
+    }
+
+    .toggle-switch {
+      position: relative;
+      width: 46px;
+      height: 26px;
+      border-radius: 999px;
+      background: rgba(6, 24, 61, 0.16);
+      flex-shrink: 0;
+      transition: background-color 0.22s ease;
+    }
+
+    .toggle-switch::after {
+      content: "";
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      box-shadow: 0 2px 6px rgba(6, 24, 61, 0.22);
+      transition: transform 0.22s var(--ease-out);
+    }
+
+    .toggle-switch.on {
+      background: var(--mint-dark);
+    }
+
+    .toggle-switch.on::after {
+      transform: translateX(20px);
+    }
+
+    .strength-meter {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 5px;
+      margin-top: 8px;
+    }
+
+    .strength-seg {
+      height: 5px;
+      border-radius: 99px;
+      background: rgba(6, 24, 61, 0.1);
+      transition: background-color 0.2s ease;
+    }
+
+    .legal-section {
+      background: var(--card);
+      border-radius: 22px;
+      padding: 16px 18px;
+      box-shadow: 0 8px 20px rgba(6, 24, 61, 0.05);
+      margin-bottom: 12px;
+    }
+
+    .legal-section h2 {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: var(--navy);
+      margin-bottom: 6px;
+    }
+
+    .legal-section p, .legal-section li {
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+
+    .legal-section ul {
+      padding-left: 18px;
+      margin-top: 6px;
+    }
+
+    .legal-section li {
+      margin-bottom: 4px;
+    }
+
+    details.faq-item {
+      background: var(--card);
+      border-radius: 20px;
+      padding: 14px 16px;
+      box-shadow: 0 6px 16px rgba(6, 24, 61, 0.05);
+      margin-bottom: 10px;
+    }
+
+    details.faq-item summary {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: var(--navy);
+      cursor: pointer;
+      list-style: none;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    details.faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details.faq-item p {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      font-size: 13px;
+      color: var(--ink-soft);
+      line-height: 1.5;
+    }
+
+    .drawer-panel.open {
+      transform: translateX(0);
+    }
+
+    .drawer-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 15px;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .drawer-item-left {
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+
+    .drawer-item.active {
+      background: var(--navy);
+      color: #FFFFFF;
+      box-shadow: 0 8px 18px rgba(6, 24, 61, 0.2);
+    }
+
+    .drawer-item.active svg {
+      color: var(--mint);
+    }
+
+    .drawer-item:not(.active):hover {
+      background: rgba(6, 24, 61, 0.05);
+    }
+
+    .sheet-panel {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: #FFFFFF;
+      border-radius: 30px 30px 0 0;
+      padding: 20px 22px calc(26px + env(safe-area-inset-bottom));
+      z-index: 50;
+      transform: translateY(105%);
+      transition: transform 0.3s var(--ease-out);
+      box-shadow: 0 -16px 40px rgba(6, 24, 61, 0.16);
+    }
+
+    .sheet-panel.open {
+      transform: translateY(0);
+    }
+
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .filter-chip {
+      padding: 9px 13px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 700;
+      background: var(--card-soft);
+      color: var(--ink-soft);
+      border: 1.5px solid transparent;
+    }
+
+    .filter-chip.active {
+      background: var(--navy);
+      color: var(--mint);
+    }
+
+    /* Toast flotante */
+    .toast {
+      position: absolute;
+      top: calc(16px + env(safe-area-inset-top));
+      left: 50%;
+      transform: translate(-50%, -24px);
+      background: var(--navy);
+      color: #FFFFFF;
+      padding: 11px 18px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 80;
+      transition: opacity 0.22s ease, transform 0.25s var(--ease-out);
+      box-shadow: 0 10px 24px rgba(6, 24, 61, 0.28);
+      border: 1px solid rgba(0, 216, 182, 0.35);
+      white-space: nowrap;
+      max-width: 90%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .toast.on {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .fade-in {
+      animation: fadeIn 0.26s var(--ease-out);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell" id="app-shell">
+    <div id="view-container" style="display:flex; flex-direction:column; flex:1; overflow:hidden;"></div>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  </div>
+
+  <script>
+    /**
+     * ==========================================================================
+     * GAPPY · RESERVAS DE ÚLTIMA HORA CERCA DE TI
+     * - Logotipos vectoriales oficiales de Gappy (Squircle App Icon + Horizontal Pill)
+     * - Inicio de sesión primero con autodetección automática de rol (Cliente / Salón)
+     * - Búsqueda inteligente insensible a tildes, diacríticos y mayúsculas
+     * ==========================================================================
+     */
+
+    const STORAGE_KEY = 'gappy_marketplace_v1';
+    const $ = id => document.getElementById(id);
+
+    /** Sanitización segura contra XSS */
+    function esc(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    /**
+     * Normalización de texto sin tildes, diacríticos ni mayúsculas.
+     * Ejemplo: "Salón Marea" -> "salon marea", "Estética" -> "estetica", "Uñas" -> "unas"
+     */
+    function normalizeText(str) {
+      return String(str ?? '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .toLowerCase()
+        .trim();
+    }
+
+    const eur = n => `${n}€`;
+    const formatHour = ms => new Date(ms).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+    const minsUntil = ms => Math.max(5, Math.round((ms - Date.now()) / 60000));
+    const finalPrice = slot => Math.round(slot.p * (1 - slot.disc / 100));
+
+    /* ==========================================================================
+       1. LOGOTIPOS OFICIALES DE GAPPY (SVG DE ALTA PRECISIÓN)
+       ========================================================================== */
+    function renderGappySquircle(size = 76) {
+      const uid = 'gappySq_' + Math.random().toString(36).slice(2, 7);
+      return `
+        <svg width="${size}" height="${size}" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Icono de Gappy">
+          <defs>
+            <linearGradient id="${uid}_bg" x1="14" y1="8" x2="106" y2="112" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#0C2A6E"/>
+              <stop offset="55%" stop-color="#06183D"/>
+              <stop offset="100%" stop-color="#030D24"/>
+            </linearGradient>
+            <linearGradient id="${uid}_mint" x1="72" y1="54" x2="102" y2="98" gradientUnits="userSpaceOnUse">
+              <stop offset="0%" stop-color="#00F0C8"/>
+              <stop offset="100%" stop-color="#00C4A7"/>
+            </linearGradient>
+          </defs>
+          <!-- Fondo Squircle azul marino profundo -->
+          <rect x="2" y="2" width="116" height="116" rx="28" fill="url(#${uid}_bg)"/>
+          <path d="M2 30C2 14.536 14.536 2 30 2H90C105.464 2 118 14.536 118 30V44C84 56 38 64 2 52V30Z" fill="#FFFFFF" fill-opacity="0.04"/>
+
+          <!-- Dos pestañas superiores del calendario -->
+          <rect x="40" y="22" width="9" height="17" rx="4.5" fill="#FFFFFF"/>
+          <rect x="66" y="22" width="9" height="17" rx="4.5" fill="#FFFFFF"/>
+
+          <!-- Cuerpo redondeado blanco calendario + G -->
+          <path d="M84 46C84 37.1634 76.8366 30 68 30H44C31.8497 30 22 39.8497 22 52V66C22 78.1503 31.8497 88 44 88H67L61 76H44C38.4772 76 34 71.5228 34 66V52C34 46.4772 38.4772 42 44 42H68C70.2091 42 72 43.7909 72 46H84Z" fill="#FFFFFF"/>
+
+          <!-- Manecillas de reloj en el centro -->
+          <path d="M56 49V60H66" stroke="#FFFFFF" stroke-width="7.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+          <!-- Dos destellos diagonales verde menta arriba a la derecha -->
+          <rect x="89" y="34" width="14" height="6.5" rx="3.25" transform="rotate(-42 89 34)" fill="url(#${uid}_mint)"/>
+          <rect x="93" y="42" width="14" height="6.5" rx="3.25" transform="rotate(-16 93 42)" fill="url(#${uid}_mint)"/>
+
+          <!-- Pin de ubicación verde menta abajo a la derecha -->
+          <path d="M85 55C76.7157 55 70 61.563 70 69.659C70 79.963 85 95 85 95C85 95 100 79.963 100 69.659C100 61.563 93.2843 55 85 55ZM85 75C81.9624 75 79.5 72.5376 79.5 69.5C79.5 66.4624 81.9624 64 85 64C88.0376 64 90.5 66.4624 90.5 69.5C90.5 72.5376 88.0376 75 85 75Z" fill="url(#${uid}_mint)"/>
+        </svg>
+      `;
+    }
+
+    function renderGappyHeaderLogo() {
+      return `
+        <button type="button" onclick="navTo('home')" aria-label="Ir al inicio de Gappy" style="display:inline-flex; align-items:center; background:#06183D; padding:6px 14px 6px 10px; border-radius:14px; gap:8px; box-shadow:0 6px 16px rgba(6,24,61,0.18);">
+          <svg width="28" height="26" viewBox="0 0 92 84" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <!-- Pestañas -->
+            <rect x="22" y="8" width="7" height="14" rx="3.5" fill="#FFFFFF"/>
+            <rect x="44" y="8" width="7" height="14" rx="3.5" fill="#FFFFFF"/>
+            <!-- Calendario-G blanco -->
+            <path d="M60 28C60 20.8203 54.1797 15 47 15H26C16.0589 15 8 23.0589 8 33V46C8 55.9411 16.0589 64 26 64H46L41 54H26C21.5817 54 18 50.4183 18 46V33C18 28.5817 21.5817 25 26 25H47C48.6569 25 50 26.3431 50 28H60Z" fill="#FFFFFF"/>
+            <!-- Manecillas reloj -->
+            <path d="M36 31V41H45" stroke="#FFFFFF" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+            <!-- Destellos menta -->
+            <rect x="64" y="18" width="12" height="5.5" rx="2.75" transform="rotate(-42 64 18)" fill="#00D8B6"/>
+            <rect x="68" y="25" width="12" height="5.5" rx="2.75" transform="rotate(-16 68 25)" fill="#00D8B6"/>
+            <!-- Pin menta -->
+            <path d="M61 36C53.8203 36 48 41.688 48 48.704C48 57.634 61 71 61 71C61 71 74 57.634 74 48.704C74 41.688 68.1797 36 61 36ZM61 53.5C58.3766 53.5 56.25 51.3734 56.25 48.75C56.25 46.1266 58.3766 44 61 44C63.6234 44 65.75 46.1266 65.75 48.75C65.75 51.3734 63.6234 53.5 61 53.5Z" fill="#00D8B6"/>
+          </svg>
+          <span style="color:#FFFFFF; font-weight:800; font-size:18px; letter-spacing:-0.03em; line-height:1;">Gappy</span>
+        </button>
+      `;
+    }
+
+    /* ==========================================================================
+       2. ICONOS DE INTERFAZ Y CATEGORÍAS
+       ========================================================================== */
+    const ICONS = {
+      menu: `<svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#06183D" stroke-width="2.4" stroke-linecap="round"><line x1="4" y1="7" x2="15" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="12" y2="17"/></svg>`,
+      bag: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06183D" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 13H5L6 7z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>`,
+      search: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8892A2" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="20" y1="20" x2="16.2" y2="16.2"/></svg>`,
+      sliders: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><line x1="4" y1="6" x2="20" y2="6"/><circle cx="9" cy="6" r="2.5" fill="currentColor"/><line x1="4" y1="12" x2="20" y2="12"/><circle cx="15" cy="12" r="2.5" fill="currentColor"/><line x1="4" y1="18" x2="20" y2="18"/><circle cx="10" cy="18" r="2.5" fill="currentColor"/></svg>`,
+      back: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06183D" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>`,
+      heart: (filled) => `<svg width="18" height="18" viewBox="0 0 24 24" fill="${filled ? '#E53935' : 'none'}" stroke="${filled ? '#E53935' : 'currentColor'}" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>`,
+      share: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>`,
+      star: `<svg width="13" height="13" viewBox="0 0 24 24" fill="#F5A623" stroke="#F5A623" stroke-width="1.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>`,
+      walk: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00A88D" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="13" cy="4" r="2"/><path d="M7 21l3-7 3 2v5"/><path d="M10 14l2-5 4 2 2-2"/></svg>`,
+      clock: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#FF6B35" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>`,
+      shield: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00A88D" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>`,
+      pin: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00A88D" stroke-width="2.2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+      check: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#00A88D" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+      radar: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 20a8 8 0 1 0-8-8"/><path d="M12 16a4 4 0 1 0-4-4"/><circle cx="12" cy="12" r="1.5" fill="currentColor"/></svg>`,
+      help: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+      logout: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>`,
+      plus: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
+      user: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+      mail: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><polyline points="22,6 12,13 2,6"/></svg>`,
+      lock: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="3"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
+      bell: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>`,
+      card: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="3"/><line x1="2" y1="10" x2="22" y2="10"/></svg>`,
+      fileText: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
+      cookie: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a10 10 0 1 0 10 10 4 4 0 0 1-5-5 4 4 0 0 1-5-5"/><circle cx="8.5" cy="11.5" r="1" fill="currentColor"/><circle cx="11.5" cy="15.5" r="1" fill="currentColor"/><circle cx="15.5" cy="13.5" r="1" fill="currentColor"/></svg>`,
+      chevronRight: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="opacity:0.45; flex-shrink:0;"><polyline points="9 18 15 12 9 6"/></svg>`
+    };
+
+    const CAT_ICONS = {
+      'Todos': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>`,
+      'Peluquería': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></svg>`,
+      'Estética': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l1.9 5.8L20 10.7l-5 3.6 1.9 5.7-4.9-3.6-4.9 3.6 1.9-5.7-5-3.6 6.1-1.9L12 3z"/></svg>`,
+      'Barbería': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v4H7z"/><path d="M9 8v4a3 3 0 0 0 6 0V8"/><line x1="12" y1="15" x2="12" y2="21"/><line x1="9" y1="21" x2="15" y2="21"/></svg>`,
+      'Uñas': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6v5H9z"/><path d="M7 8h10l1 11a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L7 8z"/><path d="M12 12v4"/></svg>`,
+      'Masajes': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/><path d="M12 17a3 3 0 0 0 3-3"/></svg>`,
+      'Fisio': `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>`
+    };
+
+    function renderServiceArt(cat, size = 56) {
+      const map = {
+        'Peluquería': `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="26" fill="#00D8B6" fill-opacity="0.16"/><circle cx="20" cy="22" r="6.5" stroke="#06183D" stroke-width="3"/><circle cx="20" cy="42" r="6.5" stroke="#00A88D" stroke-width="3"/><path d="M47 17L25 37" stroke="#06183D" stroke-width="3.2" stroke-linecap="round"/><path d="M25 27L47 47" stroke="#FF6B35" stroke-width="3.2" stroke-linecap="round"/></svg>`,
+        'Estética': `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="26" fill="#00D8B6" fill-opacity="0.16"/><path d="M32 15L36.5 26.5L48 31L36.5 35.5L32 47L27.5 35.5L16 31L27.5 26.5L32 15Z" fill="#00D8B6" fill-opacity="0.28" stroke="#06183D" stroke-width="2.8" stroke-linejoin="round"/><circle cx="46" cy="18" r="3" fill="#FF6B35"/></svg>`,
+        'Barbería': `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="26" fill="#00D8B6" fill-opacity="0.16"/><rect x="21" y="16" width="22" height="9" rx="3" stroke="#06183D" stroke-width="3"/><path d="M25 25V33C25 36.866 28.134 40 32 40C35.866 40 39 36.866 39 33V25" stroke="#00A88D" stroke-width="3"/><path d="M32 40V49" stroke="#06183D" stroke-width="3.2" stroke-linecap="round"/></svg>`,
+        'Uñas': `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="26" fill="#FF6B35" fill-opacity="0.14"/><rect x="26" y="15" width="12" height="10" rx="2.5" stroke="#06183D" stroke-width="3"/><path d="M21 27C21 25.8954 21.8954 25 23 25H41C42.1046 25 43 25.8954 43 27L41 46C40.8 47.7 39.4 49 37.7 49H26.3C24.6 49 23.2 47.7 23 46L21 27Z" fill="#FF6B35" fill-opacity="0.24" stroke="#FF6B35" stroke-width="3"/></svg>`,
+        'Masajes': `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="26" fill="#00D8B6" fill-opacity="0.16"/><path d="M32 17C32 17 45 27 45 37C45 44.1797 39.1797 50 32 50C24.8203 50 19 44.1797 19 37C19 27 32 17 32 17Z" fill="#00D8B6" fill-opacity="0.22" stroke="#06183D" stroke-width="3"/><path d="M32 28V41M26 35H38" stroke="#00A88D" stroke-width="2.8" stroke-linecap="round"/></svg>`,
+        'Fisio': `<svg width="${size}" height="${size}" viewBox="0 0 64 64" fill="none"><circle cx="32" cy="32" r="26" fill="#00D8B6" fill-opacity="0.16"/><path d="M16 33H24L29 21L35 43L40 33H48" stroke="#06183D" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="46" cy="21" r="3.5" fill="#FF6B35"/></svg>`
+      };
+      return map[cat] || map['Peluquería'];
+    }
+
+    /* ==========================================================================
+       3. BASE DE DATOS DE DEMOSTRACIÓN (NEGOCIOS REALES CON TILDES Y EÑES)
+       ========================================================================== */
+    function getDefaultData() {
+      const now = Date.now();
+      return {
+        cookiePrefs: {
+          essential: true,
+          personalization: true,
+          analytics: false
+        },
+        users: {
+          iker: {
+            pw: '123',
+            role: 'cli',
+            name: 'Iker Etxebarria',
+            email: 'iker@gappy.es',
+            phone: '644 812 903',
+            neighborhood: 'Salamanca',
+            cards: ['•••• 4242'],
+            favorites: [201, 202],
+            radarPhone: '644 812 903',
+            radarCats: ['Peluquería', 'Barbería'],
+            security: { twoFactor: false, keepSignedIn: true },
+            notifications: { whatsappUrgent: true, reminder30: true, barrioDigest: false }
+          },
+          laura: {
+            pw: '123',
+            role: 'cli',
+            name: 'Laura Méndez',
+            email: 'laura@gappy.es',
+            phone: '612 345 678',
+            neighborhood: 'Malasaña',
+            cards: ['•••• 8819'],
+            favorites: [202, 204],
+            radarPhone: '612 345 678',
+            radarCats: ['Estética', 'Uñas'],
+            security: { twoFactor: true, keepSignedIn: true },
+            notifications: { whatsappUrgent: true, reminder30: true, barrioDigest: true }
+          },
+          marea: {
+            pw: '123',
+            role: 'biz',
+            name: 'Salón Marea',
+            email: 'marea@gappy.es',
+            phone: '910 482 190',
+            address: 'C/ Velázquez, 44 · Salamanca',
+            neighborhood: 'Salamanca',
+            fiscalName: 'Salón Marea Madrid S.L.',
+            cif: 'B87654321',
+            iban: 'ES91 2100 0418 4502 0005 1332',
+            defaultWalkMeters: 350,
+            defaultWalkMins: 4,
+            security: { twoFactor: false, keepSignedIn: true },
+            notifications: { whatsappUrgent: true, reminder30: true, barrioDigest: true }
+          },
+          aura: {
+            pw: '123',
+            role: 'biz',
+            name: 'Estética Aura',
+            email: 'aura@gappy.es',
+            phone: '910 739 204',
+            address: 'C/ Fuencarral, 82 · Malasaña',
+            neighborhood: 'Malasaña',
+            fiscalName: 'Estética Aura Centro S.L.',
+            cif: 'B88910234',
+            iban: 'ES66 0049 1500 0512 3456 7892',
+            defaultWalkMeters: 500,
+            defaultWalkMins: 6,
+            security: { twoFactor: false, keepSignedIn: true },
+            notifications: { whatsappUrgent: true, reminder30: true, barrioDigest: false }
+          }
+        },
+        slots: [
+          {
+            id: 201,
+            cat: 'Peluquería',
+            s: 'Corte, lavado y secado exprés',
+            p: 38,
+            d: 45,
+            t: now + 35 * 60000,
+            disc: 30,
+            walkMeters: 350,
+            walkMins: 4,
+            rating: 4.9,
+            reviewsCount: 148,
+            spotsLeft: 2,
+            st: 'live',
+            bizId: 'marea',
+            biz: 'Salón Marea',
+            address: 'C/ Velázquez, 44 · Salamanca',
+            tags: ['peluqueria', 'corte', 'pelo', 'secado', 'salon marea'],
+            stylist: {
+              name: 'Bea Mendoza',
+              role: 'Directora Artística · 9 años exp.',
+              note: 'Acaba de liberarse este hueco de última hora. Te preparo un café de especialidad mientras vemos qué corte te favorece más.',
+              includes: ['Diagnóstico capilar exprés', 'Lavado con masaje craneal', 'Corte personalizado y secado', 'Café o infusión orgánica']
+            },
+            reviews: [
+              { author: 'Sofía R.', rating: 5, text: 'Cogí el hueco 25 minutos antes y Bea me dejó el pelo espectacular. Puntualidad absoluta.' },
+              { author: 'Marta G.', rating: 5, text: 'A 4 minutos de la oficina y con un 30% real de descuento.' }
+            ],
+            bookings: []
+          },
+          {
+            id: 202,
+            cat: 'Estética',
+            s: 'Depilación láser + higiene facial',
+            p: 75,
+            d: 60,
+            t: now + 50 * 60000,
+            disc: 35,
+            walkMeters: 500,
+            walkMins: 6,
+            rating: 5.0,
+            reviewsCount: 112,
+            spotsLeft: 1,
+            st: 'live',
+            bizId: 'aura',
+            biz: 'Estética Aura',
+            address: 'C/ Fuencarral, 82 · Malasaña',
+            tags: ['estetica', 'depilacion', 'laser', 'facial', 'limpieza', 'aura'],
+            stylist: {
+              name: 'Claudia Ríos',
+              role: 'Especialista Dermocosmética',
+              note: 'Se nos ha caído una cita de cabina ahora mismo. Aprovecha nuestra tecnología láser indolora con hidratación calmante incluida.',
+              includes: ['Sesión láser de última generación', 'Limpieza facial oxigenante', 'Mascarilla calmante de ácido hialurónico']
+            },
+            reviews: [
+              { author: 'Elena T.', rating: 5, text: 'Cabina impecable, cero esperas y trato súper cercano de Claudia.' }
+            ],
+            bookings: []
+          },
+          {
+            id: 203,
+            cat: 'Barbería',
+            s: 'Corte degradado y ritual de barba',
+            p: 28,
+            d: 40,
+            t: now + 25 * 60000,
+            disc: 25,
+            walkMeters: 280,
+            walkMins: 3,
+            rating: 4.8,
+            reviewsCount: 94,
+            spotsLeft: 1,
+            st: 'live',
+            bizId: 'clasico',
+            biz: 'Barbería El Clásico',
+            address: 'C/ Hortaleza, 61 · Chueca',
+            tags: ['barberia', 'barba', 'corte', 'degradado', 'clasico'],
+            stylist: {
+              name: 'Mateo Navarro',
+              role: 'Maestro Barbero',
+              note: 'Tengo el sillón libre ahora mismo durante 40 minutos. Te dejo el degradado limpio y toalla caliente con eucalipto.',
+              includes: ['Corte fade o clásico a tijera', 'Perfilado de barba a navaja', 'Toalla caliente aromática']
+            },
+            reviews: [
+              { author: 'Álvaro P.', rating: 5, text: 'Rápido, preciso y a 3 minutos andando.' }
+            ],
+            bookings: []
+          },
+          {
+            id: 204,
+            cat: 'Uñas',
+            s: 'Manicura rusa y esmaltado gel',
+            p: 36,
+            d: 50,
+            t: now + 70 * 60000,
+            disc: 30,
+            walkMeters: 650,
+            walkMins: 8,
+            rating: 4.9,
+            reviewsCount: 163,
+            spotsLeft: 2,
+            st: 'live',
+            bizId: 'unas_alma',
+            biz: 'Estudio Uñas & Alma',
+            address: 'C/ Almagro, 15 · Chamberí',
+            tags: ['unas', 'manicura', 'pedicura', 'gel', 'semipermanente', 'alma'],
+            stylist: {
+              name: 'Valeria Cruz',
+              role: 'Nail Artist Senior',
+              note: 'Tenemos más de 80 tonos nuevos esta temporada. Si vienes a este hueco te regalamos hidratación de cutículas con aceite de almendras.',
+              includes: ['Manicura combinada de precisión', 'Nivelación y color gel', 'Masaje hidratante de manos']
+            },
+            reviews: [
+              { author: 'Paula V.', rating: 5, text: 'Me duran intactas tres semanas. Un descubrimiento en el barrio.' }
+            ],
+            bookings: []
+          },
+          {
+            id: 205,
+            cat: 'Fisio',
+            s: 'Sesión fisioterapia descontracturante',
+            p: 55,
+            d: 50,
+            t: now + 95 * 60000,
+            disc: 25,
+            walkMeters: 750,
+            walkMins: 9,
+            rating: 4.9,
+            reviewsCount: 87,
+            spotsLeft: 1,
+            st: 'live',
+            bizId: 'fisiosalud',
+            biz: 'Clínica FisioSalud',
+            address: 'C/ Goya, 78 · Salamanca',
+            tags: ['fisio', 'fisioterapia', 'clinica', 'espalda', 'masaje', 'cervical'],
+            stylist: {
+              name: 'Dr. Javier Soto',
+              role: 'Fisioterapeuta Colegiado',
+              note: 'Un paciente ha pospuesto su sesión de hoy. Ideal si llevas toda la semana cargado de cervicales o lumbar.',
+              includes: ['Valoración postural rápida', 'Terapia manual profunda', 'Descarga muscular localizada']
+            },
+            reviews: [
+              { author: 'Diego L.', rating: 5, text: 'Salí como nuevo tras una semana terrible de ordenador.' }
+            ],
+            bookings: []
+          },
+          {
+            id: 206,
+            cat: 'Masajes',
+            s: 'Masaje relajante aromaterapia',
+            p: 60,
+            d: 55,
+            t: now + 115 * 60000,
+            disc: 40,
+            walkMeters: 500,
+            walkMins: 6,
+            rating: 5.0,
+            reviewsCount: 73,
+            spotsLeft: 1,
+            st: 'live',
+            bizId: 'aura',
+            biz: 'Estética Aura',
+            address: 'C/ Fuencarral, 82 · Malasaña',
+            tags: ['masaje', 'masajes', 'relajante', 'spa', 'estetica', 'aura'],
+            stylist: {
+              name: 'Claudia Ríos',
+              role: 'Terapeuta Corporal',
+              note: 'Desconecta casi una hora con aceites esenciales templados de lavanda y bergamota al 40% de descuento.',
+              includes: ['Masaje corporal completo 55 min', 'Aceites esenciales templados', 'Infusión relajante al terminar']
+            },
+            reviews: [
+              { author: 'Carmen S.', rating: 5, text: 'Un oasis en medio de la ciudad, precio irrepetible.' }
+            ],
+            bookings: []
+          },
+          {
+            id: 207,
+            cat: 'Peluquería',
+            s: 'Hidratación profunda y peinado',
+            p: 45,
+            d: 45,
+            t: now + 160 * 60000,
+            disc: 20,
+            walkMeters: 350,
+            walkMins: 4,
+            rating: 4.9,
+            reviewsCount: 148,
+            spotsLeft: 0,
+            st: 'booked',
+            bizId: 'marea',
+            biz: 'Salón Marea',
+            address: 'C/ Velázquez, 44 · Salamanca',
+            tags: ['peluqueria', 'hidratacion', 'peinado'],
+            stylist: { name: 'Bea Mendoza', role: 'Directora Artística', note: 'Te esperamos en el salón.', includes: ['Tratamiento brillo', 'Peinado'] },
+            reviews: [],
+            bookings: [{ cliId: 'ana_demo', cliName: 'Ana Gómez', qty: 1, pin: '4829', method: 'Apple Pay', total: 36 }]
+          }
+        ]
+      };
+    }
+
+    function loadData() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return getDefaultData();
+        const parsed = JSON.parse(raw);
+        if (!parsed.users || !Array.isArray(parsed.slots)) return getDefaultData();
+        parsed.cookiePrefs = parsed.cookiePrefs || { essential: true, personalization: true, analytics: false };
+        Object.values(parsed.users).forEach(u => {
+          u.phone = u.phone ?? u.radarPhone ?? '';
+          u.neighborhood = u.neighborhood || 'Salamanca';
+          u.security = u.security || { twoFactor: false, keepSignedIn: true };
+          u.notifications = u.notifications || { whatsappUrgent: true, reminder30: true, barrioDigest: false };
+          if (u.role === 'biz') {
+            u.fiscalName = u.fiscalName || `${u.name} S.L.`;
+            u.cif = u.cif || 'B87654321';
+            u.iban = u.iban || 'ES91 2100 0418 4502 0005 1332';
+          }
+        });
+        return parsed;
+      } catch (e) {
+        return getDefaultData();
+      }
+    }
+
+    let DB = loadData();
+
+    function saveData() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(DB));
+      } catch (e) {}
+    }
+
+    /* ==========================================================================
+       4. ESTADO GLOBAL (ARRANCA DIRECTAMENTE EN INICIO DE SESIÓN)
+       ========================================================================== */
+    const STATE = {
+      view: 'login',       // 'login', 'home', 'detail', 'checkout', 'card_form', 'success', 'bookings', 'favorites', 'radar', 'how', 'biz_dash', 'biz_new', 'biz_settings'
+      authMode: 'login',   // 'login' o 'register'
+      authError: '',
+      user: null,
+      role: null,
+      drawerOpen: false,
+      filterOpen: false,
+      searchQuery: '',
+      selectedCat: 'Todos',
+      sortBy: 'soon',      // 'soon', 'discount', 'price', 'rating'
+      maxWalkMins: 99,     // 5, 10, 15, 99
+      featuredIndex: 0,
+      detailSlotId: null,
+      detailSlide: 0,
+      cardReturnView: 'checkout',
+      lastConfirmation: null
+    };
+
+    /* ==========================================================================
+       5. BÚSQUEDA INSENSIBLE A TILDES Y FILTROS
+       ========================================================================== */
+    function getFilteredLiveSlots() {
+      const now = Date.now();
+      const normalizedQuery = normalizeText(STATE.searchQuery);
+      const queryTokens = normalizedQuery ? normalizedQuery.split(/\s+/) : [];
+
+      let list = DB.slots.filter(s => s.st === 'live' && s.spotsLeft > 0 && s.t > now);
+
+      if (STATE.selectedCat !== 'Todos') {
+        const normCat = normalizeText(STATE.selectedCat);
+        list = list.filter(s => normalizeText(s.cat) === normCat);
+      }
+
+      if (STATE.maxWalkMins < 99) {
+        list = list.filter(s => (s.walkMins || 10) <= STATE.maxWalkMins);
+      }
+
+      if (queryTokens.length > 0) {
+        list = list.filter(s => {
+          const haystack = normalizeText([
+            s.biz,
+            s.s,
+            s.cat,
+            s.address,
+            s.stylist ? s.stylist.name : '',
+            s.stylist ? s.stylist.role : '',
+            ...(s.tags || [])
+          ].join(' '));
+
+          return queryTokens.every(token => haystack.includes(token));
+        });
+      }
+
+      if (STATE.sortBy === 'discount') {
+        list.sort((a, b) => b.disc - a.disc);
+      } else if (STATE.sortBy === 'price') {
+        list.sort((a, b) => finalPrice(a) - finalPrice(b));
+      } else if (STATE.sortBy === 'rating') {
+        list.sort((a, b) => b.rating - a.rating);
+      } else {
+        list.sort((a, b) => a.t - b.t);
+      }
+
+      return list;
+    }
+
+    function getUserBookings() {
+      if (!STATE.user) return [];
+      const res = [];
+      DB.slots.forEach(s => {
+        (s.bookings || []).forEach((b, idx) => {
+          if (b.cliId === STATE.user) {
+            res.push({ slot: s, booking: b, idx });
+          }
+        });
+      });
+      return res.sort((a, b) => a.slot.t - b.slot.t);
+    }
+
+    function isFavorite(slotId) {
+      if (!STATE.user || STATE.role !== 'cli') return false;
+      const favs = DB.users[STATE.user].favorites || [];
+      return favs.includes(slotId);
+    }
+
+    /* ==========================================================================
+       6. PANTALLA 1: INICIO DE SESIÓN UNIFICADO (AUTODETECCIÓN DE ROL)
+       ========================================================================== */
+    function viewLogin() {
+      const isReg = STATE.authMode === 'register';
+      return `
+        <div class="scroll-area fade-in" style="display:flex; flex-direction:column; justify-content:center;">
+          <div style="text-align:center; margin-bottom:22px;">
+            <div style="display:inline-block; margin-bottom:12px; filter:drop-shadow(0 14px 26px rgba(6,24,61,0.22));">
+              ${renderGappySquircle(80)}
+            </div>
+            <h1 style="font-size:30px; font-weight:800; color:var(--navy); letter-spacing:-0.03em; margin-bottom:5px;">Gappy</h1>
+            <p style="font-size:13.5px; color:var(--ink-soft); max-width:295px; margin:0 auto; line-height:1.4;">
+              ${isReg
+                ? 'Crea tu cuenta en segundos y caza citas de última hora en tu barrio.'
+                : 'Inicia sesión con tu cuenta. Detectamos automáticamente si eres cliente o negocio.'}
+            </p>
+          </div>
+
+          <div class="input-card">
+            <div style="display:flex; gap:6px; background:var(--card-soft); padding:5px; border-radius:14px; margin-bottom:16px;">
+              <button type="button" onclick="setAuthMode('login')" style="flex:1; padding:9px; border-radius:10px; font-size:13px; font-weight:800; ${!isReg ? 'background:var(--navy); color:#FFFFFF;' : 'color:var(--mute);'}">Iniciar sesión</button>
+              <button type="button" onclick="setAuthMode('register')" style="flex:1; padding:9px; border-radius:10px; font-size:13px; font-weight:800; ${isReg ? 'background:var(--navy); color:#FFFFFF;' : 'color:var(--mute);'}">Crear cuenta</button>
+            </div>
+
+            ${STATE.authError ? `
+              <div style="background:var(--coral-soft); border-left:3px solid var(--coral); padding:10px 12px; border-radius:10px; font-size:12.5px; font-weight:600; color:var(--ink); margin-bottom:14px;" role="alert">
+                ${esc(STATE.authError)}
+              </div>
+            ` : ''}
+
+            ${isReg ? `
+              <form onsubmit="handleRegister(event)" novalidate>
+                <div class="field">
+                  <label for="reg-name">Nombre y apellidos</label>
+                  <input type="text" id="reg-name" placeholder="Ej. Sofía Navarro" required>
+                </div>
+                <div class="field">
+                  <label for="reg-user">Usuario o email</label>
+                  <input type="text" id="reg-user" placeholder="Ej. sofia" required>
+                </div>
+                <div class="field">
+                  <label for="reg-pass">Contraseña</label>
+                  <input type="password" id="reg-pass" placeholder="Mínimo 3 caracteres" required>
+                </div>
+                <button type="submit" class="btn-pill navy" style="margin-top:6px;">Crear cuenta y entrar</button>
+              </form>
+            ` : `
+              <form onsubmit="handleUnifiedLogin(event)" novalidate>
+                <div class="field">
+                  <label for="auth-id">Usuario o email</label>
+                  <input type="text" id="auth-id" autocomplete="username" placeholder="iker, laura, marea o aura" required>
+                </div>
+                <div class="field">
+                  <label for="auth-pw">Contraseña</label>
+                  <input type="password" id="auth-pw" autocomplete="current-password" placeholder="•••" required>
+                </div>
+                <button type="submit" class="btn-pill navy" style="margin-top:6px;">Entrar en Gappy</button>
+              </form>
+            `}
+          </div>
+
+          <div style="text-align:center; margin-top:4px;">
+            <p style="font-size:11.5px; font-weight:600; color:var(--mute); margin-bottom:9px;">Acceso rápido de prueba (autodetección de perfil):</p>
+            <div style="display:flex; gap:7px; justify-content:center; flex-wrap:wrap;">
+              <button type="button" onclick="quickLogin('iker')" style="background:#FFFFFF; padding:8px 12px; border-radius:999px; font-size:12px; font-weight:700; color:var(--navy); box-shadow:0 4px 12px rgba(6,24,61,0.08); display:inline-flex; align-items:center; gap:6px;">
+                <span style="width:7px; height:7px; border-radius:50%; background:var(--coral);"></span>
+                Entrar como Iker
+              </button>
+              <button type="button" onclick="quickLogin('laura')" style="background:#FFFFFF; padding:8px 12px; border-radius:999px; font-size:12px; font-weight:700; color:var(--navy); box-shadow:0 4px 12px rgba(6,24,61,0.08); display:inline-flex; align-items:center; gap:6px;">
+                <span style="width:7px; height:7px; border-radius:50%; background:var(--coral);"></span>
+                Entrar como Laura
+              </button>
+              <button type="button" onclick="quickLogin('marea')" style="background:#FFFFFF; padding:8px 12px; border-radius:999px; font-size:12px; font-weight:700; color:var(--navy); box-shadow:0 4px 12px rgba(6,24,61,0.08); display:inline-flex; align-items:center; gap:6px;">
+                <span style="width:7px; height:7px; border-radius:50%; background:var(--mint);"></span>
+                Salón Marea
+              </button>
+              <button type="button" onclick="quickLogin('aura')" style="background:#FFFFFF; padding:8px 12px; border-radius:999px; font-size:12px; font-weight:700; color:var(--navy); box-shadow:0 4px 12px rgba(6,24,61,0.08); display:inline-flex; align-items:center; gap:6px;">
+                <span style="width:7px; height:7px; border-radius:50%; background:var(--mint);"></span>
+                Estética Aura
+              </button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       7. BARRA SUPERIOR Y MENÚ LATERAL DESLIZABLE (DRAWER)
+       ========================================================================== */
+    function renderConsumerTopbar() {
+      const u = DB.users[STATE.user];
+      const initials = u.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+      const bookingsCount = getUserBookings().length;
+
+      return `
+        <header class="topbar">
+          <div class="topbar-left">
+            <button type="button" class="icon-btn" onclick="toggleDrawer(true)" aria-label="Abrir menú lateral">
+              ${ICONS.menu}
+            </button>
+            ${renderGappyHeaderLogo()}
+          </div>
+          <div class="topbar-right">
+            <button type="button" class="icon-btn" onclick="navTo('bookings')" aria-label="Mis citas reservadas">
+              ${ICONS.bag}
+              ${bookingsCount > 0 ? `<span class="badge-count">${bookingsCount}</span>` : ''}
+            </button>
+            <button type="button" class="avatar-pill" onclick="toggleDrawer(true)" aria-label="Perfil de ${esc(u.name)}">
+              ${esc(initials)}
+            </button>
+          </div>
+        </header>
+      `;
+    }
+
+    function renderDrawer() {
+      const u = DB.users[STATE.user];
+      if (!u) return '';
+      const isBiz = STATE.role === 'biz';
+      const bookingsCount = getUserBookings().length;
+      const favCount = (u.favorites || []).length;
+      const initials = u.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+
+      return `
+        <div class="drawer-backdrop ${STATE.drawerOpen ? 'open' : ''}" onclick="toggleDrawer(false)"></div>
+        <aside class="drawer-panel ${STATE.drawerOpen ? 'open' : ''}" aria-label="Menú principal de Gappy">
+          <!-- 1. CABECERA DEL MENÚ LATERAL (PERFIL DEL USUARIO) -->
+          <button type="button" class="drawer-profile-card" onclick="drawerNav('account_profile')" aria-label="Editar perfil de ${esc(u.name)}">
+            <div class="avatar-pill" style="width:44px; height:44px; font-size:14px;">${esc(initials)}</div>
+            <div style="min-width:0; flex:1;">
+              <div style="font-weight:800; font-size:14.5px; color:var(--navy); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${esc(u.name)}</div>
+              <div style="font-size:11.5px; color:var(--ink-soft); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${esc(u.email || '')}</div>
+              <div style="display:flex; align-items:center; gap:6px; margin-top:4px; flex-wrap:wrap;">
+                <span style="font-size:10.5px; font-weight:800; background:${isBiz ? 'var(--mint-soft)' : 'var(--coral-soft)'}; color:${isBiz ? 'var(--mint-dark)' : 'var(--coral-dark)'}; padding:2px 8px; border-radius:999px;">
+                  ${isBiz ? 'Salón Asociado' : 'Cliente Gappy'}
+                </span>
+                ${u.phone ? `<span style="font-size:10.5px; color:var(--mute); font-weight:600;">${esc(u.phone)}</span>` : ''}
+              </div>
+            </div>
+            ${ICONS.chevronRight}
+          </button>
+
+          <div class="drawer-nav-scroll">
+            <!-- 2. APARTADO 1 · EXPLORAR / GESTIÓN -->
+            <div class="drawer-section-label">${isBiz ? 'Gestión de Salón' : 'Explorar'}</div>
+            ${isBiz ? `
+              <button type="button" class="drawer-item ${STATE.view === 'biz_dash' ? 'active' : ''}" onclick="drawerNav('biz_dash')">
+                <span class="drawer-item-left">${ICONS.clock} <span>Agenda de Hoy</span></span>
+              </button>
+              <button type="button" class="drawer-item ${STATE.view === 'biz_new' ? 'active' : ''}" onclick="drawerNav('biz_new')">
+                <span class="drawer-item-left">${ICONS.plus} <span>Publicar Nuevo Hueco</span></span>
+              </button>
+              <button type="button" class="drawer-item ${STATE.view === 'biz_settings' ? 'active' : ''}" onclick="drawerNav('biz_settings')">
+                <span class="drawer-item-left">${ICONS.pin} <span>Ficha del Salón</span></span>
+              </button>
+            ` : `
+              <button type="button" class="drawer-item ${STATE.view === 'home' ? 'active' : ''}" onclick="drawerNav('home')">
+                <span class="drawer-item-left">${CAT_ICONS['Todos'].replace('24', '18').replace('24', '18')} <span>Inicio (Explorar huecos)</span></span>
+              </button>
+              <button type="button" class="drawer-item ${STATE.view === 'bookings' ? 'active' : ''}" onclick="drawerNav('bookings')">
+                <span class="drawer-item-left">${ICONS.bag} <span>Mis Citas y PIN</span></span>
+                ${bookingsCount > 0 ? `<span style="background:${STATE.view === 'bookings' ? 'var(--mint)' : 'var(--coral)'}; color:${STATE.view === 'bookings' ? 'var(--navy)' : '#fff'}; font-size:11px; font-weight:800; padding:2px 8px; border-radius:999px;">${bookingsCount}</span>` : ''}
+              </button>
+              <button type="button" class="drawer-item ${STATE.view === 'favorites' ? 'active' : ''}" onclick="drawerNav('favorites')">
+                <span class="drawer-item-left">${ICONS.heart(false)} <span>Salones Favoritos</span></span>
+                ${favCount > 0 ? `<span style="font-size:11px; font-weight:800; opacity:0.85;">${favCount}</span>` : ''}
+              </button>
+              <button type="button" class="drawer-item ${STATE.view === 'radar' ? 'active' : ''}" onclick="drawerNav('radar')">
+                <span class="drawer-item-left">${ICONS.radar} <span>Radar WhatsApp</span></span>
+              </button>
+            `}
+
+            <!-- 3. APARTADO 2 · MI CUENTA Y AJUSTES -->
+            <div class="drawer-section-label">Mi Cuenta y Ajustes</div>
+            <button type="button" class="drawer-item ${STATE.view === 'account_profile' ? 'active' : ''}" onclick="drawerNav('account_profile')">
+              <span class="drawer-item-left">${ICONS.user} <span>Datos personales</span></span>
+              ${ICONS.chevronRight}
+            </button>
+            <button type="button" class="drawer-item ${STATE.view === 'account_email' ? 'active' : ''}" onclick="drawerNav('account_email')">
+              <span class="drawer-item-left">${ICONS.mail} <span>Cambiar correo electrónico</span></span>
+              ${ICONS.chevronRight}
+            </button>
+            <button type="button" class="drawer-item ${STATE.view === 'account_security' ? 'active' : ''}" onclick="drawerNav('account_security')">
+              <span class="drawer-item-left">${ICONS.lock} <span>Contraseña y seguridad</span></span>
+              ${ICONS.chevronRight}
+            </button>
+            <button type="button" class="drawer-item ${STATE.view === 'account_notifications' ? 'active' : ''}" onclick="drawerNav('account_notifications')">
+              <span class="drawer-item-left">${ICONS.bell} <span>Notificaciones</span></span>
+              ${ICONS.chevronRight}
+            </button>
+            <button type="button" class="drawer-item ${STATE.view === 'account_payments' ? 'active' : ''}" onclick="drawerNav('account_payments')">
+              <span class="drawer-item-left">${ICONS.card} <span>${isBiz ? 'Cuenta de cobros y NIF' : 'Métodos de pago'}</span></span>
+              ${ICONS.chevronRight}
+            </button>
+
+            <!-- 4. APARTADO 3 · AYUDA Y LEGAL -->
+            <div class="drawer-section-label">Ayuda y Legal</div>
+            <button type="button" class="drawer-item ${STATE.view === 'legal_help' ? 'active' : ''}" onclick="drawerNav('legal_help')">
+              <span class="drawer-item-left">${ICONS.help} <span>Centro de ayuda</span></span>
+              ${ICONS.chevronRight}
+            </button>
+            <button type="button" class="drawer-item ${STATE.view === 'legal_privacy' ? 'active' : ''}" onclick="drawerNav('legal_privacy')">
+              <span class="drawer-item-left">${ICONS.shield} <span>Política de privacidad</span></span>
+              ${ICONS.chevronRight}
+            </button>
+            <button type="button" class="drawer-item ${STATE.view === 'legal_terms' ? 'active' : ''}" onclick="drawerNav('legal_terms')">
+              <span class="drawer-item-left">${ICONS.fileText} <span>Términos y condiciones</span></span>
+              ${ICONS.chevronRight}
+            </button>
+            <button type="button" class="drawer-item ${STATE.view === 'legal_cookies' ? 'active' : ''}" onclick="drawerNav('legal_cookies')">
+              <span class="drawer-item-left">${ICONS.cookie} <span>Política de cookies y datos</span></span>
+              ${ICONS.chevronRight}
+            </button>
+          </div>
+
+          <!-- 5. PIE DEL MENÚ -->
+          <div style="padding-top:10px; border-top:1px solid var(--line);">
+            <button type="button" class="drawer-item" onclick="logout()" style="color:#D32F2F; margin-bottom:4px;">
+              <span class="drawer-item-left">${ICONS.logout} <span>Cerrar sesión</span></span>
+            </button>
+            <div style="text-align:center; font-size:11px; font-weight:700; color:var(--mute); padding-top:2px;">
+              Gappy · Edición Barrio v1.4
+            </div>
+          </div>
+        </aside>
+      `;
+    }
+
+    /* ==========================================================================
+       8. ESCAPARATE DE CONSUMIDOR (HOME)
+       ========================================================================== */
+    function viewConsumerHome() {
+      const filteredSlots = getFilteredLiveSlots();
+      const categories = ['Todos', 'Peluquería', 'Estética', 'Barbería', 'Uñas', 'Masajes', 'Fisio'];
+      const hasActiveFilters = STATE.sortBy !== 'soon' || STATE.maxWalkMins < 99;
+
+      // Huecos Urgentes (próximas 2h = <= 120 min) dentro de los resultados filtrados
+      const urgentSlots = filteredSlots.filter(s => minsUntil(s.t) <= 120);
+      const carouselSlots = urgentSlots.length ? urgentSlots : filteredSlots;
+      if (STATE.featuredIndex >= carouselSlots.length) STATE.featuredIndex = 0;
+
+      // Mejores ofertas de hoy (ordenadas por mayor descuento o criterio activo)
+      const bestDeals = [...filteredSlots].sort((a, b) => b.disc - a.disc);
+
+      return `
+        <div class="scroll-area fade-in">
+          ${renderConsumerTopbar()}
+
+          <h1 class="hero-title">
+            Aprovecha los
+            <strong>Huecos libres hoy</strong>
+          </h1>
+
+          <!-- Buscador sin distinción de tildes + botón de filtros -->
+          <div class="search-bar">
+            ${ICONS.search}
+            <input
+              type="search"
+              id="search-input"
+              value="${esc(STATE.searchQuery)}"
+              placeholder="Busca salon marea, estetica, unas, fisio..."
+              oninput="handleSearchInput(this.value)"
+              aria-label="Buscar negocio, servicio o barrio sin importar tildes"
+            >
+            ${STATE.searchQuery ? `
+              <button type="button" onclick="handleSearchInput('')" style="padding:4px 6px; color:var(--mute); font-weight:800;" aria-label="Limpiar búsqueda">×</button>
+            ` : ''}
+            <button type="button" class="filter-trigger ${hasActiveFilters ? 'has-filters' : ''}" onclick="toggleFilterSheet(true)" aria-label="Ordenar y filtrar">
+              ${ICONS.sliders}
+            </button>
+          </div>
+
+          <!-- Categorías -->
+          <div class="section-head">
+            <h2 class="section-title">Categorías</h2>
+            <span class="section-sub">${filteredSlots.length} disponibles</span>
+          </div>
+
+          <div class="cat-row" role="tablist" aria-label="Categorías de servicios">
+            ${categories.map(cat => `
+              <button
+                type="button"
+                role="tab"
+                aria-selected="${STATE.selectedCat === cat}"
+                class="cat-item ${STATE.selectedCat === cat ? 'active' : ''}"
+                onclick="selectCategory('${cat}')"
+              >
+                <div class="cat-box">${CAT_ICONS[cat]}</div>
+                <span class="cat-label">${cat}</span>
+              </button>
+            `).join('')}
+          </div>
+
+          <!-- Carrusel horizontal: Huecos Urgentes (Próximas 2h) -->
+          <div class="section-head">
+            <h2 class="section-title">Huecos Urgentes (Próximas 2h)</h2>
+            <span class="section-sub">En vivo</span>
+          </div>
+
+          ${carouselSlots.length ? `
+            <div class="featured-row" id="featured-carousel" onscroll="handleCarouselScroll(this)">
+              ${carouselSlots.map((s, idx) => {
+                const isElevated = idx === STATE.featuredIndex;
+                const fav = isFavorite(s.id);
+                return `
+                  <article
+                    class="slot-card ${isElevated ? 'elevated' : ''}"
+                    onclick="openSlotDetail(${s.id})"
+                  >
+                    <div class="slot-top-badges">
+                      <span class="disc-pill">−${esc(s.disc)}%</span>
+                      <span class="time-pill">En ${minsUntil(s.t)} min</span>
+                    </div>
+
+                    <div class="slot-visual">
+                      ${renderServiceArt(s.cat, isElevated ? 64 : 54)}
+                    </div>
+
+                    <h3 class="slot-name">${esc(s.s)}</h3>
+                    <p class="slot-salon">${esc(s.biz)} · ${esc(s.walkMins)} min</p>
+
+                    <div class="slot-rating">
+                      ${ICONS.star}
+                      <span>${esc(s.rating)}</span>
+                      <span style="color:var(--mute); font-weight:500;">(${esc(s.reviewsCount)})</span>
+                    </div>
+
+                    <div class="slot-bottom">
+                      <div class="price-group tabular">
+                        <span class="price-now">${eur(finalPrice(s))}</span>
+                        <span class="price-old">${eur(s.p)}</span>
+                      </div>
+                      <div class="mini-actions">
+                        <button
+                          type="button"
+                          class="mini-icon-btn ${fav ? 'fav-on' : ''}"
+                          onclick="event.stopPropagation(); toggleFavorite(${s.id})"
+                          aria-label="Guardar en favoritos"
+                        >
+                          ${ICONS.heart(fav)}
+                        </button>
+                        <button
+                          type="button"
+                          class="mini-icon-btn book-quick"
+                          onclick="event.stopPropagation(); quickBookFromCard(${s.id})"
+                          aria-label="Bloquear hueco rápido"
+                        >
+                          ${ICONS.plus}
+                        </button>
+                      </div>
+                    </div>
+                  </article>
+                `;
+              }).join('')}
+            </div>
+
+            <!-- Sección: Mejores ofertas de hoy -->
+            <div class="section-head" style="margin-top:6px;">
+              <h2 class="section-title">Mejores ofertas de hoy</h2>
+              <span class="section-sub">Cerca de ti</span>
+            </div>
+
+            <div class="deals-list">
+              ${bestDeals.map(s => `
+                <article class="deal-row-card" onclick="openSlotDetail(${s.id})">
+                  <div class="deal-row-art">
+                    <span class="deal-row-badge">−${esc(s.disc)}%</span>
+                    ${renderServiceArt(s.cat, 42)}
+                  </div>
+                  <div class="deal-row-body">
+                    <h3 class="deal-row-title">${esc(s.s)}</h3>
+                    <div class="deal-row-biz">${esc(s.biz)} · Hoy ${esc(formatHour(s.t))}</div>
+                    <div class="deal-row-meta">
+                      <span style="display:inline-flex; align-items:center; gap:3px; color:var(--mint-dark);">${ICONS.walk} ${esc(s.walkMeters)} m · ${esc(s.walkMins)} min</span>
+                      <span>· ★ ${esc(s.rating)}</span>
+                    </div>
+                  </div>
+                  <div class="deal-row-right tabular">
+                    <div class="price-now" style="font-size:17px;">${eur(finalPrice(s))}</div>
+                    <div class="price-old" style="font-size:11.5px;">${eur(s.p)}</div>
+                  </div>
+                </article>
+              `).join('')}
+            </div>
+          ` : `
+            <div class="input-card" style="text-align:center; padding:34px 20px;">
+              <p style="font-weight:800; font-size:16px; color:var(--navy); margin-bottom:6px;">No encontramos huecos con esa búsqueda</p>
+              <p style="font-size:13px; color:var(--mute); margin-bottom:18px;">Prueba con otro negocio, servicio o amplía la distancia máxima.</p>
+              <button type="button" class="btn-pill navy" style="padding:13px 20px; font-size:13.5px;" onclick="resetFilters()">Ver todos los huecos de Gappy</button>
+            </div>
+          `}
+        </div>
+
+        <!-- Bottom Sheet de Filtros Rápidos -->
+        <div class="drawer-backdrop ${STATE.filterOpen ? 'open' : ''}" onclick="toggleFilterSheet(false)"></div>
+        <div class="sheet-panel ${STATE.filterOpen ? 'open' : ''}" role="dialog" aria-label="Ordenar y filtrar">
+          <div style="width:40px; height:4px; border-radius:99px; background:var(--line); margin:0 auto 16px;"></div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;">
+            <h3 style="font-size:18px; font-weight:800; color:var(--navy);">Ordenar y filtrar</h3>
+            <button type="button" onclick="resetFilters()" style="font-size:13px; font-weight:800; color:var(--coral);">Restablecer</button>
+          </div>
+
+          <p style="font-size:11.5px; font-weight:800; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.05em;">Ordenar por</p>
+          <div class="chip-group" style="margin-bottom:20px;">
+            <button type="button" class="filter-chip ${STATE.sortBy === 'soon' ? 'active' : ''}" onclick="setSort('soon')">Hora más cercana</button>
+            <button type="button" class="filter-chip ${STATE.sortBy === 'discount' ? 'active' : ''}" onclick="setSort('discount')">Mayor descuento</button>
+            <button type="button" class="filter-chip ${STATE.sortBy === 'price' ? 'active' : ''}" onclick="setSort('price')">Menor precio</button>
+            <button type="button" class="filter-chip ${STATE.sortBy === 'rating' ? 'active' : ''}" onclick="setSort('rating')">Mejor valorado</button>
+          </div>
+
+          <p style="font-size:11.5px; font-weight:800; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.05em;">Distancia máxima a pie</p>
+          <div class="chip-group" style="margin-bottom:24px;">
+            <button type="button" class="filter-chip ${STATE.maxWalkMins === 99 ? 'active' : ''}" onclick="setWalk(99)">Toda la ciudad</button>
+            <button type="button" class="filter-chip ${STATE.maxWalkMins === 5 ? 'active' : ''}" onclick="setWalk(5)">&lt; 5 min (400 m)</button>
+            <button type="button" class="filter-chip ${STATE.maxWalkMins === 10 ? 'active' : ''}" onclick="setWalk(10)">&lt; 10 min (800 m)</button>
+            <button type="button" class="filter-chip ${STATE.maxWalkMins === 15 ? 'active' : ''}" onclick="setWalk(15)">&lt; 15 min (1,2 km)</button>
+          </div>
+
+          <button type="button" class="btn-pill navy" onclick="toggleFilterSheet(false)">Aplicar filtros</button>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       9. PANTALLA DE DETALLE DEL HUECO
+       ========================================================================== */
+    function viewSlotDetail() {
+      const s = DB.slots.find(x => x.id === STATE.detailSlotId);
+      if (!s) {
+        navTo('home');
+        return '';
+      }
+      const fav = isFavorite(s.id);
+      const bookingsCount = getUserBookings().length;
+      const priceFinal = finalPrice(s);
+      const otherLive = DB.slots.filter(x => x.id !== s.id && x.st === 'live' && x.spotsLeft > 0 && x.t > Date.now());
+      const st = s.stylist || {
+        name: 'Equipo del Salón',
+        role: 'Especialista',
+        note: 'Te esperamos en el salón a la hora reservada.',
+        includes: ['Servicio completo']
+      };
+
+      let slideHtml = '';
+      if (STATE.detailSlide === 0) {
+        slideHtml = `
+          <div style="text-align:center;">
+            <div style="display:inline-flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; justify-content:center;">
+              <span class="disc-pill">−${esc(s.disc)}% AHORRO</span>
+              <span class="time-pill">Hoy ${esc(formatHour(s.t))} · En ${minsUntil(s.t)} min</span>
+            </div>
+            <div style="margin:6px auto;">${renderServiceArt(s.cat, 102)}</div>
+            <div class="tabular" style="display:flex; justify-content:center; align-items:baseline; gap:8px; margin-top:4px;">
+              <span style="font-size:24px; font-weight:800; color:var(--navy);">${eur(priceFinal)}</span>
+              <span style="font-size:14px; color:var(--mute); text-decoration:line-through;">${eur(s.p)}</span>
+            </div>
+          </div>
+        `;
+      } else if (STATE.detailSlide === 1) {
+        slideHtml = `
+          <div style="width:100%;">
+            <div style="font-size:12.5px; font-weight:800; color:var(--navy); margin-bottom:10px;">Qué incluye este turno:</div>
+            <div style="display:flex; flex-direction:column; gap:8px;">
+              ${st.includes.map(item => `
+                <div style="display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:600; color:var(--ink-soft);">
+                  ${ICONS.check}
+                  <span>${esc(item)}</span>
+                </div>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else {
+        const revs = (s.reviews && s.reviews.length)
+          ? s.reviews
+          : [{ author: 'Cliente Gappy', rating: 5, text: 'Atención puntual y resultado impecable.' }];
+        slideHtml = `
+          <div style="width:100%; display:flex; flex-direction:column; gap:9px;">
+            <div style="font-size:12px; font-weight:800; color:var(--navy);">Reseñas verificadas (${esc(s.reviewsCount)})</div>
+            ${revs.map(r => `
+              <div style="background:var(--card-soft); padding:10px 12px; border-radius:14px;">
+                <div style="display:flex; justify-content:space-between; font-size:11.5px; font-weight:800; margin-bottom:3px;">
+                  <span>${esc(r.author)}</span>
+                  <span style="color:var(--gold);">★★★★★</span>
+                </div>
+                <p style="font-size:12px; color:var(--ink-soft); line-height:1.35;">“${esc(r.text)}”</p>
+              </div>
+            `).join('')}
+          </div>
+        `;
+      }
+
+      return `
+        <div class="scroll-area with-sticky-cta fade-in">
+          <header class="topbar">
+            <button type="button" class="icon-btn" onclick="navTo('home')" aria-label="Volver atrás">
+              ${ICONS.back}
+            </button>
+            ${renderGappyHeaderLogo()}
+            <button type="button" class="icon-btn" onclick="navTo('bookings')" aria-label="Mis citas">
+              ${ICONS.bag}
+              ${bookingsCount > 0 ? `<span class="badge-count">${bookingsCount}</span>` : ''}
+            </button>
+          </header>
+
+          <!-- Cabecera visual interactiva -->
+          <div class="detail-viewer" ontouchstart="handleDetailTouchStart(event)" ontouchend="handleDetailTouchEnd(event)">
+            <div class="slide-stage">
+              <button type="button" class="slide-arrow prev" onclick="stepDetailSlide(-1)" aria-label="Anterior">‹</button>
+              ${slideHtml}
+              <button type="button" class="slide-arrow next" onclick="stepDetailSlide(1)" aria-label="Siguiente">›</button>
+            </div>
+            <div class="dots-row" role="tablist">
+              <button type="button" class="dot ${STATE.detailSlide === 0 ? 'active' : ''}" onclick="setDetailSlide(0)" aria-label="Precio y hora"></button>
+              <button type="button" class="dot ${STATE.detailSlide === 1 ? 'active' : ''}" onclick="setDetailSlide(1)" aria-label="Servicios incluidos"></button>
+              <button type="button" class="dot ${STATE.detailSlide === 2 ? 'active' : ''}" onclick="setDetailSlide(2)" aria-label="Opiniones"></button>
+            </div>
+          </div>
+
+          <!-- Título y acciones -->
+          <div class="detail-header-row">
+            <h1 class="detail-title">${esc(s.s)}</h1>
+            <div class="detail-actions">
+              <button type="button" class="icon-btn ${fav ? 'fav-on' : ''}" onclick="toggleFavorite(${s.id})" aria-label="Guardar en favoritos">
+                ${ICONS.heart(fav)}
+              </button>
+              <button type="button" class="icon-btn" onclick="shareSlot(${s.id})" aria-label="Compartir oferta">
+                ${ICONS.share}
+              </button>
+            </div>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:5px; font-size:13px; font-weight:600; color:var(--ink-soft); margin-bottom:6px;">
+            ${ICONS.pin}
+            <span>${esc(s.biz)} · ${esc(s.address)}</span>
+          </div>
+
+          <div style="display:flex; align-items:center; gap:6px; font-size:13px; font-weight:700;">
+            ${ICONS.star}
+            <span>${esc(s.rating)}</span>
+            <span style="color:var(--mute); font-weight:500;">(${esc(s.reviewsCount)} reseñas verificadas)</span>
+          </div>
+
+          <!-- Píldoras de información clave: Duración, Distancia, Cancelación gratis -->
+          <div class="pills-strip">
+            <div class="info-chip">
+              ${ICONS.clock}
+              <span>Duración: ${esc(s.d)} min</span>
+            </div>
+            <div class="info-chip">
+              ${ICONS.walk}
+              <span>Distancia: ${esc(s.walkMeters)} m · ${esc(s.walkMins)} min</span>
+            </div>
+            <div class="info-chip">
+              ${ICONS.shield}
+              <span>Cancelación gratis hasta 30 min antes</span>
+            </div>
+          </div>
+
+          <!-- Nota humana del profesional que atiende -->
+          <div class="human-note-card">
+            <div style="display:flex; align-items:center; gap:10px; margin-bottom:8px;">
+              <div class="avatar-pill" style="width:36px; height:36px; font-size:12px;">
+                ${esc(st.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase())}
+              </div>
+              <div>
+                <div style="font-size:13px; font-weight:800; color:var(--navy);">Te atiende ${esc(st.name)}</div>
+                <div style="font-size:11.5px; color:var(--mint-dark); font-weight:700;">${esc(st.role)}</div>
+              </div>
+            </div>
+            <p style="font-size:12.5px; color:var(--ink-soft); line-height:1.45; font-style:italic;">
+              “${esc(st.note)}”
+            </p>
+          </div>
+
+          <!-- También libre hoy -->
+          ${otherLive.length ? `
+            <div class="section-head">
+              <h2 class="section-title" style="font-size:15px;">También libre hoy</h2>
+            </div>
+            <div class="also-free-row">
+              ${otherLive.map(other => `
+                <article class="mini-deal-card" onclick="openSlotDetail(${other.id})">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                    <span class="disc-pill" style="font-size:10px; padding:3px 7px;">−${esc(other.disc)}%</span>
+                    <span style="font-size:11px; font-weight:700; color:var(--mute);">${esc(formatHour(other.t))}</span>
+                  </div>
+                  <div style="font-size:12.5px; font-weight:800; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:2px;">${esc(other.s)}</div>
+                  <div style="font-size:11px; color:var(--mute); margin-bottom:6px;">${esc(other.biz)}</div>
+                  <div class="tabular" style="font-size:14px; font-weight:800; color:var(--navy);">${eur(finalPrice(other))}</div>
+                </article>
+              `).join('')}
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- Botón fijo inferior grande -->
+        <div class="sticky-cta-bar">
+          <button type="button" class="btn-pill" onclick="navTo('checkout')">
+            ${ICONS.bag.replace('#06183D', '#FFFFFF')}
+            <span>Bloquear hueco · ${eur(priceFinal)}</span>
+          </button>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       10. FLUJO COMPLETO DE PAGO Y CONFIRMACIÓN
+       ========================================================================== */
+    function viewCheckout() {
+      const s = DB.slots.find(x => x.id === STATE.detailSlotId);
+      if (!s || s.st !== 'live') {
+        navTo('home');
+        return '';
+      }
+      const u = DB.users[STATE.user];
+      const savedCard = (u.cards || [])[0];
+      const priceFinal = finalPrice(s);
+      const savedAmount = s.p - priceFinal;
+
+      return `
+        <div class="scroll-area fade-in">
+          <header class="topbar">
+            <button type="button" class="icon-btn" onclick="navTo('detail')" aria-label="Volver">
+              ${ICONS.back}
+            </button>
+            <span style="font-weight:800; font-size:16px; color:var(--navy);">Finalizar reserva</span>
+            <div style="width:40px;"></div>
+          </header>
+
+          <div class="input-card" style="display:flex; gap:14px; align-items:center;">
+            <div style="width:62px; height:62px; border-radius:18px; background:#E7F6F3; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+              ${renderServiceArt(s.cat, 44)}
+            </div>
+            <div style="flex:1; min-width:0;">
+              <h2 style="font-size:15.5px; font-weight:800; color:var(--navy); margin-bottom:2px;">${esc(s.s)}</h2>
+              <p style="font-size:12.5px; color:var(--ink-soft); font-weight:600;">${esc(s.biz)} · Hoy ${esc(formatHour(s.t))}</p>
+              <div style="display:flex; justify-content:space-between; align-items:baseline; margin-top:8px;">
+                <span style="font-size:12px; font-weight:800; color:var(--mint-dark);">Ahorras ${eur(savedAmount)} (−${esc(s.disc)}%)</span>
+                <span class="tabular" style="font-size:21px; font-weight:800; color:var(--navy);">${eur(priceFinal)}</span>
+              </div>
+            </div>
+          </div>
+
+          <p style="font-size:11.5px; font-weight:800; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.05em; margin:18px 0 12px;">Elige método de pago</p>
+
+          <div style="display:flex; flex-direction:column; gap:10px;">
+            <button type="button" class="btn-pill apple" onclick="completeBooking('Apple Pay')">
+               Pagar con Apple Pay
+            </button>
+
+            ${savedCard ? `
+              <button type="button" class="btn-pill navy" onclick="completeBooking('Tarjeta ${esc(savedCard)}')">
+                Pagar con tarjeta ${esc(savedCard)}
+              </button>
+            ` : ''}
+
+            <button type="button" class="btn-pill secondary" onclick="openCardForm('checkout')">
+              ${savedCard ? '+ Añadir otra tarjeta' : '+ Pagar con tarjeta de crédito / débito'}
+            </button>
+          </div>
+
+          <!-- Compromiso anti no-show para pago en el salón -->
+          <div class="input-card" style="margin-top:18px; border-left:4px solid var(--coral);">
+            <button type="button" onclick="completeBooking('Pago en el salón')" style="width:100%; text-align:left; font-weight:800; font-size:14.5px; color:var(--navy); display:flex; justify-content:space-between; align-items:center;">
+              <span>Pagar en el salón al llegar</span>
+              <span style="color:var(--coral); font-size:18px;">→</span>
+            </button>
+            <p style="font-size:12px; color:var(--ink-soft); margin-top:6px; line-height:1.45;">
+              <strong>Compromiso anti no-show:</strong> El negocio bloquea esta silla solo para ti. Puedes cancelar gratis hasta 30 min antes; si no asistes sin avisar, se suspenderá tu acceso a ofertas de última hora en Gappy.
+            </p>
+          </div>
+        </div>
+      `;
+    }
+
+    function viewCardForm() {
+      const isCheckout = STATE.cardReturnView === 'checkout';
+      return `
+        <div class="scroll-area fade-in">
+          <header class="topbar">
+            <button type="button" class="icon-btn" onclick="navTo('${STATE.cardReturnView}')" aria-label="Cancelar">
+              ${ICONS.back}
+            </button>
+            <span style="font-weight:800; font-size:16px; color:var(--navy);">Nueva tarjeta</span>
+            <div style="width:40px;"></div>
+          </header>
+
+          <form class="input-card" onsubmit="handleCardSubmit(event)">
+            <div class="field">
+              <label for="card-num">Número de tarjeta</label>
+              <input type="text" id="card-num" inputmode="numeric" maxlength="19" placeholder="4242 4242 4242 4242" oninput="formatCardNum(this)" required>
+            </div>
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="card-exp">Caducidad</label>
+                <input type="text" id="card-exp" inputmode="numeric" maxlength="5" placeholder="MM/AA" oninput="formatCardExp(this)" required>
+              </div>
+              <div class="field">
+                <label for="card-cvc">CVC</label>
+                <input type="text" id="card-cvc" inputmode="numeric" maxlength="4" placeholder="123" required>
+              </div>
+            </div>
+            <div class="field">
+              <label for="card-holder">Titular</label>
+              <input type="text" id="card-holder" autocomplete="cc-name" placeholder="Nombre y apellidos" required>
+            </div>
+            <button type="submit" class="btn-pill" style="margin-top:8px;">
+              ${isCheckout ? 'Pagar y bloquear hueco' : 'Guardar tarjeta'}
+            </button>
+          </form>
+        </div>
+      `;
+    }
+
+    function viewBookingSuccess() {
+      const conf = STATE.lastConfirmation;
+      if (!conf) {
+        navTo('home');
+        return '';
+      }
+      return `
+        <div class="scroll-area fade-in" style="display:flex; flex-direction:column; justify-content:center; text-align:center;">
+          <div style="width:74px; height:74px; border-radius:26px; background:var(--mint-soft); color:var(--mint-dark); margin:0 auto 16px; display:flex; align-items:center; justify-content:center;">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+
+          <span style="display:inline-block; margin:0 auto 10px; background:var(--navy); color:var(--mint); font-size:12px; font-weight:800; padding:5px 14px; border-radius:999px;">
+            ¡Hueco bloqueado en Gappy!
+          </span>
+          <h1 style="font-size:28px; font-weight:800; color:var(--navy); margin-bottom:8px;">Te esperan a las ${esc(formatHour(conf.time))}</h1>
+          <p style="font-size:14px; color:var(--ink-soft); margin-bottom:20px;">
+            <strong>${esc(conf.service)}</strong> en ${esc(conf.biz)}<br>
+            <span style="font-size:12.5px; color:var(--mute);">${esc(conf.address)}</span>
+          </p>
+
+          <div class="input-card" style="background:#FFFFFF; border:2px dashed var(--mint-dark);">
+            <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.06em; color:var(--mute); margin-bottom:4px;">Código de reserva en recepción</div>
+            <div class="tabular" style="font-size:34px; font-weight:800; letter-spacing:0.14em; color:var(--navy);">#${esc(conf.pin)}</div>
+            <div style="font-size:12.5px; font-weight:700; color:var(--mint-dark); margin-top:6px;">${esc(conf.method)} · ${eur(conf.total)}</div>
+          </div>
+
+          <button type="button" class="btn-pill navy" style="margin-top:8px;" onclick="navTo('bookings')">Ver mis citas</button>
+          <button type="button" class="btn-pill secondary" style="margin-top:10px;" onclick="navTo('home')">Volver al escaparate</button>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       11. VISTAS SECUNDARIAS CONSUMIDOR: MIS CITAS, FAVORITOS, RADAR, CÓMO FUNCIONA
+       ========================================================================== */
+    function viewBookings() {
+      const list = getUserBookings();
+      return `
+        <div class="scroll-area fade-in">
+          ${renderConsumerTopbar()}
+          <h1 class="hero-title" style="font-size:24px;">Mis citas <strong>activas</strong></h1>
+
+          ${list.length ? list.map(({ slot, booking, idx }) => {
+            const canRelease = (slot.t - Date.now()) > 30 * 60000;
+            return `
+              <div class="input-card">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <span style="background:var(--mint-soft); color:var(--mint-dark); font-size:11.5px; font-weight:800; padding:4px 10px; border-radius:999px;">Hoy · ${esc(formatHour(slot.t))}</span>
+                  <span class="tabular" style="font-weight:800; font-size:14px; color:var(--navy); background:var(--card-soft); padding:4px 10px; border-radius:10px;">PIN #${esc(booking.pin)}</span>
+                </div>
+                <h3 style="font-size:16px; font-weight:800; color:var(--navy); margin-bottom:3px;">${esc(slot.s)}</h3>
+                <p style="font-size:12.5px; font-weight:600; color:var(--ink-soft); margin-bottom:12px;">${esc(slot.biz)} · ${esc(slot.address)}</p>
+                <div style="display:flex; justify-content:space-between; align-items:center; padding-top:10px; border-top:1px solid var(--line);">
+                  <span style="font-size:12.5px; font-weight:700; color:var(--ink);">${esc(booking.method)} · ${eur(booking.total)}</span>
+                  ${canRelease ? `
+                    <button type="button" onclick="releaseUserBooking(${slot.id}, ${idx})" style="font-size:12px; font-weight:800; color:var(--coral);">Liberar turno</button>
+                  ` : `<span style="font-size:11px; color:var(--mute);">Menos de 30 min</span>`}
+                </div>
+              </div>
+            `;
+          }).join('') : `
+            <div class="input-card" style="text-align:center; padding:34px 20px;">
+              <p style="font-weight:800; color:var(--navy); margin-bottom:6px;">No tienes citas activas ahora mismo</p>
+              <p style="font-size:13px; color:var(--mute); margin-bottom:18px;">Explora los huecos libres de última hora en tu barrio.</p>
+              <button type="button" class="btn-pill navy" onclick="navTo('home')">Explorar huecos</button>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function viewFavorites() {
+      const favIds = (DB.users[STATE.user].favorites || []);
+      const favSlots = DB.slots.filter(s => favIds.includes(s.id));
+      return `
+        <div class="scroll-area fade-in">
+          ${renderConsumerTopbar()}
+          <h1 class="hero-title" style="font-size:24px;">Favoritos <strong>guardados</strong></h1>
+
+          ${favSlots.length ? favSlots.map(s => `
+            <div class="input-card" style="display:flex; align-items:center; gap:12px; cursor:pointer;" onclick="openSlotDetail(${s.id})">
+              <div style="width:56px; height:56px; border-radius:16px; background:#E7F6F3; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                ${renderServiceArt(s.cat, 40)}
+              </div>
+              <div style="flex:1; min-width:0;">
+                <h3 style="font-size:14.5px; font-weight:800; color:var(--navy); white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${esc(s.s)}</h3>
+                <p style="font-size:12px; color:var(--ink-soft); font-weight:600;">${esc(s.biz)} · −${esc(s.disc)}%</p>
+                <span class="tabular" style="font-weight:800; font-size:14.5px; color:var(--coral);">${eur(finalPrice(s))}</span>
+              </div>
+              <button type="button" class="mini-icon-btn fav-on" onclick="event.stopPropagation(); toggleFavorite(${s.id})" aria-label="Quitar de favoritos">
+                ${ICONS.heart(true)}
+              </button>
+            </div>
+          `).join('') : `
+            <div class="input-card" style="text-align:center; padding:34px 20px;">
+              <p style="font-weight:800; color:var(--navy); margin-bottom:6px;">Aún no tienes favoritos guardados</p>
+              <p style="font-size:13px; color:var(--mute); margin-bottom:18px;">Pulsa el corazón en cualquier servicio para tenerlo siempre a mano.</p>
+              <button type="button" class="btn-pill navy" onclick="navTo('home')">Ver huecos de hoy</button>
+            </div>
+          `}
+        </div>
+      `;
+    }
+
+    function viewRadar() {
+      const u = DB.users[STATE.user];
+      const allCats = ['Peluquería', 'Estética', 'Barbería', 'Uñas', 'Masajes', 'Fisio'];
+      const selected = u.radarCats || ['Peluquería'];
+
+      return `
+        <div class="scroll-area fade-in">
+          ${renderConsumerTopbar()}
+          <h1 class="hero-title" style="font-size:24px;">Radar <strong>WhatsApp</strong></h1>
+          <p style="font-size:13.5px; color:var(--ink-soft); margin-bottom:18px; line-height:1.45;">
+            Activa alertas instantáneas en tu WhatsApp cuando un salón o clínica de tu zona publique una cancelación de última hora.
+          </p>
+
+          <form class="input-card" onsubmit="saveRadar(event)">
+            <div class="field">
+              <label for="radar-tel">Tu número de WhatsApp</label>
+              <input type="tel" id="radar-tel" value="${esc(u.radarPhone || '')}" placeholder="600 123 456" required>
+            </div>
+
+            <div class="field">
+              <label>Categorías que te interesan</label>
+              <div class="chip-group">
+                ${allCats.map(cat => `
+                  <button type="button" class="filter-chip ${selected.includes(cat) ? 'active' : ''}" onclick="toggleRadarCat('${cat}')">
+                    ${cat}
+                  </button>
+                `).join('')}
+              </div>
+            </div>
+
+            <button type="submit" class="btn-pill navy" style="margin-top:8px;">
+              ${u.radarPhone ? 'Actualizar alerta WhatsApp' : 'Activar Radar WhatsApp'}
+            </button>
+          </form>
+
+          ${u.radarPhone ? `
+            <div class="input-card" style="background:var(--mint-soft); box-shadow:none; border:1px solid rgba(0,216,182,0.3);">
+              <div style="font-weight:800; font-size:13.5px; color:var(--navy); margin-bottom:3px;">● Radar activo en ${esc(u.radarPhone)}</div>
+              <p style="font-size:12px; color:var(--ink-soft);">Te avisaremos al instante en cuanto quede libre un hueco de ${esc(selected.join(', '))}.</p>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function viewHowItWorks() {
+      const steps = [
+        { n: '01', title: 'Caza huecos reales cerca de ti', desc: 'Cuando alguien cancela su cita a última hora, el negocio publica ese turno en Gappy con descuentos directos del 20% al 40%.' },
+        { n: '02', title: 'Bloquéalo en 15 segundos', desc: 'Sin llamadas ni esperas. Reserva con Apple Pay, tarjeta o pago en el local y obtén tu código PIN de recepción.' },
+        { n: '03', title: 'Llega y disfruta al precio cerrado', desc: 'Acércate caminando al salón a la hora indicada, muestra tu código PIN y disfruta del servicio sin sorpresas.' }
+      ];
+      return `
+        <div class="scroll-area fade-in">
+          ${renderConsumerTopbar()}
+          <h1 class="hero-title" style="font-size:24px;">Cómo funciona <strong>Gappy</strong></h1>
+          ${steps.map(st => `
+            <div class="input-card" style="display:flex; gap:14px; align-items:flex-start;">
+              <div style="width:36px; height:36px; border-radius:12px; background:var(--navy); color:var(--mint); font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                ${st.n}
+              </div>
+              <div>
+                <h3 style="font-size:15px; font-weight:800; color:var(--navy); margin-bottom:4px;">${st.title}</h3>
+                <p style="font-size:13px; color:var(--ink-soft); line-height:1.45;">${st.desc}</p>
+              </div>
+            </div>
+          `).join('')}
+          <button type="button" class="btn-pill navy" style="margin-top:8px;" onclick="navTo('home')">Explorar huecos de hoy</button>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       11B. APARTADO 2: MI CUENTA Y AJUSTES (PANTALLAS DEDICADAS CON LOCALSTORAGE)
+       ========================================================================== */
+    function renderSubpageTopbar(title) {
+      const homeRoute = STATE.role === 'biz' ? 'biz_dash' : 'home';
+      return `
+        <header class="topbar">
+          <div class="topbar-left">
+            <button type="button" class="icon-btn" onclick="navTo('${homeRoute}')" aria-label="Volver al inicio">
+              ${ICONS.back}
+            </button>
+            <span style="font-weight:800; font-size:15.5px; color:var(--navy);">${esc(title)}</span>
+          </div>
+          <button type="button" class="icon-btn" onclick="toggleDrawer(true)" aria-label="Abrir menú lateral">
+            ${ICONS.menu}
+          </button>
+        </header>
+      `;
+    }
+
+    function viewAccountProfile() {
+      const u = DB.users[STATE.user];
+      const isBiz = STATE.role === 'biz';
+      const initials = u.name.split(' ').map(w => w[0]).slice(0, 2).join('').toUpperCase();
+      const barrios = ['Salamanca', 'Malasaña', 'Chamberí', 'Chueca', 'Retiro', 'La Latina'];
+
+      return `
+        <div class="scroll-area fade-in">
+          ${renderSubpageTopbar('Datos personales')}
+
+          <div class="input-card" style="display:flex; align-items:center; gap:14px;">
+            <div class="avatar-pill" style="width:54px; height:54px; font-size:17px;">${esc(initials)}</div>
+            <div>
+              <div style="font-weight:800; font-size:16px; color:var(--navy);">${esc(u.name)}</div>
+              <div style="font-size:12.5px; color:var(--mute);">Usuario: <strong>@${esc(STATE.user)}</strong></div>
+              <span style="display:inline-block; margin-top:4px; font-size:11px; font-weight:800; background:${isBiz ? 'var(--mint-soft)' : 'var(--coral-soft)'}; color:${isBiz ? 'var(--mint-dark)' : 'var(--coral-dark)'}; padding:2px 9px; border-radius:999px;">
+                ${isBiz ? 'Salón Asociado' : 'Cliente Gappy'}
+              </span>
+            </div>
+          </div>
+
+          <form class="input-card" onsubmit="saveAccountProfile(event)">
+            <div class="field">
+              <label for="prof-name">${isBiz ? 'Nombre comercial del salón' : 'Nombre y apellidos'}</label>
+              <input type="text" id="prof-name" value="${esc(u.name)}" required>
+            </div>
+
+            <div class="field">
+              <label for="prof-phone">Número de teléfono móvil</label>
+              <input type="tel" id="prof-phone" value="${esc(u.phone || '')}" placeholder="600 123 456" required>
+            </div>
+
+            <div class="field">
+              <label for="prof-hood">${isBiz ? 'Barrio del establecimiento' : 'Barrio o zona favorita'}</label>
+              <select id="prof-hood">
+                ${barrios.map(b => `<option value="${b}" ${u.neighborhood === b ? 'selected' : ''}>${b}</option>`).join('')}
+              </select>
+            </div>
+
+            ${isBiz ? `
+              <div class="field">
+                <label for="prof-address">Dirección completa</label>
+                <input type="text" id="prof-address" value="${esc(u.address || '')}" required>
+              </div>
+            ` : ''}
+
+            <button type="submit" class="btn-pill navy" style="margin-top:6px;">Guardar datos personales</button>
+          </form>
+        </div>
+      `;
+    }
+
+    function viewAccountEmail() {
+      const u = DB.users[STATE.user];
+      return `
+        <div class="scroll-area fade-in">
+          ${renderSubpageTopbar('Cambiar correo')}
+
+          <div class="input-card" style="background:var(--mint-soft); box-shadow:none; border:1px solid rgba(0,216,182,0.3);">
+            <div style="font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:0.05em; color:var(--mint-dark); margin-bottom:3px;">Correo electrónico actual</div>
+            <div style="font-size:15.5px; font-weight:800; color:var(--navy);">${esc(u.email || 'Sin correo asignado')}</div>
+          </div>
+
+          <form class="input-card" onsubmit="saveAccountEmail(event)">
+            <div class="field">
+              <label for="email-new">Nuevo correo electrónico</label>
+              <input type="email" id="email-new" placeholder="nuevo@correo.es" required>
+            </div>
+
+            <div class="field">
+              <label for="email-confirm">Confirmar nuevo correo</label>
+              <input type="email" id="email-confirm" placeholder="Repite el nuevo correo" required>
+            </div>
+
+            <div class="field">
+              <label for="email-pw">Contraseña actual (para confirmar)</label>
+              <input type="password" id="email-pw" placeholder="Introduce tu contraseña" required>
+            </div>
+
+            <button type="submit" class="btn-pill navy" style="margin-top:6px;">Actualizar correo electrónico</button>
+          </form>
+        </div>
+      `;
+    }
+
+    function viewAccountSecurity() {
+      const u = DB.users[STATE.user];
+      const sec = u.security || { twoFactor: false, keepSignedIn: true };
+      return `
+        <div class="scroll-area fade-in">
+          ${renderSubpageTopbar('Contraseña y seguridad')}
+
+          <form class="input-card" onsubmit="saveAccountSecurity(event)">
+            <h2 style="font-size:15px; font-weight:800; color:var(--navy); margin-bottom:14px;">Cambiar contraseña</h2>
+
+            <div class="field">
+              <label for="sec-old">Contraseña actual</label>
+              <input type="password" id="sec-old" placeholder="•••" required>
+            </div>
+
+            <div class="field">
+              <label for="sec-new">Nueva contraseña (mín. 4 caracteres)</label>
+              <input type="password" id="sec-new" placeholder="Escribe una contraseña segura" oninput="updatePasswordStrength(this.value)" required>
+              <div class="strength-meter" id="pw-strength-meter">
+                <div class="strength-seg"></div>
+                <div class="strength-seg"></div>
+                <div class="strength-seg"></div>
+                <div class="strength-seg"></div>
+              </div>
+              <div id="pw-strength-label" style="font-size:11.5px; font-weight:700; color:var(--mute); margin-top:5px;">Seguridad: pendiente de escribir</div>
+            </div>
+
+            <div class="field">
+              <label for="sec-rep">Repetir nueva contraseña</label>
+              <input type="password" id="sec-rep" placeholder="Repite la nueva contraseña" required>
+            </div>
+
+            <button type="submit" class="btn-pill navy" style="margin-top:6px;">Guardar nueva contraseña</button>
+          </form>
+
+          <div class="input-card">
+            <h2 style="font-size:15px; font-weight:800; color:var(--navy); margin-bottom:8px;">Protección de acceso</h2>
+
+            <div class="switch-row">
+              <div>
+                <div style="font-size:13.5px; font-weight:800; color:var(--ink);">Verificación en dos pasos</div>
+                <div style="font-size:12px; color:var(--mute);">Código SMS al iniciar sesión en un móvil nuevo.</div>
+              </div>
+              <button type="button" role="switch" aria-checked="${sec.twoFactor}" class="toggle-switch ${sec.twoFactor ? 'on' : ''}" onclick="toggleSecurityPref('twoFactor')" aria-label="Verificación en dos pasos"></button>
+            </div>
+
+            <div class="switch-row">
+              <div>
+                <div style="font-size:13.5px; font-weight:800; color:var(--ink);">Mantener sesión iniciada</div>
+                <div style="font-size:12px; color:var(--mute);">Reserva en un toque sin volver a escribir clave.</div>
+              </div>
+              <button type="button" role="switch" aria-checked="${sec.keepSignedIn}" class="toggle-switch ${sec.keepSignedIn ? 'on' : ''}" onclick="toggleSecurityPref('keepSignedIn')" aria-label="Mantener sesión iniciada"></button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function viewAccountNotifications() {
+      const u = DB.users[STATE.user];
+      const n = u.notifications || { whatsappUrgent: true, reminder30: true, barrioDigest: false };
+      const isBiz = STATE.role === 'biz';
+
+      return `
+        <div class="scroll-area fade-in">
+          ${renderSubpageTopbar('Notificaciones')}
+
+          <div class="input-card">
+            <div class="switch-row">
+              <div>
+                <div style="font-size:14px; font-weight:800; color:var(--navy);">${isBiz ? 'Avisos instantáneos de reserva' : 'Avisos urgentes por WhatsApp'}</div>
+                <div style="font-size:12px; color:var(--ink-soft); margin-top:2px;">
+                  ${isBiz
+                    ? 'Recibe un WhatsApp al segundo cuando un vecino bloquee uno de tus huecos.'
+                    : 'Entérate al momento cuando un salón cercano publique una cancelación.'}
+                </div>
+              </div>
+              <button type="button" role="switch" aria-checked="${n.whatsappUrgent}" class="toggle-switch ${n.whatsappUrgent ? 'on' : ''}" onclick="toggleNotifPref('whatsappUrgent')" aria-label="Avisos urgentes por WhatsApp"></button>
+            </div>
+
+            <div class="switch-row">
+              <div>
+                <div style="font-size:14px; font-weight:800; color:var(--navy);">Recordatorios 30 min antes</div>
+                <div style="font-size:12px; color:var(--ink-soft); margin-top:2px;">
+                  ${isBiz
+                    ? 'Aviso previo con el nombre y código PIN del cliente que está por llegar.'
+                    : 'Te recordamos tu cita y el código PIN 30 minutos antes de empezar.'}
+                </div>
+              </div>
+              <button type="button" role="switch" aria-checked="${n.reminder30}" class="toggle-switch ${n.reminder30 ? 'on' : ''}" onclick="toggleNotifPref('reminder30')" aria-label="Recordatorios 30 minutos antes"></button>
+            </div>
+
+            <div class="switch-row">
+              <div>
+                <div style="font-size:14px; font-weight:800; color:var(--navy);">Resumen de descuentos del barrio</div>
+                <div style="font-size:12px; color:var(--ink-soft); margin-top:2px;">
+                  ${isBiz
+                    ? 'Informe semanal con los ingresos rescatados y franjas con más demanda.'
+                    : 'Selección diaria a mediodía con las mejores ofertas cerca de tu zona.'}
+                </div>
+              </div>
+              <button type="button" role="switch" aria-checked="${n.barrioDigest}" class="toggle-switch ${n.barrioDigest ? 'on' : ''}" onclick="toggleNotifPref('barrioDigest')" aria-label="Resumen de descuentos del barrio"></button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function viewAccountPayments() {
+      const u = DB.users[STATE.user];
+      const isBiz = STATE.role === 'biz';
+
+      if (isBiz) {
+        return `
+          <div class="scroll-area fade-in">
+            ${renderSubpageTopbar('Cobros y datos fiscales')}
+
+            <form class="input-card" onsubmit="saveBizBank(event)">
+              <p style="font-size:12.5px; color:var(--ink-soft); margin-bottom:14px; line-height:1.45;">
+                Las reservas pagadas desde Gappy se liquidan automáticamente cada 48h en tu cuenta bancaria sin comisiones ocultas.
+              </p>
+
+              <div class="field">
+                <label for="biz-fiscal-name">Razón social o titular</label>
+                <input type="text" id="biz-fiscal-name" value="${esc(u.fiscalName || u.name)}" required>
+              </div>
+
+              <div class="field">
+                <label for="biz-cif">NIF / CIF del establecimiento</label>
+                <input type="text" id="biz-cif" value="${esc(u.cif || '')}" placeholder="B12345678" required>
+              </div>
+
+              <div class="field">
+                <label for="biz-iban">Cuenta IBAN de liquidación</label>
+                <input type="text" id="biz-iban" value="${esc(u.iban || '')}" placeholder="ES00 0000 0000 0000 0000 0000" required>
+              </div>
+
+              <button type="submit" class="btn-pill navy" style="margin-top:6px;">Guardar datos de cobro</button>
+            </form>
+          </div>
+        `;
+      }
+
+      const cards = u.cards || [];
+      return `
+        <div class="scroll-area fade-in">
+          ${renderSubpageTopbar('Métodos de pago')}
+
+          <div class="input-card">
+            <h2 style="font-size:15px; font-weight:800; color:var(--navy); margin-bottom:12px;">Tus tarjetas guardadas</h2>
+
+            ${cards.length ? cards.map((c, idx) => `
+              <div style="display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--card-soft); border-radius:14px; margin-bottom:8px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                  <span style="width:36px; height:26px; border-radius:7px; background:var(--navy); color:var(--mint); font-size:10px; font-weight:800; display:flex; align-items:center; justify-content:center;">VISA</span>
+                  <div>
+                    <div style="font-weight:800; font-size:14px; color:var(--navy);">${esc(c)}</div>
+                    <div style="font-size:11px; color:var(--mint-dark); font-weight:700;">${idx === 0 ? 'Predeterminada · Pago en 1 toque' : 'Tarjeta secundaria'}</div>
+                  </div>
+                </div>
+                <button type="button" onclick="removeUserCard(${idx})" style="font-size:12px; font-weight:800; color:#D32F2F; padding:6px 8px;">Quitar</button>
+              </div>
+            `).join('') : `
+              <p style="font-size:13px; color:var(--mute); padding:8px 0;">Aún no tienes tarjetas guardadas. Añade una para reservar huecos urgentes en segundos.</p>
+            `}
+
+            <button type="button" class="btn-pill navy" style="margin-top:10px;" onclick="openCardForm('account_payments')">
+              + Añadir nueva tarjeta
+            </button>
+          </div>
+
+          <div class="legal-section">
+            <h2>Pagos protegidos y Apple Pay</h2>
+            <p>También puedes pagar con <strong>Apple Pay</strong> o directamente en el salón al llegar. Gappy nunca almacena el código CVV ni los dígitos completos de tu tarjeta.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       11C. APARTADO 3: AYUDA Y LEGAL (LECTURA CÓMODA Y CERCANA EN ESPAÑOL)
+       ========================================================================== */
+    function viewLegalHelp() {
+      const faqs = [
+        {
+          q: '¿Por qué los precios tienen hasta un 40% de descuento?',
+          a: 'Cuando un cliente cancela a última hora, esa silla o cabina quedaría vacía. Los salones asociados a Gappy prefieren ofrecer ese turno con un descuento real a un vecino que pueda acercarse en las próximas horas.'
+        },
+        {
+          q: '¿Cómo uso mi código PIN al llegar al salón?',
+          a: 'Al bloquear un hueco recibes un PIN numérico de 4 cifras (disponible siempre en "Mis Citas y PIN"). Solo tienes que decirlo en recepción al entrar para validar tu turno al precio cerrado.'
+        },
+        {
+          q: '¿Hasta cuándo puedo cancelar gratis si me surge un imprevisto?',
+          a: 'Puedes liberar tu turno sin coste hasta 30 minutos antes de la hora de inicio desde "Mis Citas y PIN". Así el hueco vuelve automáticamente al escaparate para que otro vecino pueda aprovecharlo.'
+        },
+        {
+          q: '¿Qué ocurre si reservo con pago en el salón y no acudo?',
+          a: 'El negocio bloquea esa hora exclusivamente para ti. Si no asistes sin haber liberado el turno con al menos 30 minutos de antelación, tu cuenta quedará suspendida temporalmente para proteger a los salones del barrio.'
+        }
+      ];
+
+      return `
+        <div class="scroll-area fade-in">
+          ${renderSubpageTopbar('Centro de ayuda')}
+
+          <h1 class="hero-title" style="font-size:22px;">¿En qué podemos <strong>ayudarte?</strong></h1>
+
+          ${faqs.map((item, i) => `
+            <details class="faq-item" ${i === 0 ? 'open' : ''}>
+              <summary>
+                <span>${esc(item.q)}</span>
+                <span style="color:var(--mint-dark); font-size:18px; line-height:1;">+</span>
+              </summary>
+              <p>${esc(item.a)}</p>
+            </details>
+          `).join('')}
+
+          <form class="input-card" style="margin-top:16px;" onsubmit="sendSupportTicket(event)">
+            <h2 style="font-size:15px; font-weight:800; color:var(--navy); margin-bottom:4px;">Escríbenos directamente</h2>
+            <p style="font-size:12.5px; color:var(--ink-soft); margin-bottom:12px;">Respondemos desde Madrid en menos de 15 minutos en horario de apertura de salones.</p>
+            <div class="field">
+              <label for="sup-msg">Cuéntanos qué necesitas</label>
+              <textarea id="sup-msg" rows="3" placeholder="Ej. Tengo una duda con mi reserva de hoy..." required></textarea>
+            </div>
+            <button type="submit" class="btn-pill navy">Enviar consulta al equipo Gappy</button>
+          </form>
+        </div>
+      `;
+    }
+
+    function viewLegalPrivacy() {
+      return `
+        <div class="scroll-area fade-in">
+          ${renderSubpageTopbar('Política de privacidad')}
+
+          <div class="legal-section">
+            <h2>1. Responsable del tratamiento</h2>
+            <p><strong>Gappy Local S.L.</strong>, con domicilio en Madrid (España) y correo de contacto <strong>privacidad@gappy.es</strong>, es responsable del tratamiento de los datos personales que nos facilitas al crear tu cuenta o reservar citas de última hora.</p>
+          </div>
+
+          <div class="legal-section">
+            <h2>2. Uso de tus datos y alertas WhatsApp</h2>
+            <p>Tratamos únicamente los datos imprescindibles para gestionar tus reservas:</p>
+            <ul>
+              <li><strong>Nombre y correo electrónico:</strong> identificación de cuenta, envío de justificantes y código PIN de recepción.</li>
+              <li><strong>Teléfono móvil:</strong> envío de recordatorios 30 minutos antes de tu cita y alertas del Radar WhatsApp solo si las has activado expresamente.</li>
+              <li><strong>Barrio favorito:</strong> mostrarte primero los salones y clínicas a pocos minutos a pie de ti.</li>
+            </ul>
+          </div>
+
+          <div class="legal-section">
+            <h2>3. Seguridad en los pagos</h2>
+            <p>Los pagos con tarjeta o Apple Pay se procesan mediante pasarelas certificadas PCI-DSS. Gappy nunca almacena el código CVV ni los dígitos completos de tu tarjeta en tu dispositivo.</p>
+          </div>
+
+          <div class="legal-section">
+            <h2>4. Tus derechos (RGPD)</h2>
+            <p>Puedes modificar tus datos en cualquier momento desde <em>Mi Cuenta y Ajustes</em>, o solicitar una copia completa o la supresión definitiva de tu perfil con un solo toque.</p>
+            <button type="button" class="btn-pill secondary" style="margin-top:12px; padding:12px 16px; font-size:13px;" onclick="requestDataExport()">
+              Solicitar copia de mis datos personales
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    function viewLegalTerms() {
+      return `
+        <div class="scroll-area fade-in">
+          ${renderSubpageTopbar('Términos y condiciones')}
+
+          <div class="legal-section">
+            <h2>1. Funcionamiento de las ofertas de última hora</h2>
+            <p>Gappy conecta a usuarios con peluquerías, centros de estética, barberías y clínicas que disponen de huecos libres en las próximas horas a precios promocionales cerrados.</p>
+          </div>
+
+          <div class="legal-section">
+            <h2>2. Puntualidad y código PIN</h2>
+            <p>Al tratarse de turnos inmediatos, te recomendamos llegar 5 minutos antes de la hora reservada y facilitar tu código PIN de 4 dígitos en recepción. El precio mostrado en Gappy incluye IVA y no admite recargos sorpresa en el local.</p>
+          </div>
+
+          <div class="legal-section">
+            <h2>3. Cancelación gratuita y compromiso anti no-show</h2>
+            <ul>
+              <li>Puedes liberar cualquier cita sin coste hasta <strong>30 minutos antes</strong> del inicio.</li>
+              <li>Si acumulas inasistencias injustificadas sin avisar, Gappy restringirá el acceso a ofertas de última hora para proteger la agenda de los negocios locales.</li>
+            </ul>
+          </div>
+
+          <div class="legal-section">
+            <h2>4. Condiciones para salones asociados</h2>
+            <p>Los negocios se comprometen a respetar íntegramente el servicio, duración y descuento publicado en Gappy, garantizando la misma calidad profesional que en una cita de tarifa habitual.</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function viewLegalCookies() {
+      const c = DB.cookiePrefs || { essential: true, personalization: true, analytics: false };
+      return `
+        <div class="scroll-area fade-in">
+          ${renderSubpageTopbar('Cookies y datos locales')}
+
+          <div class="legal-section">
+            <h2>Cómo usamos el almacenamiento local</h2>
+            <p>Gappy utiliza almacenamiento local del navegador (<code>localStorage</code>) para mantener tu sesión abierta, recordar tus citas activas con PIN y guardar tus favoritos sin depender de rastreadores publicitarios de terceros.</p>
+          </div>
+
+          <div class="input-card">
+            <h2 style="font-size:15px; font-weight:800; color:var(--navy); margin-bottom:8px;">Preferencias de privacidad</h2>
+
+            <div class="switch-row">
+              <div>
+                <div style="font-size:13.5px; font-weight:800; color:var(--ink);">Técnicas y de sesión (Obligatorias)</div>
+                <div style="font-size:12px; color:var(--mute);">Necesarias para iniciar sesión, guardar reservas y mostrar tu código PIN.</div>
+              </div>
+              <button type="button" role="switch" aria-checked="true" class="toggle-switch on" style="opacity:0.65; cursor:default;" aria-label="Cookies técnicas obligatorias"></button>
+            </div>
+
+            <div class="switch-row">
+              <div>
+                <div style="font-size:13.5px; font-weight:800; color:var(--ink);">Preferencias de barrio y filtros</div>
+                <div style="font-size:12px; color:var(--mute);">Recuerda tu barrio favorito y tus salones guardados.</div>
+              </div>
+              <button type="button" role="switch" aria-checked="${c.personalization}" class="toggle-switch ${c.personalization ? 'on' : ''}" onclick="toggleCookiePref('personalization')" aria-label="Preferencias de barrio"></button>
+            </div>
+
+            <div class="switch-row">
+              <div>
+                <div style="font-size:13.5px; font-weight:800; color:var(--ink);">Analítica anónima de uso</div>
+                <div style="font-size:12px; color:var(--mute);">Nos ayuda a saber qué horarios tienen más demanda en tu ciudad.</div>
+              </div>
+              <button type="button" role="switch" aria-checked="${c.analytics}" class="toggle-switch ${c.analytics ? 'on' : ''}" onclick="toggleCookiePref('analytics')" aria-label="Analítica anónima"></button>
+            </div>
+
+            <button type="button" class="btn-pill navy" style="margin-top:14px;" onclick="saveCookiePrefs()">Guardar preferencias</button>
+          </div>
+
+          <div class="input-card" style="text-align:center;">
+            <p style="font-size:12.5px; color:var(--ink-soft); margin-bottom:10px;">¿Quieres reiniciar los datos locales de prueba a su estado inicial?</p>
+            <button type="button" class="btn-pill secondary" style="padding:12px 16px; font-size:13px;" onclick="resetDemo()">
+              Restaurar datos de demostración
+            </button>
+          </div>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       12. PANEL DE GESTIÓN DE NEGOCIO / SALÓN (DETECTADO AUTOMÁTICAMENTE)
+       ========================================================================== */
+    function renderBizTopbar() {
+      return `
+        <header class="topbar">
+          <div class="topbar-left">
+            <button type="button" class="icon-btn" onclick="toggleDrawer(true)" aria-label="Menú del negocio">
+              ${ICONS.menu}
+            </button>
+            ${renderGappyHeaderLogo()}
+          </div>
+          <span style="font-size:11.5px; font-weight:800; background:var(--mint-soft); color:var(--mint-dark); padding:6px 11px; border-radius:999px;">
+            ● En vivo
+          </span>
+        </header>
+      `;
+    }
+
+    function viewBizDash() {
+      const biz = DB.users[STATE.user];
+      const mySlots = DB.slots
+        .filter(s => s.bizId === STATE.user)
+        .sort((a, b) => a.t - b.t);
+
+      let savedCount = 0;
+      let rescuedEur = 0;
+      mySlots.forEach(s => {
+        (s.bookings || []).forEach(b => {
+          savedCount += b.qty;
+          rescuedEur += b.total;
+        });
+      });
+
+      return `
+        <div class="scroll-area fade-in">
+          ${renderBizTopbar()}
+
+          <h1 class="hero-title">
+            Panel de
+            <strong>${esc(biz.name)}</strong>
+          </h1>
+
+          <!-- Métricas de caja rescatada y huecos salvados -->
+          <div class="form-grid-2" style="margin-bottom:16px;">
+            <div class="input-card" style="margin-bottom:0; padding:16px;">
+              <div style="font-size:11.5px; font-weight:700; color:var(--mute); margin-bottom:4px;">Caja rescatada hoy</div>
+              <div class="tabular" style="font-size:26px; font-weight:800; color:var(--navy);">${eur(rescuedEur)}</div>
+            </div>
+            <div class="input-card" style="margin-bottom:0; padding:16px;">
+              <div style="font-size:11.5px; font-weight:700; color:var(--mute); margin-bottom:4px;">Huecos salvados</div>
+              <div class="tabular" style="font-size:26px; font-weight:800; color:var(--mint-dark);">${savedCount} <span style="font-size:13px; color:var(--mute); font-weight:700;">citas</span></div>
+            </div>
+          </div>
+
+          <button type="button" class="btn-pill" style="margin-bottom:22px;" onclick="navTo('biz_new')">
+            ${ICONS.plus}
+            <span>Publicar nuevo hueco</span>
+          </button>
+
+          <div class="section-head">
+            <h2 class="section-title">Turnos publicados hoy</h2>
+            <span class="section-sub">${mySlots.length} total</span>
+          </div>
+
+          ${mySlots.map(s => {
+            const hasBookings = (s.bookings || []).length > 0;
+            const isFull = s.spotsLeft <= 0 || s.st === 'booked';
+            return `
+              <div class="input-card" style="padding:16px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                  <span class="tabular" style="font-size:18px; font-weight:800; color:var(--navy);">${esc(formatHour(s.t))} <span style="font-size:12px; font-weight:600; color:var(--mute);">· ${esc(s.d)} min</span></span>
+                  ${isFull
+                    ? `<span style="background:var(--mint-soft); color:var(--mint-dark); font-size:11px; font-weight:800; padding:4px 10px; border-radius:999px;">Salvado</span>`
+                    : `<span style="background:var(--coral-soft); color:var(--coral-dark); font-size:11px; font-weight:800; padding:4px 10px; border-radius:999px;">Disponible · −${esc(s.disc)}%</span>`}
+                </div>
+
+                <h3 style="font-size:15px; font-weight:800; color:var(--ink); margin-bottom:4px;">${esc(s.s)}</h3>
+
+                ${hasBookings ? s.bookings.map(b => `
+                  <div style="background:var(--card-soft); padding:9px 12px; border-radius:12px; font-size:12.5px; margin-top:8px; display:flex; justify-content:space-between; align-items:center;">
+                    <span><strong>${esc(b.cliName)}</strong></span>
+                    <span class="tabular" style="font-weight:800; color:var(--navy);">PIN #${esc(b.pin)} · ${eur(b.total)}</span>
+                  </div>
+                `).join('') : `
+                  <p style="font-size:12.5px; color:var(--mute); margin-bottom:8px;">
+                    En escaparate por <strong>${eur(finalPrice(s))}</strong> (antes ${eur(s.p)}) · ${s.spotsLeft} ${s.spotsLeft === 1 ? 'plaza' : 'plazas'}
+                  </p>
+                `}
+
+                ${!isFull ? `
+                  <div style="margin-top:8px; display:flex; justify-content:flex-end;">
+                    <button type="button" onclick="removeBizSlot(${s.id})" style="font-size:12px; font-weight:800; color:#D32F2F; padding:4px 8px;">Retirar turno</button>
+                  </div>
+                ` : ''}
+              </div>
+            `;
+          }).join('')}
+        </div>
+      `;
+    }
+
+    function viewBizNew() {
+      const biz = DB.users[STATE.user];
+      const defaultCat = STATE.user === 'aura' ? 'Estética' : 'Peluquería';
+      return `
+        <div class="scroll-area fade-in">
+          <header class="topbar">
+            <button type="button" class="icon-btn" onclick="navTo('biz_dash')" aria-label="Volver">
+              ${ICONS.back}
+            </button>
+            <span style="font-weight:800; font-size:16px; color:var(--navy);">Publicar hueco</span>
+            <div style="width:40px;"></div>
+          </header>
+
+          <form class="input-card" onsubmit="createBizSlot(event)">
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="new-cat">Categoría</label>
+                <select id="new-cat">
+                  <option value="Peluquería" ${defaultCat === 'Peluquería' ? 'selected' : ''}>Peluquería</option>
+                  <option value="Estética" ${defaultCat === 'Estética' ? 'selected' : ''}>Estética</option>
+                  <option value="Barbería">Barbería</option>
+                  <option value="Uñas">Uñas</option>
+                  <option value="Masajes">Masajes</option>
+                  <option value="Fisio">Fisio</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="new-spots">Plazas</label>
+                <select id="new-spots">
+                  <option value="1" selected>1 cita</option>
+                  <option value="2">2 citas</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="new-service">Servicio disponible</label>
+              <input type="text" id="new-service" placeholder="Ej. Corte y secado, Depilación láser, Masaje..." required>
+            </div>
+
+            <div class="field">
+              <label for="new-stylist">Profesional que atiende</label>
+              <input type="text" id="new-stylist" value="${STATE.user === 'aura' ? 'Claudia Ríos' : 'Bea Mendoza'}" required>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="new-in">Empieza en</label>
+                <select id="new-in">
+                  <option value="30">30 min</option>
+                  <option value="45" selected>45 min</option>
+                  <option value="60">1 hora</option>
+                  <option value="90">1 h 30 min</option>
+                  <option value="120">2 horas</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="new-dur">Duración</label>
+                <select id="new-dur">
+                  <option value="30">30 min</option>
+                  <option value="45" selected>45 min</option>
+                  <option value="60">60 min</option>
+                  <option value="90">90 min</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="field">
+                <label for="new-price">Precio habitual (€)</label>
+                <input type="number" id="new-price" min="5" max="500" value="40" oninput="updateBizPreview()" required>
+              </div>
+              <div class="field">
+                <label for="new-disc">Descuento</label>
+                <select id="new-disc" onchange="updateBizPreview()">
+                  <option value="20">−20%</option>
+                  <option value="30" selected>−30%</option>
+                  <option value="35">−35%</option>
+                  <option value="40">−40%</option>
+                  <option value="50">−50%</option>
+                </select>
+              </div>
+            </div>
+
+            <div id="biz-price-preview" style="background:var(--mint-soft); color:var(--navy); padding:12px 14px; border-radius:14px; font-size:13px; font-weight:800; margin-bottom:16px;">
+              Precio final Gappy: 28€ (el cliente ahorra 12€)
+            </div>
+
+            <button type="submit" class="btn-pill navy">Publicar en Gappy ahora</button>
+          </form>
+        </div>
+      `;
+    }
+
+    function viewBizSettings() {
+      const biz = DB.users[STATE.user];
+      return `
+        <div class="scroll-area fade-in">
+          ${renderBizTopbar()}
+          <h1 class="hero-title" style="font-size:24px;">Perfil de <strong>${esc(biz.name)}</strong></h1>
+
+          <form class="input-card" onsubmit="saveBizProfile(event)">
+            <div class="field">
+              <label for="biz-name">Nombre del negocio</label>
+              <input type="text" id="biz-name" value="${esc(biz.name)}" required>
+            </div>
+            <div class="field">
+              <label for="biz-addr">Dirección y barrio</label>
+              <input type="text" id="biz-addr" value="${esc(biz.address)}" required>
+            </div>
+            <button type="submit" class="btn-pill navy">Guardar cambios</button>
+          </form>
+        </div>
+      `;
+    }
+
+    /* ==========================================================================
+       13. CONTROLADOR PRINCIPAL Y ACCIONES
+       ========================================================================== */
+    function render() {
+      const views = {
+        login: viewLogin,
+        home: viewConsumerHome,
+        detail: viewSlotDetail,
+        checkout: viewCheckout,
+        card_form: viewCardForm,
+        success: viewBookingSuccess,
+        bookings: viewBookings,
+        favorites: viewFavorites,
+        radar: viewRadar,
+        how: viewHowItWorks,
+        account_profile: viewAccountProfile,
+        account_email: viewAccountEmail,
+        account_security: viewAccountSecurity,
+        account_notifications: viewAccountNotifications,
+        account_payments: viewAccountPayments,
+        legal_help: viewLegalHelp,
+        legal_privacy: viewLegalPrivacy,
+        legal_terms: viewLegalTerms,
+        legal_cookies: viewLegalCookies,
+        biz_dash: viewBizDash,
+        biz_new: viewBizNew,
+        biz_settings: viewBizSettings
+      };
+
+      const activeRenderer = views[STATE.view] || viewLogin;
+      const drawerHtml = STATE.user ? renderDrawer() : '';
+      $('view-container').innerHTML = `${activeRenderer()}${drawerHtml}`;
+    }
+
+    function navTo(view) {
+      STATE.view = view;
+      STATE.drawerOpen = false;
+      STATE.filterOpen = false;
+      render();
+    }
+
+    function setAuthMode(mode) {
+      STATE.authMode = mode;
+      STATE.authError = '';
+      render();
+    }
+
+    /** Inicio de sesión unificado: detecta automáticamente si es consumidor o negocio */
+    function handleUnifiedLogin(e) {
+      e.preventDefault();
+      const rawId = normalizeText($('auth-id').value);
+      const pw = $('auth-pw').value;
+
+      const matchedKey = Object.keys(DB.users).find(k => {
+        const u = DB.users[k];
+        return normalizeText(k) === rawId || (u.email && normalizeText(u.email) === rawId);
+      });
+
+      if (matchedKey && DB.users[matchedKey].pw === pw) {
+        const account = DB.users[matchedKey];
+        STATE.user = matchedKey;
+        STATE.role = account.role;
+        STATE.authError = '';
+        toast(`Hola, ${account.name.split(' ')[0]}`);
+        navTo(account.role === 'biz' ? 'biz_dash' : 'home');
+      } else {
+        STATE.authError = 'Usuario o contraseña incorrectos. Prueba iker, laura, marea o aura (contraseña 123).';
+        render();
+      }
+    }
+
+    function quickLogin(userKey) {
+      const account = DB.users[userKey];
+      if (!account) return;
+      STATE.user = userKey;
+      STATE.role = account.role;
+      STATE.authError = '';
+      toast(`Sesión iniciada como ${account.name}`);
+      navTo(account.role === 'biz' ? 'biz_dash' : 'home');
+    }
+
+    function handleRegister(e) {
+      e.preventDefault();
+      const name = $('reg-name').value.trim();
+      const rawUser = normalizeText($('reg-user').value).replace(/[^a-z0-9@._-]/g, '');
+      const pw = $('reg-pass').value;
+
+      if (!name || !rawUser || pw.length < 3) {
+        STATE.authError = 'Introduce tu nombre, usuario y una contraseña de al menos 3 caracteres.';
+        render();
+        return;
+      }
+      if (DB.users[rawUser]) {
+        STATE.authError = 'Ese usuario ya está registrado. Inicia sesión directamente.';
+        render();
+        return;
+      }
+
+      DB.users[rawUser] = {
+        pw,
+        role: 'cli',
+        name,
+        email: rawUser.includes('@') ? rawUser : `${rawUser}@gappy.es`,
+        phone: '',
+        neighborhood: 'Salamanca',
+        cards: [],
+        favorites: [201],
+        radarPhone: '',
+        radarCats: ['Peluquería', 'Estética'],
+        security: { twoFactor: false, keepSignedIn: true },
+        notifications: { whatsappUrgent: true, reminder30: true, barrioDigest: false }
+      };
+      saveData();
+
+      STATE.user = rawUser;
+      STATE.role = 'cli';
+      STATE.authError = '';
+      toast(`Bienvenido/a a Gappy, ${name.split(' ')[0]}`);
+      navTo('home');
+    }
+
+    function logout() {
+      STATE.user = null;
+      STATE.role = null;
+      STATE.drawerOpen = false;
+      STATE.authError = '';
+      navTo('login');
+      toast('Has cerrado sesión');
+    }
+
+    function toggleDrawer(open) {
+      STATE.drawerOpen = open;
+      render();
+    }
+
+    function drawerNav(view) {
+      STATE.drawerOpen = false;
+      navTo(view);
+    }
+
+    function toggleFilterSheet(open) {
+      STATE.filterOpen = open;
+      render();
+    }
+
+    function handleSearchInput(val) {
+      STATE.searchQuery = val;
+      STATE.featuredIndex = 0;
+      render();
+      const inp = $('search-input');
+      if (inp) {
+        inp.focus();
+        inp.setSelectionRange(val.length, val.length);
+      }
+    }
+
+    function selectCategory(cat) {
+      STATE.selectedCat = cat;
+      STATE.featuredIndex = 0;
+      render();
+    }
+
+    function setSort(sortBy) {
+      STATE.sortBy = sortBy;
+      render();
+    }
+
+    function setWalk(maxWalkMins) {
+      STATE.maxWalkMins = maxWalkMins;
+      render();
+    }
+
+    function resetFilters() {
+      STATE.selectedCat = 'Todos';
+      STATE.searchQuery = '';
+      STATE.sortBy = 'soon';
+      STATE.maxWalkMins = 99;
+      STATE.featuredIndex = 0;
+      STATE.filterOpen = false;
+      render();
+    }
+
+    function handleCarouselScroll(el) {
+      const cardWidth = 218;
+      const newIdx = Math.round(el.scrollLeft / cardWidth);
+      if (newIdx !== STATE.featuredIndex) {
+        STATE.featuredIndex = newIdx;
+        const cards = el.querySelectorAll('.slot-card');
+        cards.forEach((c, i) => c.classList.toggle('elevated', i === newIdx));
+      }
+    }
+
+    function toggleFavorite(slotId) {
+      if (!STATE.user || STATE.role !== 'cli') return;
+      const favs = DB.users[STATE.user].favorites || [];
+      const idx = favs.indexOf(slotId);
+      if (idx >= 0) {
+        favs.splice(idx, 1);
+        toast('Quitado de favoritos');
+      } else {
+        favs.push(slotId);
+        toast('Guardado en favoritos');
+      }
+      DB.users[STATE.user].favorites = favs;
+      saveData();
+      render();
+    }
+
+    function openSlotDetail(slotId) {
+      STATE.detailSlotId = slotId;
+      STATE.detailSlide = 0;
+      navTo('detail');
+    }
+
+    function quickBookFromCard(slotId) {
+      STATE.detailSlotId = slotId;
+      navTo('checkout');
+    }
+
+    function stepDetailSlide(dir) {
+      STATE.detailSlide = (STATE.detailSlide + dir + 3) % 3;
+      render();
+    }
+
+    function setDetailSlide(idx) {
+      STATE.detailSlide = idx;
+      render();
+    }
+
+    let touchStartX = 0;
+    function handleDetailTouchStart(e) {
+      touchStartX = e.changedTouches[0].clientX;
+    }
+
+    function handleDetailTouchEnd(e) {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      if (Math.abs(dx) > 40) {
+        stepDetailSlide(dx < 0 ? 1 : -1);
+      }
+    }
+
+    function shareSlot(slotId) {
+      const s = DB.slots.find(x => x.id === slotId);
+      if (!s) return;
+      const text = `${s.s} en ${s.biz} hoy a las ${formatHour(s.t)} por ${eur(finalPrice(s))} (−${s.disc}%) en Gappy`;
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try {
+        document.execCommand('copy');
+        toast('Oferta copiada para compartir');
+      } catch (e) {
+        toast('No se pudo copiar');
+      }
+      document.body.removeChild(ta);
+    }
+
+    function openCardForm(returnView) {
+      STATE.cardReturnView = returnView;
+      navTo('card_form');
+    }
+
+    function formatCardNum(inp) {
+      const digits = inp.value.replace(/\D/g, '').slice(0, 16);
+      inp.value = digits.replace(/(.{4})/g, '$1 ').trim();
+    }
+
+    function formatCardExp(inp) {
+      const digits = inp.value.replace(/\D/g, '').slice(0, 4);
+      inp.value = digits.length > 2 ? `${digits.slice(0, 2)}/${digits.slice(2)}` : digits;
+    }
+
+    function handleCardSubmit(e) {
+      e.preventDefault();
+      const digits = $('card-num').value.replace(/\D/g, '');
+      if (digits.length < 13) {
+        toast('Introduce un número de tarjeta válido');
+        return;
+      }
+      const masked = `•••• ${digits.slice(-4)}`;
+      const u = DB.users[STATE.user];
+      if (!u.cards.includes(masked)) {
+        u.cards.unshift(masked);
+        saveData();
+      }
+      if (STATE.cardReturnView === 'checkout') {
+        completeBooking(`Tarjeta ${masked}`);
+      } else {
+        toast('Tarjeta guardada');
+        navTo(STATE.cardReturnView);
+      }
+    }
+
+    function completeBooking(method) {
+      const s = DB.slots.find(x => x.id === STATE.detailSlotId);
+      if (!s || s.st !== 'live' || s.spotsLeft < 1) {
+        toast('Este hueco acaba de ocuparse');
+        navTo('home');
+        return;
+      }
+
+      const u = DB.users[STATE.user];
+      const total = finalPrice(s);
+      const pin = String(Math.floor(1000 + Math.random() * 9000));
+
+      s.spotsLeft -= 1;
+      if (s.spotsLeft <= 0) {
+        s.spotsLeft = 0;
+        s.st = 'booked';
+      }
+      s.bookings = s.bookings || [];
+      s.bookings.push({
+        cliId: STATE.user,
+        cliName: u.name,
+        qty: 1,
+        pin,
+        method,
+        total
+      });
+
+      STATE.lastConfirmation = {
+        service: s.s,
+        biz: s.biz,
+        address: s.address,
+        time: s.t,
+        pin,
+        method,
+        total
+      };
+
+      saveData();
+      navTo('success');
+    }
+
+    function releaseUserBooking(slotId, bookingIdx) {
+      const s = DB.slots.find(x => x.id === slotId);
+      if (!s || !s.bookings || !s.bookings[bookingIdx]) return;
+      const [removed] = s.bookings.splice(bookingIdx, 1);
+      s.spotsLeft += removed.qty;
+      s.st = 'live';
+      saveData();
+      toast('Turno liberado · Vuelve a estar disponible');
+      render();
+    }
+
+    function toggleRadarCat(cat) {
+      const u = DB.users[STATE.user];
+      const list = u.radarCats || [];
+      const idx = list.indexOf(cat);
+      if (idx >= 0 && list.length > 1) {
+        list.splice(idx, 1);
+      } else if (idx < 0) {
+        list.push(cat);
+      }
+      u.radarCats = list;
+      saveData();
+      render();
+    }
+
+    function saveRadar(e) {
+      e.preventDefault();
+      const tel = $('radar-tel').value.trim();
+      if (!tel) return;
+      DB.users[STATE.user].radarPhone = tel;
+      if (!DB.users[STATE.user].phone) {
+        DB.users[STATE.user].phone = tel;
+      }
+      saveData();
+      toast('Radar WhatsApp guardado');
+      render();
+    }
+
+    /* ==========================================================================
+       13B. ACCIONES DE MI CUENTA, SEGURIDAD Y LEGAL
+       ========================================================================== */
+    function saveAccountProfile(e) {
+      e.preventDefault();
+      const name = $('prof-name').value.trim();
+      const phone = $('prof-phone').value.trim();
+      const neighborhood = $('prof-hood').value;
+      if (!name || !phone) return;
+
+      const u = DB.users[STATE.user];
+      u.name = name;
+      u.phone = phone;
+      u.neighborhood = neighborhood;
+
+      if (STATE.role === 'cli') {
+        u.radarPhone = phone;
+        DB.slots.forEach(s => {
+          (s.bookings || []).forEach(b => {
+            if (b.cliId === STATE.user) b.cliName = name;
+          });
+        });
+      } else {
+        const addrInput = $('prof-address');
+        const newAddr = addrInput ? addrInput.value.trim() : u.address;
+        u.address = newAddr || u.address;
+        DB.slots.forEach(s => {
+          if (s.bizId === STATE.user) {
+            s.biz = name;
+            s.address = u.address;
+          }
+        });
+      }
+
+      saveData();
+      toast('Datos personales guardados');
+      render();
+    }
+
+    function saveAccountEmail(e) {
+      e.preventDefault();
+      const newEmail = $('email-new').value.trim().toLowerCase();
+      const confirmEmail = $('email-confirm').value.trim().toLowerCase();
+      const currentPw = $('email-pw').value;
+      const u = DB.users[STATE.user];
+
+      if (!newEmail || !newEmail.includes('@')) {
+        toast('Introduce un correo electrónico válido');
+        return;
+      }
+      if (newEmail !== confirmEmail) {
+        toast('Los correos electrónicos no coinciden');
+        return;
+      }
+      if (currentPw !== u.pw) {
+        toast('La contraseña actual no es correcta');
+        return;
+      }
+
+      u.email = newEmail;
+      saveData();
+      toast('Correo electrónico actualizado');
+      render();
+    }
+
+    function updatePasswordStrength(val) {
+      const meter = $('pw-strength-meter');
+      const label = $('pw-strength-label');
+      if (!meter || !label) return;
+
+      let score = 0;
+      if (val.length >= 4) score++;
+      if (val.length >= 7) score++;
+      if (/[A-Z]/.test(val) && /[a-z]/.test(val)) score++;
+      if (/[0-9]/.test(val) || /[^A-Za-z0-9]/.test(val)) score++;
+
+      const colors = ['#E5531E', '#F5A623', '#00A88D', '#06183D'];
+      const texts = [
+        'Seguridad: demasiado corta',
+        'Seguridad: aceptable',
+        'Seguridad: buena',
+        'Seguridad: muy alta'
+      ];
+
+      const segs = meter.querySelectorAll('.strength-seg');
+      segs.forEach((seg, idx) => {
+        seg.style.backgroundColor = idx < score ? colors[score - 1] : 'rgba(6, 24, 61, 0.1)';
+      });
+      label.textContent = val.length === 0 ? 'Seguridad: pendiente de escribir' : texts[Math.max(0, score - 1)];
+    }
+
+    function saveAccountSecurity(e) {
+      e.preventDefault();
+      const oldPw = $('sec-old').value;
+      const newPw = $('sec-new').value;
+      const repPw = $('sec-rep').value;
+      const u = DB.users[STATE.user];
+
+      if (oldPw !== u.pw) {
+        toast('La contraseña actual no coincide');
+        return;
+      }
+      if (newPw.length < 4) {
+        toast('La nueva contraseña debe tener al menos 4 caracteres');
+        return;
+      }
+      if (newPw !== repPw) {
+        toast('Las nuevas contraseñas no coinciden');
+        return;
+      }
+
+      u.pw = newPw;
+      saveData();
+      toast('Contraseña actualizada con éxito');
+      render();
+    }
+
+    function toggleSecurityPref(key) {
+      const u = DB.users[STATE.user];
+      u.security = u.security || { twoFactor: false, keepSignedIn: true };
+      u.security[key] = !u.security[key];
+      saveData();
+      toast('Ajuste de seguridad guardado');
+      render();
+    }
+
+    function toggleNotifPref(key) {
+      const u = DB.users[STATE.user];
+      u.notifications = u.notifications || { whatsappUrgent: true, reminder30: true, barrioDigest: false };
+      u.notifications[key] = !u.notifications[key];
+      saveData();
+      toast('Preferencia de notificación actualizada');
+      render();
+    }
+
+    function removeUserCard(idx) {
+      const u = DB.users[STATE.user];
+      if (!u.cards) return;
+      u.cards.splice(idx, 1);
+      saveData();
+      toast('Tarjeta eliminada');
+      render();
+    }
+
+    function saveBizBank(e) {
+      e.preventDefault();
+      const fiscalName = $('biz-fiscal-name').value.trim();
+      const cif = $('biz-cif').value.trim().toUpperCase();
+      const iban = $('biz-iban').value.trim().toUpperCase();
+      if (!fiscalName || !cif || !iban) return;
+
+      const u = DB.users[STATE.user];
+      u.fiscalName = fiscalName;
+      u.cif = cif;
+      u.iban = iban;
+      saveData();
+      toast('Datos bancarios y fiscales guardados');
+      render();
+    }
+
+    function sendSupportTicket(e) {
+      e.preventDefault();
+      const msg = $('sup-msg').value.trim();
+      if (!msg) return;
+      $('sup-msg').value = '';
+      toast('Consulta enviada · Te respondemos en breve');
+    }
+
+    function requestDataExport() {
+      const u = DB.users[STATE.user];
+      toast(`Resumen enviado a ${u.email}`);
+    }
+
+    function toggleCookiePref(key) {
+      DB.cookiePrefs = DB.cookiePrefs || { essential: true, personalization: true, analytics: false };
+      DB.cookiePrefs[key] = !DB.cookiePrefs[key];
+      render();
+    }
+
+    function saveCookiePrefs() {
+      saveData();
+      toast('Preferencias de cookies guardadas');
+    }
+
+    /* ==========================================================================
+       14. ACCIONES DEL PANEL DE NEGOCIO
+       ========================================================================== */
+    function updateBizPreview() {
+      const p = Number($('new-price')?.value || 0);
+      const d = Number($('new-disc')?.value || 0);
+      const fp = Math.round(p * (1 - d / 100));
+      const box = $('biz-price-preview');
+      if (box) {
+        box.textContent = `Precio final Gappy: ${eur(fp)} (el cliente ahorra ${eur(Math.max(0, p - fp))})`;
+      }
+    }
+
+    function createBizSlot(e) {
+      e.preventDefault();
+      const cat = $('new-cat').value;
+      const spots = Number($('new-spots').value);
+      const service = $('new-service').value.trim();
+      const stylistName = $('new-stylist').value.trim();
+      const inMins = Number($('new-in').value);
+      const dur = Number($('new-dur').value);
+      const price = Number($('new-price').value);
+      const disc = Number($('new-disc').value);
+      const biz = DB.users[STATE.user];
+
+      if (!service || price <= 0) return;
+
+      DB.slots.unshift({
+        id: Date.now(),
+        cat,
+        s: service,
+        p: price,
+        d: dur,
+        t: Date.now() + inMins * 60000,
+        disc,
+        walkMeters: biz.defaultWalkMeters || 400,
+        walkMins: biz.defaultWalkMins || 5,
+        rating: 4.9,
+        reviewsCount: 130,
+        spotsLeft: spots,
+        st: 'live',
+        bizId: STATE.user,
+        biz: biz.name,
+        address: biz.address,
+        tags: [normalizeText(cat), normalizeText(service), normalizeText(biz.name)],
+        stylist: {
+          name: stylistName || 'Equipo del Salón',
+          role: 'Especialista',
+          note: 'Acabamos de abrir este hueco de última hora. Te esperamos con atención personalizada.',
+          includes: ['Diagnóstico personalizado', 'Productos profesionales incluidos', 'Acabado de salón']
+        },
+        reviews: [
+          { author: 'Cliente verificado', rating: 5, text: 'Atención rápida y puntual.' }
+        ],
+        bookings: []
+      });
+
+      saveData();
+      toast('Hueco publicado en Gappy');
+      navTo('biz_dash');
+    }
+
+    function removeBizSlot(slotId) {
+      DB.slots = DB.slots.filter(s => s.id !== slotId);
+      saveData();
+      toast('Turno retirado del escaparate');
+      render();
+    }
+
+    function saveBizProfile(e) {
+      e.preventDefault();
+      const name = $('biz-name').value.trim();
+      const addr = $('biz-addr').value.trim();
+      if (!name || !addr) return;
+      DB.users[STATE.user].name = name;
+      DB.users[STATE.user].address = addr;
+      DB.slots.forEach(s => {
+        if (s.bizId === STATE.user) {
+          s.biz = name;
+          s.address = addr;
+        }
+      });
+      saveData();
+      toast('Perfil del negocio actualizado');
+      navTo('biz_dash');
+    }
+
+    function resetDemo() {
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      DB = getDefaultData();
+      STATE.user = null;
+      STATE.role = null;
+      STATE.drawerOpen = false;
+      STATE.selectedCat = 'Todos';
+      STATE.searchQuery = '';
+      navTo('login');
+      toast('Datos de demostración restaurados');
+    }
+
+    let toastTimer;
+    function toast(msg) {
+      const t = $('toast');
+      t.textContent = msg;
+      t.classList.add('on');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => t.classList.remove('on'), 2600);
+    }
+
+    setInterval(() => {
+      if (STATE.view === 'home' && !STATE.filterOpen && !STATE.drawerOpen) {
+        render();
+      }
+    }, 30000);
+
+    window.addEventListener('DOMContentLoaded', render);
+  </script>
+</body>
+</html>
